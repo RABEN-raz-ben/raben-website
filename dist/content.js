@@ -8,5 +8,6 @@ window.RABEN_CONTENT = {
     { title: 'מוצרים דיגיטליים', description: 'מרעיון לגרסה ראשונה שאפשר להשתמש בה, עם התמקדות במה שחשוב למשתמשים ומקום להתפתח בהמשך.' }
   ],
   projects: [],
-  contact: { email: '', whatsapp: '' }
+  // Instagram username without @. WhatsApp: business number in international digits, e.g. 972… (no + or leading local zero).
+  contact: { email: '', instagram: 'raben10studio', whatsapp: '' }
 };

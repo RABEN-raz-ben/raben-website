@@ -14,3 +14,5 @@
 .empty-symbol{display:flex;color:#9bbdfb;flex-shrink:0}.empty-symbol .icon{width:70px;height:70px}
 @media(max-width:600px){.ticker{flex-wrap:wrap;justify-content:center}.ticker .ticker-icon{width:15px;height:15px}.empty-symbol .icon{width:45px;height:45px}.nav-cta .icon,.text-link .icon{width:18px;height:18px}}
 @media(max-width:360px){.hero-actions{gap:14px}.hero-actions .button{gap:14px;padding-inline:16px}}
+
+.contact-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}.contact-actions .button{justify-content:center}.contact-actions [hidden]{display:none}.contact-actions button:disabled{cursor:default;color:var(--muted);background:#f8fafd}.message-help{font-size:12px;line-height:1.8;color:var(--muted)}
