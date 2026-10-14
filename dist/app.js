@@ -41,6 +41,7 @@ form.onsubmit = async event => {
   const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
   form.setAttribute('aria-busy', 'true');
+  document.getElementById('contact-fallback').hidden = true;
   status.textContent = 'שולחים את הפנייה…';
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 20000);
@@ -56,11 +57,31 @@ form.onsubmit = async event => {
     status.textContent = 'הפנייה נשלחה ל־RABEN. תודה! נחזור אליכם למספר שהשארתם.';
     form.reset();
   } catch {
+    document.getElementById('instagram-brief').value = `היי RABEN, אשמח לשמוע עוד על בניית פרויקט.\nשם: ${payload.name}\nטלפון: ${payload.phone}\nסוג הפרויקט: ${payload.project_type}\n\n${payload.message}`;
+    document.getElementById('contact-fallback').hidden = false;
     status.textContent = 'לא הצלחנו לאשר שהפנייה נשלחה. הפרטים נשארו בטופס; אפשר לנסות שוב או לפנות אלינו באינסטגרם.';
   } finally {
     clearTimeout(timer);
     sending = false;
     button.disabled = false;
     form.removeAttribute('aria-busy');
+  }
+};
+
+document.getElementById('instagram-fallback-link').onclick = () => {
+  const message = document.getElementById('instagram-brief');
+  const copyStatus = document.getElementById('instagram-copy-status');
+  try {
+    navigator.clipboard.writeText(message.value).then(() => {
+      copyStatus.textContent = 'הפרטים הועתקו. הדביקו את ההודעה בשיחה באינסטגרם ולחצו על שליחה.';
+    }).catch(() => {
+      message.focus();
+      message.select();
+      copyStatus.textContent = 'לא הצלחנו להעתיק אוטומטית. העתיקו את ההודעה מהשדה והדביקו אותה באינסטגרם.';
+    });
+  } catch {
+    message.focus();
+    message.select();
+    copyStatus.textContent = 'העתיקו את ההודעה מהשדה והדביקו אותה באינסטגרם.';
   }
 };
