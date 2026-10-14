@@ -9,5 +9,5 @@ window.RABEN_CONTENT = {
   ],
   projects: [],
   // Instagram username without @. WhatsApp: business number in international digits, e.g. 972… (no + or leading local zero).
-  contact: { email: '', instagram: 'raben10studio', whatsapp: '' }
+  contact: { email: 'raben10studio@gmail.com', instagram: 'raben10studio', whatsapp: '' }
 };
