@@ -85,3 +85,103 @@ document.getElementById('instagram-fallback-link').onclick = () => {
     copyStatus.textContent = 'העתיקו את ההודעה מהשדה והדביקו אותה באינסטגרם.';
   }
 };
+
+// Progressive motion: content remains readable without JavaScript or animation APIs.
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+const art = document.querySelector('.hero-art');
+const revealTargets = document.querySelectorAll(
+  '.hero-copy > *, .hero-art, .section-label, .about-grid > *, .capability, ' +
+  '.section-heading, .empty-projects, .project-card, .contact-copy > h2, ' +
+  '.contact-copy > p, #contact-links, #brief-form'
+);
+const reveals = new Map();
+const revealed = new WeakSet();
+const motionToggle = document.querySelector('.motion-toggle');
+let motionPausedByUser = false;
+let revealObserver;
+let ambientObserver;
+let pointerFrame = 0;
+
+function resetArt() {
+  cancelAnimationFrame(pointerFrame);
+  pointerFrame = 0;
+  art.style.removeProperty('--art-x');
+  art.style.removeProperty('--art-y');
+}
+
+function setMotionPreference() {
+  revealObserver?.disconnect();
+  ambientObserver?.disconnect();
+  reveals.forEach(animation => animation.cancel());
+  reveals.clear();
+  resetArt();
+  const enabled = !reducedMotion.matches && !motionPausedByUser;
+  document.documentElement.classList.toggle('motion-enabled', enabled);
+  motionToggle.setAttribute('aria-pressed', String(motionPausedByUser));
+  motionToggle.textContent = motionPausedByUser ? 'הפעלת תנועה' : 'עצירת תנועה';
+  motionToggle.hidden = reducedMotion.matches;
+  document.querySelectorAll('.motion-in-view').forEach(node => node.classList.remove('motion-in-view'));
+  if (!enabled || !('IntersectionObserver' in window)) return;
+
+  if (typeof Element.prototype.animate === 'function') {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (!isIntersecting) return;
+        revealObserver.unobserve(target);
+        if (revealed.has(target)) return;
+        revealed.add(target);
+        if (target.contains(document.activeElement)) return;
+        const siblings = [...target.parentElement.children];
+        const stagger = target.matches('.capability, .hero-copy > *')
+          ? Math.min(siblings.indexOf(target), 3) * 85 : 0;
+        const animation = target.animate([
+          { opacity: 0, transform: 'translateY(40px) scale(.97)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ], { duration: 950, delay: stagger, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' });
+        reveals.set(target, animation);
+        animation.onfinish = animation.oncancel = () => reveals.delete(target);
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
+    revealTargets.forEach(node => revealObserver.observe(node));
+  }
+
+  // Ambient effects run only while their section is on screen.
+  ambientObserver = new IntersectionObserver(entries => {
+    entries.forEach(({ target, isIntersecting }) => {
+      target.classList.toggle('motion-in-view', isIntersecting);
+      if (target === art && !isIntersecting) resetArt();
+    });
+  });
+  document.querySelectorAll('.hero, .hero-art, .ticker, .empty-projects, .contact').forEach(node => ambientObserver.observe(node));
+}
+
+art.addEventListener('pointermove', event => {
+  if (reducedMotion.matches || motionPausedByUser || !finePointer.matches) return;
+  const rect = art.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width - .5) * 12;
+  const y = ((event.clientY - rect.top) / rect.height - .5) * 10;
+  cancelAnimationFrame(pointerFrame);
+  pointerFrame = requestAnimationFrame(() => {
+    art.style.setProperty('--art-x', `${x}px`);
+    art.style.setProperty('--art-y', `${y}px`);
+    pointerFrame = 0;
+  });
+});
+art.addEventListener('pointerleave', resetArt);
+finePointer.addEventListener('change', resetArt);
+document.addEventListener('focusin', event => {
+  reveals.forEach((animation, target) => {
+    if (target.contains(event.target)) animation.cancel();
+  });
+});
+document.addEventListener('visibilitychange', () => {
+  document.documentElement.classList.toggle('motion-paused', document.hidden);
+  if (document.hidden) resetArt();
+});
+reducedMotion.addEventListener('change', setMotionPreference);
+motionToggle.addEventListener('click', () => {
+  motionPausedByUser = !motionPausedByUser;
+  setMotionPreference();
+});
+setMotionPreference();
