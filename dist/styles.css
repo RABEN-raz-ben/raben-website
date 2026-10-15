@@ -172,3 +172,42 @@ footer .wordmark{font-size:21px;color:#424245}
 }
 @media(max-width:360px){.header-actions{gap:8px}.nav-cta{padding-inline:10px}.hero-actions{gap:16px}.hero-actions .button{padding-inline:15px}.hero-note{gap:7px}.hero-note i{width:16px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.hero-art img{transform:none}.capability,.project-card{translate:none}}
+
+/* Smooth graphite, midnight blue and muted teal, within the existing layout. */
+.header{background:#101722ed;border-bottom-color:#ffffff0d;color:#f5f7fa}
+.header .wordmark{color:#f5f7fa}
+.header nav{color:#c7cfdb}
+.header nav a:is(:hover,:focus-visible){color:#a7c9f7}
+.header .motion-toggle{color:#b3bdcd}
+.header .motion-toggle:hover{color:#fff}
+.hero{background:radial-gradient(ellipse at 50% 72%,#d9e3f04d,transparent 55%),linear-gradient(160deg,#e9edf3 0%,#f5f6f8 48%,#fff 100%)}
+h1 span{color:#365f8a}
+.ticker-window{background:linear-gradient(110deg,#172131,#202c3b);border-color:#ffffff0d}
+.ticker{color:#cbd3df}
+.ticker .ticker-icon{color:#8b9db5}
+.capability{--card-surface:linear-gradient(145deg,#25374f,#141f30);background:var(--card-surface);color:#f5f7fb;box-shadow:0 8px 24px #101b2b08}
+.capability:nth-child(2){--card-surface:linear-gradient(145deg,#343346,#20202e)}
+.capability:nth-child(3){--card-surface:linear-gradient(145deg,#24413f,#162b2b)}
+.capability .number{color:#adbdcf}
+.capability h3{color:#f5f7fb}
+.capability p{color:#c1cbd8}
+.capability:is(:hover,:focus-within){background:var(--card-surface);box-shadow:0 16px 36px #101b2b1a}
+.projects{color:#f5f7fa;background:radial-gradient(ellipse at 85% 0%,#27364b80,transparent 65%),linear-gradient(150deg,#141c29,#10151e)}
+.projects .section-label,.projects .section-label>span,.projects .small-label{color:#a6b3c6}
+.projects .section-label>span{border-color:#ffffff26}
+.projects h2 span{color:#9bbce7}
+.empty-projects,.projects .project-card{background:linear-gradient(130deg,#ffffff09,#ffffff04);border:1px solid #ffffff12;color:#f5f7fa}
+.empty-projects p,.projects .project-card p{color:#b8c4d5}
+.empty-symbol{color:#8faed4}
+.projects .project-link{color:#9fc8fb}
+.projects .project-card:is(:hover,:focus-within){background:#ffffff0a;border-color:#ffffff20}
+#brief-form{background:linear-gradient(145deg,#202e42,#141e2d);color:#f5f7fa;box-shadow:0 18px 48px #1422380e;color-scheme:dark}
+#brief-form label span,#brief-form .message-help{color:#b2bfd0}
+#brief-form input,#brief-form textarea,#brief-form select{background:#ffffff08;border-color:#ffffff26;color:#f5f7fa}
+#brief-form :is(input,textarea)::placeholder{color:#a3afc0;opacity:1}
+#brief-form :is(input,textarea,select):focus{background:#ffffff0c;border-color:#7cace8;box-shadow:0 0 0 3px #7cace81a}
+#brief-form select option{background:#202e42;color:#f5f7fa}
+#brief-form #form-status{color:#a4ccff}
+footer{background:#101722;color:#b0bbcc}
+footer .wordmark{color:#eef2f8}
+footer .wordmark>span{background:#8bb5ed}
