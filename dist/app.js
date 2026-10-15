@@ -136,9 +136,9 @@ function setMotionPreference() {
         const stagger = target.matches('.capability, .hero-copy > *')
           ? Math.min(siblings.indexOf(target), 3) * 85 : 0;
         const animation = target.animate([
-          { opacity: 0, transform: 'translateY(40px) scale(.97)' },
+          { opacity: 0, transform: 'translateY(22px) scale(.99)' },
           { opacity: 1, transform: 'translateY(0)' }
-        ], { duration: 950, delay: stagger, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' });
+        ], { duration: 850, delay: stagger, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' });
         reveals.set(target, animation);
         animation.onfinish = animation.oncancel = () => reveals.delete(target);
       });
@@ -153,14 +153,14 @@ function setMotionPreference() {
       if (target === art && !isIntersecting) resetArt();
     });
   });
-  document.querySelectorAll('.hero, .hero-art, .ticker, .empty-projects, .contact').forEach(node => ambientObserver.observe(node));
+  document.querySelectorAll('.hero, .hero-art, .empty-projects, .contact').forEach(node => ambientObserver.observe(node));
 }
 
 art.addEventListener('pointermove', event => {
   if (reducedMotion.matches || motionPausedByUser || !finePointer.matches) return;
   const rect = art.getBoundingClientRect();
-  const x = ((event.clientX - rect.left) / rect.width - .5) * 12;
-  const y = ((event.clientY - rect.top) / rect.height - .5) * 10;
+  const x = ((event.clientX - rect.left) / rect.width - .5) * 8;
+  const y = ((event.clientY - rect.top) / rect.height - .5) * 6;
   cancelAnimationFrame(pointerFrame);
   pointerFrame = requestAnimationFrame(() => {
     art.style.setProperty('--art-x', `${x}px`);
