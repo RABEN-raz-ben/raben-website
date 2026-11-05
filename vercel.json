@@ -3,5 +3,11 @@
   "framework": null,
   "buildCommand": "",
   "outputDirectory": "dist",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "functions": {
+    "api/projects.js": {
+      "includeFiles": "dist/content.js",
+      "maxDuration": 30
+    }
+  }
 }

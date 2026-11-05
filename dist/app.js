@@ -5,9 +5,69 @@ const el = (tag, text, className) => { const node=document.createElement(tag); n
 document.getElementById('about-text').textContent=content.about;
 document.getElementById('year').textContent=new Date().getFullYear();
 if(content.capabilities.length){const list=el('div','','capability-list');content.capabilities.forEach((item,i)=>{const card=el('article','','capability');card.append(el('span',String(i+1).padStart(2,'0'),'number'),el('h3',item.title),el('p',item.description));list.append(card)});document.getElementById('capabilities').append(list)}
-const projects=document.getElementById('project-list');
-if(!content.projects.length){projects.innerHTML='<div class="empty-projects"><div><h3>הפרק הבא יופיע כאן.</h3><p>כאן נציג את הפרויקטים שאנחנו בונים יחד ואת העבודה שלנו לעסקים. נוסיף כל פרויקט עם הסיפור שלו, תמונות וקישור כשיהיה מוכן להצגה.</p></div><span class="empty-symbol" aria-hidden="true">'+icon('asterisk')+'</span></div>'}else{content.projects.forEach(p=>{const card=el('article','','project-card');card.append(el('h3',p.title),el('p',p.description));if(p.url&&/^https?:\/\//.test(p.url)){const link=el('a','לצפייה בפרויקט','project-link');link.insertAdjacentHTML('beforeend',icon('arrow-up-right'));link.href=p.url;link.target='_blank';link.rel='noopener noreferrer';card.append(link)}projects.append(card)})}
+const websiteService = content.services.find(service => service.id === 'business-websites');
+if (websiteService) {
+  document.getElementById('websites-title').textContent = websiteService.title;
+  document.getElementById('website-description').textContent = websiteService.description;
+  websiteService.features.forEach(feature => document.getElementById('website-features').append(el('li', feature)));
+} else document.getElementById('websites').hidden = true;
 
+const projectSection = document.getElementById('projects');
+const projectList = document.getElementById('project-list');
+let projectExpiryTimer;
+let projectRequest = 0;
+function hideProjects() {
+  clearTimeout(projectExpiryTimer);
+  projectList.replaceChildren();
+  projectSection.hidden = true;
+  document.querySelectorAll('[data-project-nav]').forEach(link => link.hidden = true);
+}
+async function loadProjects() {
+  const request = ++projectRequest;
+  hideProjects();
+  try {
+    const response = await fetch('/api/projects', { signal: AbortSignal.timeout(20000) });
+    if (!response.ok) return;
+    const result = await response.json();
+    if (request !== projectRequest) return;
+    const expiresAt = Date.parse(result.expiresAt);
+    if (!Array.isArray(result.projects) || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) return;
+    result.projects.forEach(project => {
+      const url = new URL(project.url);
+      if (url.protocol !== 'https:' || url.username || url.password) return;
+      const card = el('a', '', 'project-card');
+      card.href = url.href;
+      card.target = '_blank';
+      card.rel = 'noopener noreferrer';
+      card.setAttribute('aria-label', project.title + ' — לצפייה באתר (בטאב חדש)');
+      const media = el('div', 'RABEN / BUILD & EXPLORE', 'project-media');
+      if (project.image && project.image.startsWith('/assets/')) {
+        const img = document.createElement('img');
+        img.src = project.image;
+        img.alt = 'צילום מסך של ' + project.title;
+        img.loading = 'lazy';
+        img.onerror = () => img.remove();
+        media.append(img);
+      }
+      const body = el('div', '', 'project-body');
+      body.append(el('span', project.category, 'project-category'));
+      if (project.concept) body.append(el('span', 'דוגמת קונספט', 'concept-label'));
+      const projectLink = el('span', 'לצפייה באתר', 'project-link');
+      projectLink.insertAdjacentHTML('beforeend', icon('arrow-up-right'));
+      body.append(el('h3', project.title), el('p', project.description), projectLink);
+      card.append(media, body);
+      projectList.append(card);
+    });
+    projectExpiryTimer = setTimeout(() => { hideProjects(); loadProjects(); }, Math.min(expiresAt - Date.now(), 300000));
+    if (projectList.children.length) {
+      projectSection.hidden = false;
+      document.querySelectorAll('[data-project-nav]').forEach(link => link.hidden = false);
+    }
+  } catch { if (request === projectRequest) { hideProjects(); projectExpiryTimer = setTimeout(loadProjects, 300000); } }
+}
+loadProjects();
+// Revalidate after returning to the tab; no cross-origin browser probes.
+document.addEventListener('visibilitychange', () => { if (!document.hidden) loadProjects(); });
 const form = document.getElementById('brief-form');
 const status = document.getElementById('form-status');
 const phoneField = document.getElementById('phone');
@@ -86,102 +146,3 @@ document.getElementById('instagram-fallback-link').onclick = () => {
   }
 };
 
-// Progressive motion: content remains readable without JavaScript or animation APIs.
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-const art = document.querySelector('.hero-art');
-const revealTargets = document.querySelectorAll(
-  '.hero-copy > *, .hero-art, .section-label, .about-grid > *, .capability, ' +
-  '.section-heading, .empty-projects, .project-card, .contact-copy > h2, ' +
-  '.contact-copy > p, #contact-links, #brief-form'
-);
-const reveals = new Map();
-const revealed = new WeakSet();
-const motionToggle = document.querySelector('.motion-toggle');
-let motionPausedByUser = false;
-let revealObserver;
-let ambientObserver;
-let pointerFrame = 0;
-
-function resetArt() {
-  cancelAnimationFrame(pointerFrame);
-  pointerFrame = 0;
-  art.style.removeProperty('--art-x');
-  art.style.removeProperty('--art-y');
-}
-
-function setMotionPreference() {
-  revealObserver?.disconnect();
-  ambientObserver?.disconnect();
-  reveals.forEach(animation => animation.cancel());
-  reveals.clear();
-  resetArt();
-  const enabled = !reducedMotion.matches && !motionPausedByUser;
-  document.documentElement.classList.toggle('motion-enabled', enabled);
-  motionToggle.setAttribute('aria-pressed', String(motionPausedByUser));
-  motionToggle.textContent = motionPausedByUser ? 'הפעלת תנועה' : 'עצירת תנועה';
-  motionToggle.hidden = reducedMotion.matches;
-  document.querySelectorAll('.motion-in-view').forEach(node => node.classList.remove('motion-in-view'));
-  if (!enabled || !('IntersectionObserver' in window)) return;
-
-  if (typeof Element.prototype.animate === 'function') {
-    revealObserver = new IntersectionObserver(entries => {
-      entries.forEach(({ target, isIntersecting }) => {
-        if (!isIntersecting) return;
-        revealObserver.unobserve(target);
-        if (revealed.has(target)) return;
-        revealed.add(target);
-        if (target.contains(document.activeElement)) return;
-        const siblings = [...target.parentElement.children];
-        const stagger = target.matches('.capability, .hero-copy > *')
-          ? Math.min(siblings.indexOf(target), 3) * 85 : 0;
-        const animation = target.animate([
-          { opacity: 0, transform: 'translateY(22px) scale(.99)' },
-          { opacity: 1, transform: 'translateY(0)' }
-        ], { duration: 850, delay: stagger, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' });
-        reveals.set(target, animation);
-        animation.onfinish = animation.oncancel = () => reveals.delete(target);
-      });
-    }, { threshold: 0, rootMargin: '0px 0px -24px 0px' });
-    revealTargets.forEach(node => revealObserver.observe(node));
-  }
-
-  // Ambient effects run only while their section is on screen.
-  ambientObserver = new IntersectionObserver(entries => {
-    entries.forEach(({ target, isIntersecting }) => {
-      target.classList.toggle('motion-in-view', isIntersecting);
-      if (target === art && !isIntersecting) resetArt();
-    });
-  });
-  document.querySelectorAll('.hero, .hero-art, .empty-projects, .contact').forEach(node => ambientObserver.observe(node));
-}
-
-art.addEventListener('pointermove', event => {
-  if (reducedMotion.matches || motionPausedByUser || !finePointer.matches) return;
-  const rect = art.getBoundingClientRect();
-  const x = ((event.clientX - rect.left) / rect.width - .5) * 8;
-  const y = ((event.clientY - rect.top) / rect.height - .5) * 6;
-  cancelAnimationFrame(pointerFrame);
-  pointerFrame = requestAnimationFrame(() => {
-    art.style.setProperty('--art-x', `${x}px`);
-    art.style.setProperty('--art-y', `${y}px`);
-    pointerFrame = 0;
-  });
-});
-art.addEventListener('pointerleave', resetArt);
-finePointer.addEventListener('change', resetArt);
-document.addEventListener('focusin', event => {
-  reveals.forEach((animation, target) => {
-    if (target.contains(event.target)) animation.cancel();
-  });
-});
-document.addEventListener('visibilitychange', () => {
-  document.documentElement.classList.toggle('motion-paused', document.hidden);
-  if (document.hidden) resetArt();
-});
-reducedMotion.addEventListener('change', setMotionPreference);
-motionToggle.addEventListener('click', () => {
-  motionPausedByUser = !motionPausedByUser;
-  setMotionPreference();
-});
-setMotionPreference();
