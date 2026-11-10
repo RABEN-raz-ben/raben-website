@@ -5,12 +5,34 @@ const el = (tag, text, className) => { const node=document.createElement(tag); n
 document.getElementById('about-text').textContent=content.about;
 document.getElementById('year').textContent=new Date().getFullYear();
 if(content.capabilities.length){const list=el('div','','capability-list');content.capabilities.forEach((item,i)=>{const card=el('article','','capability');card.append(el('span',String(i+1).padStart(2,'0'),'number'),el('h3',item.title),el('p',item.description));list.append(card)});document.getElementById('capabilities').append(list)}
-const websiteService = content.services.find(service => service.id === 'business-websites');
-if (websiteService) {
-  document.getElementById('websites-title').textContent = websiteService.title;
-  document.getElementById('website-description').textContent = websiteService.description;
-  websiteService.features.forEach(feature => document.getElementById('website-features').append(el('li', feature)));
-} else document.getElementById('websites').hidden = true;
+if (content.offering) {
+  document.getElementById('websites-title').textContent = content.offering.title;
+  document.getElementById('website-description').textContent = content.offering.description;
+}
+const solutionList = document.getElementById('solution-list');
+if (solutionList) {
+  const solutionCards = content.services.map((service, index) => {
+    const card = el('article', '', 'solution-card solution-' + service.id);
+    card.id = 'solution-' + service.id;
+    const example = el('div', '', 'solution-example');
+    example.append(el('strong', 'למשל'), el('span', service.example));
+    const includes = el('ul', '', 'solution-includes');
+    service.includes.forEach(item => includes.append(el('li', item)));
+    const link = el('a', 'איך זה יכול להיראות', 'solution-link');
+    link.href = '#playground';
+    link.dataset.exampleLink = service.id;
+    link.insertAdjacentHTML('beforeend', icon('arrow-left'));
+    card.append(
+      el('span', String(index + 1).padStart(2, '0'), 'solution-number'),
+      el('p', service.need, 'solution-need'),
+      el('h3', service.title),
+      el('p', service.description, 'solution-description'),
+      example, includes, link
+    );
+    return card;
+  });
+  solutionList.replaceChildren(...solutionCards);
+}
 
 const projectSection = document.getElementById('projects');
 const projectList = document.getElementById('project-list');
@@ -190,6 +212,40 @@ intentButtons.forEach(button => {
 briefKind?.addEventListener('change', syncBriefIntent);
 // Form resets apply default values after the reset event has been dispatched.
 form.addEventListener('reset', () => queueMicrotask(syncBriefIntent));
+
+
+// Examples demonstrate possible client needs; they are separate from verified work.
+const exampleChoices = document.querySelectorAll('.example-buttons [data-example-choice]');
+const examplePanels = document.querySelectorAll('[data-example-panel]');
+const exampleDescription = document.getElementById('example-description');
+const exampleKindLink = document.getElementById('example-kind-link');
+const exampleArt = document.querySelector('#playground .hero-art');
+function selectExample(id) {
+  const service = content.services.find(item => item.id === id);
+  if (!service) return;
+  exampleChoices.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.exampleChoice === id)));
+  examplePanels.forEach(panel => { panel.hidden = panel.dataset.examplePanel !== id; });
+  if (exampleDescription) exampleDescription.textContent = service.description;
+  if (exampleKindLink) {
+    exampleKindLink.dataset.exampleKind = service.kind;
+    exampleKindLink.textContent = 'נדבר על ' + service.title + ' ←';
+  }
+  if (exampleArt) exampleArt.dataset.example = id;
+}
+exampleChoices.forEach(button => button.addEventListener('click', () => selectExample(button.dataset.exampleChoice)));
+document.querySelectorAll('[data-example-link]').forEach(link => {
+  link.addEventListener('click', () => selectExample(link.dataset.exampleLink));
+});
+exampleKindLink?.addEventListener('click', () => {
+  const kind = exampleKindLink.dataset.exampleKind;
+  if (!briefKind || !Array.from(briefKind.options).some(option => option.value === kind)) return;
+  briefKind.value = kind;
+  syncBriefIntent();
+});
+if (exampleChoices.length) {
+  const activeExample = Array.from(exampleChoices).find(button => button.getAttribute('aria-pressed') === 'true');
+  selectExample(activeExample?.dataset.exampleChoice || 'website');
+}
 
 const revealSections = Array.from(document.querySelectorAll('[data-reveal]'));
 let revealObserver;
