@@ -14,6 +14,12 @@ if (solutionList) {
   const solutionCards = content.services.map((service, index) => {
     const card = el('article', '', 'solution-card solution-' + service.id);
     card.id = 'solution-' + service.id;
+    const visual = el('img', '', 'solution-visual');
+    visual.src = 'assets/service-' + service.id + '.svg';
+    visual.alt = '';
+    visual.width = 480;
+    visual.height = 220;
+    visual.loading = 'lazy';
     const example = el('div', '', 'solution-example');
     example.append(el('strong', 'למשל'), el('span', service.example));
     const includes = el('ul', '', 'solution-includes');
@@ -23,6 +29,7 @@ if (solutionList) {
     link.dataset.exampleLink = service.id;
     link.insertAdjacentHTML('beforeend', icon('arrow-left'));
     card.append(
+      visual,
       el('span', String(index + 1).padStart(2, '0'), 'solution-number'),
       el('p', service.need, 'solution-need'),
       el('h3', service.title),
@@ -123,6 +130,8 @@ form.onsubmit = async event => {
   sending = true;
   const button = form.querySelector('button[type="submit"]');
   button.disabled = true;
+  briefBack.disabled = true;
+  briefNext.disabled = true;
   form.setAttribute('aria-busy', 'true');
   document.getElementById('contact-fallback').hidden = true;
   status.textContent = 'שולחים את הפנייה…';
@@ -147,6 +156,8 @@ form.onsubmit = async event => {
     clearTimeout(timer);
     sending = false;
     button.disabled = false;
+    briefBack.disabled = false;
+    briefNext.disabled = false;
     form.removeAttribute('aria-busy');
   }
 };
@@ -202,7 +213,7 @@ function syncBriefIntent() {
 }
 intentButtons.forEach(button => {
   button.addEventListener('click', () => {
-    if (!briefKind || !Array.from(briefKind.options).some(option => option.value === button.dataset.briefKind)) return;
+    if (sending || !briefKind || !Array.from(briefKind.options).some(option => option.value === button.dataset.briefKind)) return;
     briefKind.value = button.dataset.briefKind;
     syncBriefIntent();
     showBriefStep(0, false);
@@ -239,6 +250,7 @@ document.querySelectorAll('[data-example-link]').forEach(link => {
   link.addEventListener('click', () => selectExample(link.dataset.exampleLink));
 });
 exampleKindLink?.addEventListener('click', () => {
+  if (sending) return;
   const kind = exampleKindLink.dataset.exampleKind;
   if (!briefKind || !Array.from(briefKind.options).some(option => option.value === kind)) return;
   briefKind.value = kind;
@@ -340,11 +352,12 @@ document.querySelectorAll('.faq details').forEach(details => {
     event.preventDefault();
     expanded = !expanded;
     const from = details.open ? answer.getBoundingClientRect().height : 0;
+    const opacity = details.open ? getComputedStyle(answer).opacity : '0';
     animation?.cancel();
     details.open = true;
     const to = expanded ? answer.scrollHeight : 0;
     animation = answer.animate([
-      { height: from + 'px', opacity: from ? 1 : 0, transform: 'translateY(' + (from ? 0 : -8) + 'px)' },
+      { height: from + 'px', opacity, transform: 'translateY(' + (from ? 0 : -8) + 'px)' },
       { height: to + 'px', opacity: expanded ? 1 : 0, transform: 'translateY(' + (expanded ? 0 : -8) + 'px)' }
     ], { duration: 360, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' });
     animation.onfinish = () => {
@@ -359,23 +372,30 @@ document.querySelectorAll('.faq details').forEach(details => {
   });
 });
 
-// Keep the visitor oriented while moving through the page.
-if ('IntersectionObserver' in window) {
-  const navigationLinks = Array.from(document.querySelectorAll('.header nav a'));
-  const navigationObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      navigationLinks.forEach(link => {
-        if (link.hash === '#' + entry.target.id) link.setAttribute('aria-current', 'location');
-        else link.removeAttribute('aria-current');
-      });
-    });
-  }, { rootMargin: '-20% 0px -55% 0px', threshold: 0 });
+// Derive the active section from its position, including sections without a nav link.
+// Passive listeners schedule one frame per scroll; no continuous animation loop.
+const navigationLinks = Array.from(document.querySelectorAll('.header nav a'));
+const navigationSections = Array.from(document.querySelectorAll('main > section'));
+let navigationFrame = 0;
+function updateNavigation() {
+  navigationFrame = 0;
+  const marker = (document.querySelector('.header')?.getBoundingClientRect().bottom || 0) + 90;
+  let current = '';
+  navigationSections.forEach(section => {
+    if (!section.hidden && section.getBoundingClientRect().top <= marker) current = section.id;
+  });
   navigationLinks.forEach(link => {
-    const section = document.querySelector(link.hash);
-    if (section) navigationObserver.observe(section);
+    if (current && link.hash === '#' + current) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
   });
 }
+function scheduleNavigation() {
+  if (!navigationFrame) navigationFrame = requestAnimationFrame(updateNavigation);
+}
+window.addEventListener('scroll', scheduleNavigation, { passive: true });
+window.addEventListener('resize', scheduleNavigation, { passive: true });
+window.addEventListener('load', scheduleNavigation, { once: true });
+scheduleNavigation();
 
 // A short conversation, progressively enhanced from the regular accessible form.
 let briefStep = 0;
@@ -383,6 +403,7 @@ const briefPages = [];
 const briefSubmit = form.querySelector('button[type="submit"]');
 const conversationHeader = el('div', '', 'conversation-header');
 const conversationProgress = el('div', '', 'conversation-progress');
+conversationProgress.setAttribute('role', 'group');
 conversationProgress.setAttribute('aria-label', 'התקדמות הפנייה');
 const conversationTitle = el('h3', '', 'conversation-title');
 conversationTitle.tabIndex = -1;
@@ -412,13 +433,22 @@ briefBack.addEventListener('click', () => showBriefStep(briefStep - 1));
 conversationNavigation.append(briefBack, briefNext);
 briefSubmit.before(conversationNavigation);
 form.classList.add('conversation-form');
+// Native validation is invoked explicitly per visible step, so Enter never tries
+// to focus a required field on a later, hidden page. The no-JS form stays native.
+form.noValidate = true;
+form.addEventListener('keydown', event => {
+  if (event.key === 'Enter' && !event.isComposing && event.target.matches('input') && briefStep < 2) {
+    event.preventDefault();
+    if (!sending) advanceBrief();
+  }
+});
 const briefStepCopy = [
   ['מה נבנה יחד?', 'כמה מילים על העסק, הרעיון או משהו שהייתם רוצים שיעבוד טוב יותר.'],
   ['נעים להכיר. ואיך קוראים לכם?', 'נשאר רק לדעת למי לחזור.'],
   ['זה הכיוון שלכם. שולחים?', 'הכול כאן? אפשר לחזור ולדייק, או לשלוח אלינו.']
 ];
 function showBriefStep(step, focus = true) {
-  if (!briefPages.length) return;
+  if (!briefPages.length || sending) return;
   briefStep = Math.max(0, Math.min(2, step));
   briefPages.forEach((page, index) => { page.hidden = index !== briefStep; });
   conversationTitle.textContent = briefStepCopy[briefStep][0];
@@ -433,6 +463,7 @@ function showBriefStep(step, focus = true) {
   conversationProgress.setAttribute('aria-label', 'שלב ' + (briefStep + 1) + ' מתוך 3');
   briefBack.hidden = briefStep === 0;
   briefNext.hidden = briefStep === 2;
+  briefNext.querySelector('span').textContent = briefStep === 0 ? 'ממשיכים להיכרות' : 'רואים את הסיכום';
   briefSubmit.hidden = briefStep !== 2;
   if (briefStep === 2) {
     briefReview.replaceChildren(
@@ -447,7 +478,7 @@ function showBriefStep(step, focus = true) {
 }
 function advanceBrief() {
   const page = briefPages[briefStep];
-  if (!page) return;
+  if (!page || sending) return;
   if (briefStep === 1) {
     const phone = phoneField.value.trim();
     phoneField.setCustomValidity(/^\+?[0-9\s()-]+$/.test(phone) && /^\d{8,15}$/.test(phone.replace(/[^0-9]/g, '')) ? '' : 'הזינו מספר טלפון תקין כדי שנוכל לחזור אליכם.');
