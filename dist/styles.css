@@ -47,3 +47,11 @@
 @media(max-width:600px){.conversation-form{min-height:490px}.conversation-title{font-size:25px}.conversation-hint{font-size:12px}.conversation-review{padding:18px}.contact h2{font-size:42px}}
 @media(prefers-reduced-motion:reduce){.conversation-page:not([hidden]),.conversation-review:not([hidden]){animation:none}}
 .contact label{display:flex;align-items:center;justify-content:space-between;gap:10px}.contact label .field-cue{display:inline-flex;align-items:center;gap:6px;font-size:10px;color:#77829a;white-space:nowrap}.field-cue:before{content:'';width:6px;height:6px;border:1px solid #8d9fc7;border-radius:50%;transition:background .25s,border-color .25s,box-shadow .25s}.contact label:has(+ :required:valid) .field-cue{color:#547737}.contact label:has(+ :required:valid) .field-cue:before{background:#7eaa52;border-color:#7eaa52;box-shadow:0 0 0 3px #7eaa5215}
+
+/* Give the next step a clear, calm place in the conversation. */
+.conversation-navigation{flex-wrap:wrap;margin-top:10px}
+.conversation-navigation .conversation-next{width:100%;min-height:56px;margin:0;padding:15px 20px;border-radius:12px;background:#19243b;color:#fff;box-shadow:0 4px 10px #19243b0a;font-size:14px;font-weight:500;justify-content:space-between;transition:background .2s,box-shadow .2s}
+.conversation-next .icon{width:19px;height:19px;transition:transform .2s}
+.conversation-navigation .conversation-next:hover{background:#263c66;transform:none;box-shadow:0 6px 16px #19243b18}
+.conversation-next:hover .icon{transform:translateX(-3px)}
+.conversation-navigation .conversation-next:active{background:#101b30;box-shadow:none}
