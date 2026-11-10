@@ -27,11 +27,11 @@ async function loadProjects() {
   hideProjects();
   try {
     const response = await fetch('/api/projects', { signal: AbortSignal.timeout(20000) });
-    if (!response.ok) return;
+    if (!response.ok) throw new Error('Project verification unavailable');
     const result = await response.json();
     if (request !== projectRequest) return;
     const expiresAt = Date.parse(result.expiresAt);
-    if (!Array.isArray(result.projects) || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) return;
+    if (!Array.isArray(result.projects) || !Number.isFinite(expiresAt) || expiresAt <= Date.now()) throw new Error('Invalid project verification');
     result.projects.forEach(project => {
       const url = new URL(project.url);
       if (url.protocol !== 'https:' || url.username || url.password) return;
@@ -146,3 +146,22 @@ document.getElementById('instagram-fallback-link').onclick = () => {
   }
 };
 
+
+// The hero is an explicitly labeled design study, separate from verified work.
+const preview = document.getElementById('site-preview');
+document.querySelectorAll('.device-controls button').forEach(button => {
+  button.addEventListener('click', () => {
+    preview.dataset.device = button.dataset.device;
+    document.querySelectorAll('.device-controls button').forEach(control => {
+      control.setAttribute('aria-pressed', String(control === button));
+    });
+  });
+});
+document.querySelectorAll('.color-controls button').forEach(button => {
+  button.addEventListener('click', () => {
+    preview.style.setProperty('--preview-accent', button.dataset.color);
+    document.querySelectorAll('.color-controls button').forEach(control => {
+      control.setAttribute('aria-pressed', String(control === button));
+    });
+  });
+});
