@@ -147,7 +147,7 @@ document.getElementById('instagram-fallback-link').onclick = () => {
 };
 
 
-// The hero is an explicitly labeled design study, separate from verified work.
+// The playground is an explicitly labeled design study, separate from verified work.
 const preview = document.getElementById('site-preview');
 document.querySelectorAll('.device-controls button').forEach(button => {
   button.addEventListener('click', () => {
@@ -165,3 +165,107 @@ document.querySelectorAll('.color-controls button').forEach(button => {
     });
   });
 });
+
+// Optional enhancements stay scoped to their own controls and respect motion preferences.
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const briefIntents = document.getElementById('brief-intents');
+const briefKind = document.getElementById('kind');
+const briefSelection = document.getElementById('brief-selection');
+const intentButtons = briefIntents ? briefIntents.querySelectorAll('[data-brief-kind]') : [];
+function syncBriefIntent() {
+  if (!briefKind) return;
+  intentButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.briefKind === briefKind.value)));
+  if (briefSelection) briefSelection.textContent = 'בחרתם: ' + briefKind.value;
+}
+intentButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    if (!briefKind || !Array.from(briefKind.options).some(option => option.value === button.dataset.briefKind)) return;
+    briefKind.value = button.dataset.briefKind;
+    syncBriefIntent();
+    const ideaField = document.getElementById('idea');
+    ideaField?.focus({ preventScroll: true });
+    ideaField?.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'center' });
+  });
+});
+briefKind?.addEventListener('change', syncBriefIntent);
+// Form resets apply default values after the reset event has been dispatched.
+form.addEventListener('reset', () => queueMicrotask(syncBriefIntent));
+
+const revealSections = Array.from(document.querySelectorAll('[data-reveal]'));
+let revealObserver;
+function revealSection(section) {
+  section.classList.add('is-visible');
+  revealObserver?.unobserve(section);
+}
+if (!reducedMotion.matches && 'IntersectionObserver' in window) {
+  revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) revealSection(entry.target); });
+  }, { threshold: 0, rootMargin: '0px 0px -35px 0px' });
+  revealSections.forEach(section => {
+    // Content already on screen, including anchor targets, remains visible immediately.
+    if (section.getBoundingClientRect().top >= window.innerHeight) {
+      section.classList.add('reveal-ready');
+      revealObserver.observe(section);
+    } else revealSection(section);
+  });
+  document.addEventListener('focusin', event => {
+    const section = event.target.closest('[data-reveal]');
+    if (section) revealSection(section);
+  });
+}
+reducedMotion.addEventListener('change', event => {
+  if (event.matches) {
+    revealSections.forEach(revealSection);
+    revealObserver?.disconnect();
+  }
+});
+
+const readingProgress = document.getElementById('reading-progress');
+if (readingProgress) {
+  let progressFrame = 0;
+  function updateReadingProgress() {
+    progressFrame = 0;
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const fraction = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
+    readingProgress.style.transform = 'scaleX(' + fraction + ')';
+  }
+  function scheduleReadingProgress() {
+    if (!progressFrame) progressFrame = requestAnimationFrame(updateReadingProgress);
+  }
+  window.addEventListener('scroll', scheduleReadingProgress, { passive: true });
+  window.addEventListener('resize', scheduleReadingProgress, { passive: true });
+  window.addEventListener('load', scheduleReadingProgress, { once: true });
+  if ('ResizeObserver' in window) new ResizeObserver(scheduleReadingProgress).observe(document.body);
+  scheduleReadingProgress();
+}
+
+const heroSculpture = document.getElementById('hero-sculpture');
+const heroVisual = heroSculpture?.closest('.hero-visual');
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+if (heroSculpture && heroVisual) {
+  let tiltFrame = 0;
+  let tiltX = 0;
+  let tiltY = 0;
+  function resetHeroTilt() {
+    cancelAnimationFrame(tiltFrame);
+    tiltFrame = 0;
+    heroSculpture.style.setProperty('--tilt-x', '0deg');
+    heroSculpture.style.setProperty('--tilt-y', '0deg');
+  }
+  heroVisual.addEventListener('pointermove', event => {
+    if (reducedMotion.matches || !finePointer.matches || event.pointerType === 'touch') return;
+    const bounds = heroVisual.getBoundingClientRect();
+    if (!bounds.width || !bounds.height) return;
+    tiltX = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1)) * -4;
+    tiltY = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1)) * 4;
+    if (!tiltFrame) tiltFrame = requestAnimationFrame(() => {
+      tiltFrame = 0;
+      heroSculpture.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
+      heroSculpture.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
+    });
+  }, { passive: true });
+  heroVisual.addEventListener('pointerleave', resetHeroTilt);
+  heroVisual.addEventListener('pointercancel', resetHeroTilt);
+  reducedMotion.addEventListener('change', resetHeroTilt);
+  finePointer.addEventListener('change', resetHeroTilt);
+}
