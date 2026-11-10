@@ -98,6 +98,7 @@ let sending = false;
 form.onsubmit = async event => {
   event.preventDefault();
   if (sending) return;
+  if (form.classList.contains('conversation-form') && briefStep < 2) { advanceBrief(); return; }
   const phone = phoneField.value.trim();
   if (!/^\+?[0-9\s()-]+$/.test(phone) || !/^\d{8,15}$/.test(phone.replace(/[^0-9]/g, ''))) {
     phoneField.setCustomValidity('הזינו מספר טלפון תקין כדי שנוכל לחזור אליכם.');
@@ -204,6 +205,7 @@ intentButtons.forEach(button => {
     if (!briefKind || !Array.from(briefKind.options).some(option => option.value === button.dataset.briefKind)) return;
     briefKind.value = button.dataset.briefKind;
     syncBriefIntent();
+    showBriefStep(0, false);
     const ideaField = document.getElementById('idea');
     ideaField?.focus({ preventScroll: true });
     ideaField?.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'center' });
@@ -241,6 +243,7 @@ exampleKindLink?.addEventListener('click', () => {
   if (!briefKind || !Array.from(briefKind.options).some(option => option.value === kind)) return;
   briefKind.value = kind;
   syncBriefIntent();
+  showBriefStep(0, false);
 });
 if (exampleChoices.length) {
   const activeExample = Array.from(exampleChoices).find(button => button.getAttribute('aria-pressed') === 'true');
@@ -325,3 +328,141 @@ if (heroSculpture && heroVisual) {
   reducedMotion.addEventListener('change', resetHeroTilt);
   finePointer.addEventListener('change', resetHeroTilt);
 }
+
+// Animate native disclosures in both directions; preserve keyboard and no-JS behavior.
+document.querySelectorAll('.faq details').forEach(details => {
+  const summary = details.querySelector('summary');
+  const answer = details.querySelector('.faq-answer');
+  let animation;
+  let expanded = details.open;
+  summary.addEventListener('click', event => {
+    if (reducedMotion.matches || !answer.animate) return;
+    event.preventDefault();
+    expanded = !expanded;
+    const from = details.open ? answer.getBoundingClientRect().height : 0;
+    animation?.cancel();
+    details.open = true;
+    const to = expanded ? answer.scrollHeight : 0;
+    animation = answer.animate([
+      { height: from + 'px', opacity: from ? 1 : 0, transform: 'translateY(' + (from ? 0 : -8) + 'px)' },
+      { height: to + 'px', opacity: expanded ? 1 : 0, transform: 'translateY(' + (expanded ? 0 : -8) + 'px)' }
+    ], { duration: 360, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both' });
+    animation.onfinish = () => {
+      details.open = expanded;
+      animation.cancel();
+      animation = null;
+    };
+  });
+  details.addEventListener('toggle', () => { if (!animation) expanded = details.open; });
+  reducedMotion.addEventListener('change', () => {
+    if (animation) { animation.cancel(); animation = null; details.open = expanded; }
+  });
+});
+
+// Keep the visitor oriented while moving through the page.
+if ('IntersectionObserver' in window) {
+  const navigationLinks = Array.from(document.querySelectorAll('.header nav a'));
+  const navigationObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navigationLinks.forEach(link => {
+        if (link.hash === '#' + entry.target.id) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+      });
+    });
+  }, { rootMargin: '-20% 0px -55% 0px', threshold: 0 });
+  navigationLinks.forEach(link => {
+    const section = document.querySelector(link.hash);
+    if (section) navigationObserver.observe(section);
+  });
+}
+
+// A short conversation, progressively enhanced from the regular accessible form.
+let briefStep = 0;
+const briefPages = [];
+const briefSubmit = form.querySelector('button[type="submit"]');
+const conversationHeader = el('div', '', 'conversation-header');
+const conversationProgress = el('div', '', 'conversation-progress');
+conversationProgress.setAttribute('aria-label', 'התקדמות הפנייה');
+const conversationTitle = el('h3', '', 'conversation-title');
+conversationTitle.tabIndex = -1;
+const conversationHint = el('p', '', 'conversation-hint');
+conversationHeader.append(conversationProgress, conversationTitle, conversationHint);
+form.querySelector('.form-heading').after(conversationHeader);
+[['idea','kind'], ['name','phone']].forEach(ids => {
+  const page = el('div', '', 'conversation-page');
+  ids.forEach(id => {
+    page.append(form.querySelector('label[for="' + id + '"]'), document.getElementById(id));
+  });
+  briefPages.push(page);
+  conversationHeader.after(page);
+});
+const briefReview = el('div', '', 'conversation-review');
+briefPages.push(briefReview);
+conversationHeader.after(briefReview);
+const conversationNavigation = el('div', '', 'conversation-navigation');
+const briefBack = el('button', '→ חזרה', 'conversation-back');
+briefBack.type = 'button';
+const briefNext = el('button', 'ממשיכים ←', 'button primary');
+briefNext.type = 'button';
+briefNext.addEventListener('click', advanceBrief);
+briefBack.addEventListener('click', () => showBriefStep(briefStep - 1));
+conversationNavigation.append(briefBack, briefNext);
+briefSubmit.before(conversationNavigation);
+form.classList.add('conversation-form');
+const briefStepCopy = [
+  ['מה נבנה יחד?', 'כמה מילים על העסק, הרעיון או משהו שהייתם רוצים שיעבוד טוב יותר.'],
+  ['נעים להכיר. ואיך קוראים לכם?', 'נשאר רק לדעת למי לחזור.'],
+  ['זה הכיוון שלכם. שולחים?', 'הכול כאן? אפשר לחזור ולדייק, או לשלוח אלינו.']
+];
+function showBriefStep(step, focus = true) {
+  if (!briefPages.length) return;
+  briefStep = Math.max(0, Math.min(2, step));
+  briefPages.forEach((page, index) => { page.hidden = index !== briefStep; });
+  conversationTitle.textContent = briefStepCopy[briefStep][0];
+  conversationHint.textContent = briefStepCopy[briefStep][1];
+  conversationProgress.replaceChildren(...briefStepCopy.map((copy, index) => {
+    const mark = el('span', index < briefStep ? '✓' : String(index + 1));
+    mark.classList.toggle('current', index === briefStep);
+    mark.classList.toggle('done', index < briefStep);
+    if (index === briefStep) mark.setAttribute('aria-current', 'step');
+    return mark;
+  }));
+  conversationProgress.setAttribute('aria-label', 'שלב ' + (briefStep + 1) + ' מתוך 3');
+  briefBack.hidden = briefStep === 0;
+  briefNext.hidden = briefStep === 2;
+  briefSubmit.hidden = briefStep !== 2;
+  if (briefStep === 2) {
+    briefReview.replaceChildren(
+      el('span', 'היי רז ובן,', 'review-greeting'),
+      el('p', 'אני ' + document.getElementById('name').value.trim() + '. ' + (briefKind.selectedIndex === 0 ? 'אשמח לחשוב יחד על הכיוון.' : 'אשמח לדבר על ' + briefKind.value + '.')),
+      el('blockquote', document.getElementById('idea').value.trim()),
+      el('p', 'אפשר לחזור אליי ב־' + phoneField.value.trim(), 'review-phone')
+    );
+    briefSubmit.firstChild.textContent = 'בואו נהפוך את זה למשהו ← ';
+  }
+  if (focus) conversationTitle.focus({ preventScroll: true });
+}
+function advanceBrief() {
+  const page = briefPages[briefStep];
+  if (!page) return;
+  if (briefStep === 1) {
+    const phone = phoneField.value.trim();
+    phoneField.setCustomValidity(/^\+?[0-9\s()-]+$/.test(phone) && /^\d{8,15}$/.test(phone.replace(/[^0-9]/g, '')) ? '' : 'הזינו מספר טלפון תקין כדי שנוכל לחזור אליכם.');
+  }
+  const fields = Array.from(page.querySelectorAll('input,textarea,select'));
+  const invalid = fields.find(field => !field.checkValidity());
+  if (invalid) { invalid.reportValidity(); return; }
+  const idea = document.getElementById('idea');
+  const name = document.getElementById('name');
+  const blank = briefStep === 0 && !idea.value.trim() ? idea : briefStep === 1 && !name.value.trim() ? name : null;
+  if (blank) { blank.setCustomValidity('כתבו כאן כמה מילים כדי שנוכל להמשיך.'); blank.reportValidity(); return; }
+  showBriefStep(briefStep + 1);
+}
+['idea','name'].forEach(id => document.getElementById(id).addEventListener('input', event => event.target.setCustomValidity('')));
+form.addEventListener('invalid', event => {
+  const pageIndex = briefPages.findIndex(page => page.contains(event.target));
+  if (pageIndex >= 0 && pageIndex !== briefStep) showBriefStep(pageIndex, false);
+}, true);
+form.addEventListener('reset', () => queueMicrotask(() => showBriefStep(0, false)));
+showBriefStep(0, false);
