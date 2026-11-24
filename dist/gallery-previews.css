@@ -1,0 +1,207 @@
+/* Each concept has its own visual identity. Controls retain a consistent hit area. */
+.gp-preview {
+  --gp-paper: #fcfaf5;
+  --gp-ink: #242c29;
+  --gp-accent: #334f42;
+  --gp-tint: #e4e9df;
+  container-type: inline-size;
+  display: grid;
+  align-content: start;
+  gap: .65rem;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: clamp(.85rem, 2.1vw, 1.4rem);
+  color: var(--gp-ink);
+  background: var(--gp-paper);
+  border: 1px solid color-mix(in srgb, var(--gp-accent) 32%, var(--gp-paper));
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+  text-align: start;
+}
+.gp-preview *, .gp-preview *::before, .gp-preview *::after { box-sizing: border-box; }
+.gp-preview [hidden] { display: none !important; }
+.gp-preview p, .gp-preview h3, .gp-preview ul { margin: 0; }
+.gp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .7rem;
+  min-width: 0;
+  padding-block-end: .65rem;
+  border-block-end: 1px solid color-mix(in srgb, var(--gp-accent) 27%, var(--gp-paper));
+}
+.gp-head-copy { min-width: 0; }
+.gp-brand { color: var(--gp-accent); font-size: .78rem; font-weight: 700; }
+.gp-head .gp-title {
+  margin-block-start: .2rem;
+  color: var(--gp-ink);
+  font-size: clamp(1.25rem, 7cqi, 1.75rem);
+  line-height: 1.16;
+  letter-spacing: -.025em;
+}
+.gp-photo {
+  display: block;
+  width: clamp(3.8rem, 25cqi, 6rem);
+  aspect-ratio: 1.14;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border-radius: .45rem;
+}
+.gp-label, .gp-result, .gp-shift { font-size: .9rem; line-height: 1.4; }
+.gp-label { font-weight: 700; }
+.gp-choices { display: flex; gap: .35rem; flex-wrap: wrap; }
+.gp-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: .44rem .72rem;
+  border: 1px solid var(--gp-accent);
+  border-radius: .48rem;
+  background: transparent;
+  color: var(--gp-ink);
+  font: 700 .88rem/1.25 Arial, sans-serif;
+  cursor: pointer;
+  text-align: center;
+}
+.gp-button:hover { background: var(--gp-tint); }
+.gp-button:focus-visible { outline: 3px solid var(--gp-accent); outline-offset: 2px; }
+.gp-button[aria-pressed="true"], .gp-preview > .gp-button {
+  background: var(--gp-accent);
+  color: white;
+}
+.gp-button[aria-pressed="true"] { box-shadow: inset 0 -3px 0 rgb(0 0 0 / 26%); }
+.gp-result {
+  padding: .57rem .7rem;
+  border-inline-start: 3px solid var(--gp-accent);
+  color: var(--gp-ink);
+  background: var(--gp-tint);
+}
+.gp-ceramics { --gp-paper: #f7f3e9; --gp-ink: #162b46; --gp-accent: #2a4e80; --gp-tint: #dfe8ef; }
+.gp-ceramics .gp-title, .gp-bakery .gp-title { font-family: Georgia, "Times New Roman", serif; }
+.gp-ceramics .gp-choices .gp-button { font-size: 1rem; font-variant-numeric: tabular-nums; }
+.gp-bakery { --gp-paper: #fff4ee; --gp-ink: #3b242a; --gp-accent: #843748; --gp-tint: #f3dce0; }
+.gp-bakery .gp-result { font-size: 1.16rem; font-weight: 700; }
+.gp-guitar { --gp-paper: #fcf2d6; --gp-ink: #322c22; --gp-accent: #60442a; --gp-tint: #f0e1b7; }
+.gp-technician { --gp-paper: #f5f6ef; --gp-ink: #202a2a; --gp-accent: #345364; --gp-tint: #dfe8e8; }
+.gp-visit {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  padding-block: .2rem;
+}
+.gp-visit div { display: grid; gap: .2rem; }
+.gp-visit div span { font-size: .85rem; }
+.gp-time { font: 700 1.2rem/1 monospace; color: var(--gp-accent); }
+.gp-community { --gp-paper: #fffae8; --gp-ink: #403322; --gp-accent: #70551a; --gp-tint: #f2e9c9; }
+.gp-rows, .gp-poll { display: grid; list-style: none; padding: 0; }
+.gp-rows li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .4rem;
+  padding-block: .4rem;
+  border-block-end: 1px solid var(--gp-tint);
+  font-size: .85rem;
+}
+.gp-rows small { flex-shrink: 0; color: var(--gp-accent); font-size: .77rem; }
+.gp-volunteer { --gp-paper: #f2f8ee; --gp-ink: #203a34; --gp-accent: #355f4d; --gp-tint: #dcebd8; }
+.gp-shift { padding: .5rem; background: var(--gp-tint); font-weight: 700; }
+.gp-study { --gp-paper: #f7f2fc; --gp-ink: #362d43; --gp-accent: #61437a; --gp-tint: #e9def1; }
+.gp-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+.gp-tags span { padding: .27rem .65rem; background: var(--gp-tint); border-radius: 2rem; font-size: .83rem; }
+.gp-hiking { --gp-paper: #f6f6e7; --gp-ink: #293624; --gp-accent: #4c612f; --gp-tint: #e1e8ca; }
+.gp-poll { gap: .35rem; }
+.gp-poll li { display: grid; grid-template-columns: 2.6rem minmax(1rem, 1fr) 3.5rem; align-items: center; gap: .4rem; font-size: .78rem; }
+.gp-poll .gp-bar { height: .48rem; border-radius: 1rem; background: linear-gradient(to left, var(--gp-accent) var(--gp-share), var(--gp-tint) var(--gp-share)); }
+@media (forced-colors: active) {
+  .gp-button[aria-pressed="true"] { outline: 2px solid Highlight; outline-offset: -4px; }
+}
+
+.gp-preview.gp-bakery { border-radius: 1.3rem; }
+.gp-bakery .gp-result { border-inline-start: 0; border-block: 1px dashed var(--gp-accent); text-align: center; }
+.gp-technician .gp-visit { padding: .8rem; background: var(--gp-tint); border-inline-start: 4px solid var(--gp-accent); }
+.gp-technician .gp-result, .gp-community .gp-result { padding: .15rem 0; border: none; background: transparent; }
+.gp-community .gp-rows { border-block-start: 1px solid var(--gp-tint); }
+.gp-community .gp-rows small { background: var(--gp-tint); padding: .16rem .35rem; border-radius: .2rem; }
+.gp-volunteer .gp-shift { border-inline-start: 4px solid var(--gp-accent); }
+.gp-study .gp-photo { border-radius: 50%; aspect-ratio: 1; }
+.gp-hiking .gp-photo { aspect-ratio: 1.4; border-radius: .15rem; transform: rotate(-3deg); }
+
+/* Storefronts have a full masthead and product photograph above the selection. */
+.gp-storefront {
+  display: block;
+  padding: 0;
+  overflow: clip;
+  border-radius: .7rem;
+}
+.gp-storefront > .gp-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  min-height: 2.5rem;
+  padding: .5rem 1rem;
+  font-size: 1rem;
+  line-height: 1.18;
+}
+.gp-brand-mark {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+.gp-storefront .gp-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+  align-items: stretch;
+  gap: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+}
+.gp-storefront .gp-head-copy { display: grid; align-items: center; padding: .8rem clamp(.85rem, 4cqi, 1.8rem); }
+.gp-storefront .gp-title {
+  margin: 0;
+  color: inherit;
+  font-size: clamp(1.45rem, 7.7cqi, 2.7rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+.gp-storefront .gp-photo {
+  width: 100%;
+  height: clamp(7.4rem, 30cqi, 10.7rem);
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+.gp-storefront > .gp-label { margin: .8rem 1rem .4rem; }
+.gp-storefront > .gp-choices { margin-inline: 1rem; }
+.gp-storefront > .gp-result { margin: .7rem 1rem .85rem; }
+.gp-ceramics > .gp-brand { color: #f7f2df; background: #192f52; font-family: Georgia, "Times New Roman", serif; }
+.gp-ceramics .gp-brand-mark { border: 1.5px solid currentColor; height: .77rem; border-radius: .05rem .05rem .35rem .35rem; }
+.gp-ceramics .gp-head { background: #d1dee2; }
+.gp-ceramics .gp-photo { object-position: 50% 58%; }
+.gp-ceramics .gp-title { color: #203858; }
+.gp-ceramics .gp-button { min-width: 3.3rem; border-radius: .25rem; }
+.gp-bakery > .gp-brand { background: #fff4ee; color: #703044; border-bottom: 1px dashed #b67c89; }
+.gp-bakery .gp-brand-mark { background: #9a3e50; border-radius: 70% 25% 70% 45%; transform: rotate(-28deg); }
+.gp-bakery .gp-head { color: #702238; background: #f1c6cc; }
+.gp-bakery .gp-head-copy { text-align: center; }
+.gp-bakery .gp-photo { border-start-start-radius: 45%; border-end-start-radius: 45%; }
+.gp-bakery .gp-button { min-width: 3.3rem; border-radius: 99px; direction: ltr; }
+.gp-guitar > .gp-brand { justify-content: flex-start; color: #f6eac5; background: #342a22; }
+.gp-guitar .gp-brand-mark { width: .83rem; background: #ead392; border-radius: 50% 50% 70% 70% / 40% 40% 90% 90%; }
+.gp-guitar .gp-head { display: grid; grid-template-columns: 1fr; isolation: isolate; position: relative; background: #332d2b; }
+.gp-guitar .gp-head-copy, .gp-guitar .gp-photo { grid-area: 1 / 1; }
+.gp-guitar .gp-head-copy {
+  align-content: end;
+  z-index: 1;
+  color: white;
+  background: linear-gradient(to left, rgb(27 22 22 / 87%), rgb(34 25 20 / 48%) 55%, transparent 88%);
+}
+.gp-guitar .gp-title { max-width: 10ch; text-shadow: 0 1px 4px #17120d; }
+.gp-guitar .gp-photo { object-position: 50% 55%; }
