@@ -15,8 +15,13 @@
   line-height: 1.1;
   text-wrap: balance;
 }
-.gallery-description, .gallery-links { display: flex; align-items: center; flex-wrap: wrap; }
-.gallery-description { justify-content: space-between; gap: 1rem; }
+.gallery-links { display: flex; align-items: center; flex-wrap: wrap; }
+.story-intro {
+  padding: 1rem 1.2rem;
+  background: var(--stage);
+  border-radius: 1rem 1rem 0 0;
+}
+.story-intro p { margin-block-start: .35rem; line-height: 1.5; max-width: 70ch; text-wrap: pretty; }
 .gallery-play {
   position: absolute;
   inset-inline-end: .75rem;
@@ -29,7 +34,7 @@
   background: var(--paper);
 }
 .gallery-play:hover { background: white; }
-.gallery-pair { display: grid; grid-template-columns: 1fr 1fr; overflow: clip; border-radius: 1.15rem; }
+.gallery-pair { display: grid; grid-template-columns: 1fr 1fr; overflow: clip; border-radius: 0 0 1.15rem 1.15rem; }
 .gallery-picture { background: #eee5d8; position: relative; min-width: 0; }
 .gallery-picture img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
 .gallery-stage {
@@ -43,10 +48,8 @@
   min-height: clamp(27rem, 34vw, 32rem);
   padding: clamp(1rem, 2.6vw, 2.65rem);
 }
-.gallery-description { padding-block-start: 1.15rem; align-items: start; }
-.gallery-description h3, .static-workshop h3 { font-size: clamp(1.4rem, 2vw, 1.95rem); line-height: 1.15; }
-.gallery-description p { max-width: 56ch; margin-top: .45rem; line-height: 1.55; }
-.gallery-links { gap: .5rem 1.15rem; }
+.story-intro h3, .static-workshop h3 { font-size: clamp(1.4rem, 2vw, 1.95rem); line-height: 1.15; }
+.gallery-links { gap: .5rem 1.15rem; margin-block-start: 1rem; }
 .gallery-links a, .static-ideas a, .static-ideas summary { min-height: 44px; display: inline-flex; align-items: center; }
 .gallery-cta { background: var(--orange); color: white; text-decoration: none; border-radius: 999px; padding: .62rem 1.15rem; font-weight: 700; }
 .gallery-cta:hover { background: #94311d; }
@@ -58,9 +61,9 @@
 @media (max-width: 720px) {
   .gallery-heading h2 { max-width: 20ch; }
   .gallery-pair { grid-template-columns: minmax(0, 1fr); }
-  .gallery-picture { height: clamp(10rem, 48vw, 15rem); }
+  .gallery-picture { height: clamp(8rem, 35vw, 13rem); }
   .gallery-stage { min-height: 23rem; border-radius: 0 0 1.15rem 1.15rem; }
-  .gallery-description { align-items: start; }
+  .story-intro { padding: .9rem 1rem; }
 }
 .static-dates { border: 0; margin-inline: 0; padding: .5rem 0; }
 .static-dates label { display: block; padding: .4rem; }
