@@ -171,7 +171,7 @@
 .service-body > p { margin-block: .55rem .85rem; line-height: 1.6; }
 
 .service-example { border-block-start: 1px solid #aba99e; }
-.service-example summary, .service-example a {
+.service-example summary, .service-contact {
   display: flex;
   align-items: center;
   gap: .7rem;
@@ -203,9 +203,24 @@
 
 .service-example summary span::after { transform: rotate(90deg); }
 .service-example[open] summary span::after { display: none; }
-.service-example p { line-height: 1.6; }
-.service-example a { width: fit-content; text-decoration: underline; text-underline-offset: .24em; }
-.service-example :is(summary, a):hover { text-decoration: underline; text-underline-offset: .24em; }
+.service-example p { padding-block-end: .8rem; line-height: 1.6; }
+.service-example summary:hover { text-decoration: underline; text-underline-offset: .24em; }
+.service-contact {
+  width: fit-content;
+  color: var(--orange);
+  text-decoration: underline;
+  text-underline-offset: .22em;
+}
+.service-contact span {
+  display: grid;
+  place-items: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  line-height: 1;
+}
+.service-contact:is(:hover, :focus-visible) span { background: var(--orange); color: white; }
 
 @media (max-width: 760px) {
   .services-heading { display: grid; gap: .6rem; margin-block-end: 1.4rem; }

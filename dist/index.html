@@ -30,9 +30,50 @@
 <section class="intro shell" aria-labelledby="intro-title">
   <div class="intro-copy">
     <p class="studio-line"><span aria-hidden="true"></span> הסטודיו לעיצוב ופיתוח של רז ובן</p>
-    <h1 id="intro-title">יש לכם רעיון?<br><em>בואו נבנה אותו.</em></h1>
-    <p class="intro-text">אתר שיציג את מה שאתם עושים, כלי שיחסוך זמן בעבודה או אפליקציה שתמיד רציתם לבנות. מתחילים במה שחשוב לכם.</p>
-    <div class="intro-actions"><a class="solid-link" href="#websites">מה מתאים לי? <span aria-hidden="true">←</span></a><a class="quiet-link" href="#contact">לדבר עם רז ובן</a></div>
+    <h1 id="intro-title">מה תרצו<br><em>לשפר או לבנות?</em></h1>
+    <p class="intro-text">אתר שיקל על לקוחות לפנות, כלי שיחסוך עבודה ידנית או רעיון לאפליקציה? נשמח לשמוע מה קורה אצלכם ולחשוב יחד מאיפה להתחיל.</p>
+    <div id="contact" class="hero-contact">
+      <form id="brief-form" class="journey-form" aria-label="בקשת שיחת היכרות עם רז ובן" action="https://formsubmit.co/raben10studio@gmail.com" method="post">
+      <fieldset>
+        <legend class="journey-sr">פרטי הפנייה</legend>
+        <label for="phone">לאיזה מספר לחזור?</label>
+        <div class="callback-row">
+          <input placeholder="050-1234567" id="phone" name="phone" type="tel" dir="ltr" autocomplete="tel" inputmode="tel" maxlength="25" required>
+          <button type="submit">חזרו אליי <span aria-hidden="true">←</span></button>
+        </div>
+        <p class="callback-note">רז או בן יחזרו אליך לשיחת היכרות.</p>
+        <details id="brief-extras" class="journey-extras">
+          <summary><span>הוספת פרטים <small id="brief-topic"></small></span></summary>
+          <label for="idea">על מה נדבר?</label>
+          <textarea id="idea" name="message" rows="2" maxlength="2000"></textarea>
+          <div class="journey-fields">
+            <div><label for="name">שם</label><input id="name" name="name" autocomplete="name" maxlength="100"></div>
+            <div><label for="kind">נושא הפנייה</label>
+              <select id="kind" name="project_type">
+                <option value="רוצה לחשוב על זה יחד">אשמח לחשוב יחד</option>
+                <option value="אתר או ממשק">אתר או דף נחיתה</option>
+                <option value="כלי לעסק">כלי לעבודה יומיומית</option>
+                <option value="רעיון למוצר">מוצר דיגיטלי חדש</option>
+                <option value="שיתוף פעולה">שיתוף פעולה</option>
+              </select>
+            </div>
+          </div>
+        </details>
+        <input type="text" name="_honey" tabindex="-1" autocomplete="off" hidden>
+        <input type="hidden" name="_subject" value="בקשה לשיחת היכרות מאתר RABEN">
+        <input type="hidden" name="_template" value="table">
+        <p class="journey-form-note">הפרטים נשלחים באמצעות FormSubmit.</p>
+      </fieldset>
+      <p id="form-status" role="status"></p>
+      <div id="contact-fallback" hidden>
+        <label for="instagram-brief">הודעה מוכנה לאינסטגרם</label>
+        <textarea id="instagram-brief" readonly rows="5"></textarea>
+        <a id="instagram-fallback-link" class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span aria-hidden="true">↗</span></a>
+        <p id="instagram-copy-status" role="status">אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.</p>
+      </div>
+    </form>
+      <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">מעדיפים לכתוב? הודעה באינסטגרם <span aria-hidden="true">↗</span></a>
+    </div>
   </div>
   <div class="studio-art" aria-hidden="true"><img src="assets/studio-objects.webp" width="1000" height="820" fetchpriority="high" alt=""></div>
 </section>
@@ -55,8 +96,8 @@
         <details class="service-example">
           <summary>דוגמה לאתר <span aria-hidden="true"></span></summary>
           <p>בעמוד של סדנת קרמיקה אפשר לראות מה מכינים, לבדוק למי הסדנה מתאימה ולבקש להצטרף.</p>
-          <a href="#contact" data-service-kind="אתר או ממשק">נדבר על האתר שלי <span aria-hidden="true">←</span></a>
         </details>
+        <a class="service-contact" href="#contact" data-service-kind="אתר או ממשק">נדבר על האתר שלי <span aria-hidden="true">←</span></a>
       </div>
     </article>
     <article class="service-option" id="solution-tool">
@@ -69,8 +110,8 @@
         <details class="service-example">
           <summary>דוגמה לכלי עבודה <span aria-hidden="true"></span></summary>
           <p>בעמותה שמחלקת סלי מזון, הצוות יכול לראות מי נרשם לחלוקה, למי שובץ מתנדב ומי כבר קיבל סל.</p>
-          <a href="#contact" data-service-kind="כלי לעסק">נדבר על כלי בשבילנו <span aria-hidden="true">←</span></a>
         </details>
+        <a class="service-contact" href="#contact" data-service-kind="כלי לעסק">נדבר על כלי שמתאים לי <span aria-hidden="true">←</span></a>
       </div>
     </article>
     <article class="service-option" id="solution-product">
@@ -83,8 +124,8 @@
         <details class="service-example">
           <summary>דוגמה למוצר ראשון <span aria-hidden="true"></span></summary>
           <p>יש רעיון לחבר בין אנשים שרוצים ללמוד יחד? אפשר להתחיל במסך שמציע שותף ללימוד ומאפשר לקבוע פגישה.</p>
-          <a href="#contact" data-service-kind="רעיון למוצר">נדבר על הרעיון שלי <span aria-hidden="true">←</span></a>
         </details>
+        <a class="service-contact" href="#contact" data-service-kind="רעיון למוצר">נדבר על הרעיון שלי <span aria-hidden="true">←</span></a>
       </div>
     </article>
   </div>
@@ -120,45 +161,13 @@
     </div>
   </div>
 </section>
-<section id="contact" class="journey-block journey-contact" aria-labelledby="contact-title">
-  <div class="journey-shell journey-contact-layout">
+<section class="journey-block journey-contact" aria-labelledby="contact-title">
+  <div class="journey-shell closing-contact">
     <div class="journey-intro">
-      <p class="journey-kicker">יצירת קשר</p>
-      <h2 id="contact-title">מה נבנה<br>בשבילך?</h2>
-      <p>אפשר להתחיל במשפט אחד על מה שצריך. נחזור אליך בטלפון ונחשוב יחד איך להתקדם.</p>
-      <a class="journey-social" href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">אפשר גם לכתוב לנו באינסטגרם <span aria-hidden="true">↗</span></a>
+      <h2 id="contact-title">שנדבר על זה?</h2>
+      <p>גם שאלה אחת על האתר או על הדרך שבה אתם עובדים היא סיבה טובה לכתוב לנו.</p>
     </div>
-    <form id="brief-form" class="journey-form" aria-labelledby="contact-title" action="https://formsubmit.co/raben10studio@gmail.com" method="post">
-      <fieldset>
-        <legend class="journey-sr">פרטי הפנייה</legend>
-        <div class="journey-fields">
-          <div><label for="name">שם</label><input id="name" name="name" autocomplete="name" maxlength="100" required></div>
-          <div><label for="phone">טלפון לחזרה</label><input id="phone" name="phone" type="tel" dir="ltr" autocomplete="tel" inputmode="tel" maxlength="25" required></div>
-        </div>
-        <label for="kind">מה מעניין אותך?</label>
-        <select id="kind" name="project_type">
-          <option value="רוצה לחשוב על זה יחד">אשמח לחשוב יחד</option>
-          <option value="אתר או ממשק">אתר או דף נחיתה</option>
-          <option value="כלי לעסק">כלי לעבודה יומיומית</option>
-          <option value="רעיון למוצר">מוצר דיגיטלי חדש</option>
-          <option value="שיתוף פעולה">שיתוף פעולה</option>
-        </select>
-        <label for="idea">כמה מילים על הרעיון או הצורך</label>
-        <textarea id="idea" name="message" rows="3" maxlength="2000" required></textarea>
-        <input type="text" name="_honey" tabindex="-1" autocomplete="off" hidden>
-        <input type="hidden" name="_subject" value="פנייה חדשה מאתר RABEN">
-        <input type="hidden" name="_template" value="table">
-        <p class="journey-form-note">הפרטים יישלחו לרז ובן באמצעות FormSubmit כדי שנוכל לחזור אליך.</p>
-        <button type="submit">שליחת הפנייה <span aria-hidden="true">←</span></button>
-      </fieldset>
-      <p id="form-status" role="status"></p>
-      <div id="contact-fallback" hidden>
-        <label for="instagram-brief">הודעה מוכנה לאינסטגרם</label>
-        <textarea id="instagram-brief" readonly rows="5"></textarea>
-        <a id="instagram-fallback-link" class="journey-social" href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span aria-hidden="true">↗</span></a>
-        <p id="instagram-copy-status" role="status">אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.</p>
-      </div>
-    </form>
+    <div class="closing-actions"><a class="header-contact" href="#contact">אשמח שתחזרו אליי <span aria-hidden="true">←</span></a><a class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">הודעה באינסטגרם <span aria-hidden="true">↗</span></a></div>
   </div>
 </section>
 </main>

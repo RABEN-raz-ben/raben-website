@@ -81,7 +81,7 @@ if (contact?.email) {
   form.action = destination.href;
 }
 if (contact?.instagram) {
-  document.querySelectorAll('#contact .journey-social').forEach(link => {
+  document.querySelectorAll('[data-instagram]').forEach(link => {
     link.href = 'https://ig.me/m/' + encodeURIComponent(contact.instagram);
   });
 }
@@ -95,14 +95,18 @@ const fallback = document.getElementById('contact-fallback');
 const instagramBrief = document.getElementById('instagram-brief');
 const copyStatus = document.getElementById('instagram-copy-status');
 
+function callbackMessage() {
+  return message.value.trim() || 'אשמח שתחזרו אליי לשיחת היכרות.';
+}
+
 function updateFallback() {
   instagramBrief.value = [
     'היי רז ובן, אשמח לדבר על פרויקט.',
-    'שם: ' + nameField.value.trim(),
+    ...(nameField.value.trim() ? ['שם: ' + nameField.value.trim()] : []),
     'טלפון: ' + phone.value.trim(),
     'סוג הפרויקט: ' + kind.selectedOptions[0].textContent,
     '',
-    message.value.trim()
+    callbackMessage()
   ].join('\n');
 }
 
@@ -110,15 +114,21 @@ form.addEventListener('input', event => {
   event.target.setCustomValidity?.('');
   if (!fallback.hidden) updateFallback();
 });
+function updateTopic() {
+  document.getElementById('brief-topic').textContent = kind.selectedIndex > 0
+    ? kind.selectedOptions[0].textContent
+    : '';
+}
+
+updateTopic();
 kind.addEventListener('change', () => {
+  updateTopic();
   if (!fallback.hidden) updateFallback();
 });
 
 form.addEventListener('submit', async event => {
   event.preventDefault();
   if (fieldset.disabled) return;
-  nameField.setCustomValidity(nameField.value.trim() ? '' : 'כדאי להוסיף שם כדי שנדע למי לחזור.');
-  message.setCustomValidity(message.value.trim() ? '' : 'אפשר לספר במשפט אחד מה הצורך שלך.');
   const number = phone.value.trim();
   const validPhone = /^\+?[0-9\s()-]+$/.test(number) && /^\d{8,15}$/.test(number.replace(/\D/g, ''));
   phone.setCustomValidity(validPhone ? '' : 'יש להזין מספר טלפון תקין, כולל קידומת.');
@@ -127,7 +137,7 @@ form.addEventListener('submit', async event => {
   const payload = Object.fromEntries(new FormData(form));
   payload.name = nameField.value.trim();
   payload.phone = number;
-  payload.message = message.value.trim();
+  payload.message = callbackMessage();
   fieldset.disabled = true;
   fallback.hidden = true;
   formStatus.textContent = 'שולחים את הפנייה…';
@@ -145,6 +155,8 @@ form.addEventListener('submit', async event => {
     const result = await response.json();
     if (!response.ok || ![true, 'true'].includes(result.success)) throw new Error('Submission rejected');
     form.reset();
+    document.getElementById('brief-extras').open = false;
+    updateTopic();
     instagramBrief.value = '';
     formStatus.textContent = 'תודה, הפנייה נשלחה. נחזור אליך למספר שהשארת.';
   } catch {

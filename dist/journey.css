@@ -106,9 +106,7 @@
   text-underline-offset: 5px;
 }
 .journey-form {
-  padding: clamp(1.2rem, 3vw, 2.25rem);
-  border-radius: 1.25rem;
-  background: #fffbf4;
+  max-width: 31rem;
   color: #183b32;
 }
 .journey-form fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
@@ -117,6 +115,26 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
 }
+.journey-extras {
+  border-block: 1px solid #c9d0c2;
+  margin-block: .45rem;
+}
+.journey-extras summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  padding-block: .65rem;
+  min-height: 44px;
+  list-style: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.journey-extras summary::-webkit-details-marker { display: none; }
+.journey-extras summary::after { content: '+'; font-size: 1.4rem; }
+.journey-extras[open] summary::after { content: '−'; }
+.journey-extras small { font-size: .85rem; color: #475e54; margin-inline-start: .35rem; }
+.journey-extras .journey-fields { margin-block-start: .4rem; }
 .journey-form label {
   display: block;
   margin-block-end: .4rem;
@@ -150,10 +168,19 @@
   font-weight: 650;
   cursor: pointer;
 }
+.callback-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .55rem;
+}
+.journey-form .callback-row input { min-width: 0; margin: 0; border-radius: 2rem; padding-inline: 1rem; text-align: right; }
+.journey-form .callback-row button { white-space: nowrap; gap: .6rem; }
+.journey-form .callback-note { margin: .5rem 0 0; font-size: 1rem; line-height: 1.5; }
+.journey-form #form-status:empty { margin: 0; }
 .journey-form button:hover { background: #94311d; }
 .journey-form fieldset:disabled { opacity: .7; }
 .journey-form .journey-form-note,
-#instagram-copy-status { font-size: .92rem; line-height: 1.5; margin-block: .25rem 1rem; color: #475e54; }
+#instagram-copy-status { font-size: .92rem; line-height: 1.5; margin-block: .25rem 0; color: #475e54; }
 #form-status:not(:empty),
 #contact-fallback:not([hidden]) { margin-block-start: 1rem; }
 #form-status:not(:empty) { padding: .85rem 1rem; border-radius: .6rem; background: #e1eee2; }
