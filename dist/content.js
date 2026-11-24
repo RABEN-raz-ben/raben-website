@@ -1,57 +1,9 @@
-// Public display content only. Publish projects only after explicit permission and verification.
+// Public configuration. Only add projects with explicit publication approval.
 window.RABEN_CONTENT = {
-  "brand": "RABEN",
-  "about": "אנחנו רז ובן, השותפים שמאחורי RABEN. אוהבים לקחת צורך אמיתי של עסק, לשאול את השאלות הנכונות ולהפוך אותו למשהו ברור, שימושי ונעים לעבוד איתו.",
-  "offering": {
-    "title": "מה העסק שלכם צריך עכשיו?",
-    "description": "להציג את העסק, לפשט את העבודה או להתחיל מוצר חדש. שלושה כיוונים, עם פתרון שמתאים למה שאתם צריכים."
-  },
-  "capabilities": [],
-  "services": [
-    {
-      "id": "website",
-      "title": "אתרים ודפי נחיתה",
-      "need": "שיראו מה יש לכם להציע",
-      "description": "אתר שמספר את הסיפור של העסק ומוביל את הלקוחות לצעד הבא.",
-      "example": "שירותים, עבודות ודרך פשוטה ליצור קשר.",
-      "includes": [
-        "עיצוב ותוכן",
-        "מחשב ונייד",
-        "יצירת קשר"
-      ],
-      "kind": "אתר או ממשק"
-    },
-    {
-      "id": "tool",
-      "title": "כלים לעבודה בעסק",
-      "need": "פחות בלאגן. יותר שליטה.",
-      "description": "כלי שמרכז מידע ופעולות במקום אחד, לפי הדרך שבה אתם עובדים.",
-      "example": "פניות, משימות ומצב הטיפול — במסך אחד.",
-      "includes": [
-        "ניהול ומעקב",
-        "מידע מרוכז",
-        "תהליך מותאם"
-      ],
-      "kind": "כלי לעסק"
-    },
-    {
-      "id": "product",
-      "title": "מוצר דיגיטלי ראשון",
-      "need": "להוציא את הרעיון לדרך",
-      "description": "גרסה ראשונה שמתרכזת בפעולות החשובות של המוצר שלכם.",
-      "example": "ממשק לבקשת פגישה ובחירת שירות.",
-      "includes": [
-        "אפיון ממוקד",
-        "גרסה ראשונה",
-        "בסיס להמשך"
-      ],
-      "kind": "רעיון למוצר"
-    }
-  ],
-  "projects": [],
-  "contact": {
-    "email": "raben10studio@gmail.com",
-    "instagram": "raben10studio",
-    "whatsapp": ""
+  projects: [],
+  contact: {
+    email: 'raben10studio@gmail.com',
+    instagram: 'raben10studio',
+    whatsapp: ''
   }
 };
