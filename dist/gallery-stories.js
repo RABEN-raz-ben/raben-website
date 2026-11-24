@@ -21,9 +21,7 @@
   }
 
   function output() {
-    const result = element('p', 'gp-result');
-    result.setAttribute('role', 'status');
-    return result;
+    return element('p', 'gp-result');
   }
 
   function button(label, click) {
@@ -33,22 +31,41 @@
     return control;
   }
 
-  // Only results and pressed states change. Controls keep focus after an action.
+  // Each mounted instance has a displayed choice independent of its visitor's saved choice.
   function example(id, min, max, initial, build) {
-    return (container, state, onChange) => {
-      if (!Number.isInteger(state.choice) || state.choice < min || state.choice > max) {
-        state.choice = initial;
-      }
+    const instances = new WeakMap();
+
+    function render(container, state, onChange) {
+      const valid = Number.isInteger(state.choice) && state.choice >= min && state.choice <= max;
+      let shown = valid ? state.choice : initial;
+      if (!valid) delete state.choice;
+
       const panel = element('section', 'gp-preview gp-' + id);
       panel.dir = 'rtl';
+      const announcement = element('span', 'gp-announcement');
+      announcement.setAttribute('role', 'status');
       const update = build(panel, value => {
+        shown = value;
         state.choice = value;
         update(value);
+        announcement.textContent = panel.querySelector('.gp-result').textContent;
         onChange?.();
-      }, () => state.choice);
-      update(state.choice);
+      }, () => shown);
+
+      update(shown);
+      panel.append(announcement);
       container.replaceChildren(panel);
-    };
+      instances.set(panel, () => {
+        shown = shown < 0 ? 1 : (shown + 1) % (max + 1);
+        update(shown);
+      });
+    }
+
+    function demonstrate(container) {
+      instances.get(container.firstElementChild)?.();
+    }
+
+    return { render, demonstrate };
   }
 
   function header(panel, name, heading, id) {
@@ -95,7 +112,7 @@
     panel.append(result);
     return index => {
       mark(index);
-      result.textContent = index < 0 ? 'בחרו תאריך כדי לבדוק אם יש מקום.' :
+      result.textContent = index < 0 ? 'שלושה מועדים לסדנה, כולם בשעה 18:00.' :
         'המפגש ב־' + dates[index] + ' בשעה 18:00 · נשארו ' + places[index] + ' מקומות.';
     };
   });
@@ -208,7 +225,7 @@
     header(panel, 'יוצאים לשביל', 'מתי יוצאים לטיול?', 'hiking');
     const days = ['חמישי', 'שישי', 'שבת'];
     const baseVotes = [2, 3, 4];
-    const mark = choices(panel, 'הצביעו ליום שנוח לכם', days, select);
+    const mark = choices(panel, 'באיזה יום נוח לצאת?', days, select);
     const results = element('ul', 'gp-poll');
     const bars = days.map(day => {
       const row = element('li');
@@ -231,7 +248,7 @@
       const tallies = baseVotes.map((votes, pos) => votes + Number(pos === index));
       const leaders = days.filter((day, pos) => tallies[pos] === Math.max(...tallies));
       const standing = leaders.length > 1 ? 'תיקו בין ' + leaders.join(' ל') + '.' : 'היום המוביל הוא ' + leaders[0] + '.';
-      result.textContent = index < 0 ? standing : 'בחרתם ביום ' + days[index] + '. ' + standing;
+      result.textContent = index < 0 ? standing : 'נוסף קול ליום ' + days[index] + '. ' + standing;
     };
   });
 
@@ -239,42 +256,42 @@
     {
       id: 'ceramics', category: 'clients', title: 'לבחור מועד לסדנה',
       alt: 'ספל קרמיקה בזיגוג כחול בסטודיו', caption: 'בסדנת הקרמיקה מכינים ספל בזיגוג כחול. בוחרים תאריך ורואים כמה מקומות נשארו במפגש.',
-      cta: 'נדבר על אתר לסדנה שלי', kind: website, interest: 'אתר לסדנה עם בחירת מועד', render: pottery
+      cta: 'נדבר על אתר לסדנה שלי', kind: website, interest: 'אתר לסדנה עם בחירת מועד', ...pottery
     },
     {
       id: 'bakery', category: 'clients', title: 'לבחור עוגה לפי מספר האורחים',
       alt: 'עוגת תותים במאפייה', caption: 'במאפייה בוחרים לכמה אנשים תספיק עוגת התותים, ומיד רואים את הגודל והמחיר.',
-      cta: 'נדבר על אתר למוצרים שלי', kind: website, interest: 'עמוד מוצרים עם בחירת גודל ומחיר', render: cake
+      cta: 'נדבר על אתר למוצרים שלי', kind: website, interest: 'עמוד מוצרים עם בחירת גודל ומחיר', ...cake
     },
     {
       id: 'guitar', category: 'clients', title: 'למצוא שעה לשיעור גיטרה ראשון',
       alt: 'גיטרה בשיעור נגינה', caption: 'תלמידים בוחרים שיעור אישי או זוגי ורואים מתי אפשר להגיע.',
-      cta: 'נדבר על אתר לשיעורים שלי', kind: website, interest: 'אתר לשיעורים עם הצגת שעות פנויות', render: lesson
+      cta: 'נדבר על אתר לשיעורים שלי', kind: website, interest: 'אתר לשיעורים עם הצגת שעות פנויות', ...lesson
     },
     {
       id: 'technician', category: 'work', title: 'לסיים ביקור ולראות מי הבא בתור',
       alt: 'טכנאית בודקת מכונת כביסה בביקור בית', caption: 'הטכנאית מסמנת שתיקון מכונת הכביסה הסתיים, ומיד רואה אצל מי הביקור הבא ומתי הוא מתחיל.',
-      cta: 'נדבר על יומן לעבודה שלי', kind: tool, interest: 'יומן לניהול ביקורים בשטח', render: visits
+      cta: 'נדבר על יומן לעבודה שלי', kind: tool, interest: 'יומן לניהול ביקורים בשטח', ...visits
     },
     {
       id: 'community', category: 'work', title: 'לדעת למי עוד צריך לחזור',
       alt: 'פעילות במרכז קהילתי', caption: 'הצוות יכול להתמקד בפניות על חוגים שעדיין מחכות לתשובה.',
-      cta: 'נדבר על מעקב אחרי פניות', kind: tool, interest: 'מעקב אחרי פניות שממתינות לתשובה', render: inbox
+      cta: 'נדבר על מעקב אחרי פניות', kind: tool, interest: 'מעקב אחרי פניות שממתינות לתשובה', ...inbox
     },
     {
       id: 'volunteer', category: 'work', title: 'למצוא מי יאסוף את ארגזי הירקות',
       alt: 'מתנדבים עם ארגזי ירקות לחלוקה', caption: 'לצוות החלוקה נשאר לאסוף ארגזי ירקות. בוחרים מי ייצא לאיסוף, וכולם רואים שהמשימה אוישה.',
-      cta: 'נדבר על שיבוץ בצוות שלי', kind: tool, interest: 'כלי לשיבוץ מתנדבים ומשמרות', render: assign
+      cta: 'נדבר על שיבוץ בצוות שלי', kind: tool, interest: 'כלי לשיבוץ מתנדבים ומשמרות', ...assign
     },
     {
       id: 'study', category: 'ideas', title: 'למצוא עם מי לתרגל אנגלית בערב',
       alt: 'חוברת תרגול אנגלית במפגש לימוד', caption: 'רוצים לתרגל שיחה באנגלית? מסך התאמה מוצא שותף ללימוד שפנוי בערב כמוכם.',
-      cta: 'נדבר על הרעיון שלי', kind: product, interest: 'אפליקציה להתאמה בין אנשים', render: match
+      cta: 'נדבר על הרעיון שלי', kind: product, interest: 'אפליקציה להתאמה בין אנשים', ...match
     },
     {
       id: 'hiking', category: 'ideas', title: 'לקבוע יום לטיול בהצבעה',
       alt: 'מטיילים נעזרים במפת שבילים', caption: 'חברי הקבוצה בוחרים יום ליציאה לשביל ורואים איזה מועד מוביל, גם כשההצבעה צמודה.',
-      cta: 'נדבר על כלי לקבוצה שלי', kind: product, interest: 'רעיון להצבעות ותיאום בקבוצה', render: poll
+      cta: 'נדבר על כלי לקבוצה שלי', kind: product, interest: 'רעיון להצבעות ותיאום בקבוצה', ...poll
     }
   ];
 })();

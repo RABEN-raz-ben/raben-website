@@ -94,23 +94,12 @@
       <h2 id="gallery-heading">מה זה יכול לעשות בשבילכם?</h2>
     </header>
     <div data-gallery-enhanced hidden>
-      <div class="gallery-toolbar">
-        <div class="gallery-filters" role="group" aria-label="סינון לפי צורך">
-          <button type="button" data-gallery-filter="all" aria-pressed="true">כל הדוגמאות</button>
-          <button type="button" data-gallery-filter="clients" aria-pressed="false">לקבל לקוחות</button>
-          <button type="button" data-gallery-filter="work" aria-pressed="false">לעשות סדר בעבודה</button>
-          <button type="button" data-gallery-filter="ideas" aria-pressed="false">לנסות רעיון</button>
-        </div>
-        <div class="gallery-controls" role="group" aria-label="דפדוף בדוגמאות">
-          <button data-gallery-prev type="button" aria-label="הדוגמה הקודמת">→</button>
-          <span data-gallery-index></span>
-          <button data-gallery-next type="button" aria-label="הדוגמה הבאה">←</button>
-          <button data-gallery-play type="button">השהיה</button>
-        </div>
-      </div>
       <article aria-labelledby="current-story-title">
         <div class="gallery-pair">
-          <div class="gallery-picture"><img data-gallery-photo width="1100" height="820" decoding="async" alt=""></div>
+          <div class="gallery-picture">
+            <img data-gallery-photo width="1100" height="820" decoding="async" alt="">
+            <button class="gallery-play" data-gallery-play type="button" aria-label="השהיית התצוגה האוטומטית">השהיה</button>
+          </div>
           <div class="gallery-stage"><div data-gallery-demo></div></div>
         </div>
         <div class="gallery-description">
@@ -132,7 +121,7 @@
         <div class="gallery-stage"><div class="static-workshop">
           <p>ידיים בחומר</p><h3>סדנה להכנת ספל כחול</h3>
           <fieldset class="static-dates"><legend>בחרו מועד לדוגמה</legend>
-            <label><input type="radio" name="sample-date">12 בינואר <span>המפגש ב־18:00. נשארו 4 מקומות.</span></label>
+            <label><input type="radio" name="sample-date" checked>12 בינואר <span>המפגש ב־18:00. נשארו 4 מקומות.</span></label>
             <label><input type="radio" name="sample-date">19 בינואר <span>המפגש ב־18:00. נשארו 2 מקומות.</span></label>
             <label><input type="radio" name="sample-date">26 בינואר <span>המפגש ב־18:00. נשארו 5 מקומות.</span></label>
           </fieldset>

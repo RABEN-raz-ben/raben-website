@@ -24,33 +24,34 @@ async previewTab => {
       return route.fulfill({json: {success: requests.length > 1}});
     });
 
-    await page.emulateMedia({reducedMotion: 'reduce'});
-    await page.goto(base);
+    await page.emulateMedia({reducedMotion: 'no-preference'});
+    await page.setViewportSize({width:490,height:904});
+    await page.clock.install({time:new Date('2026-01-01T10:00:00Z')});
+    await page.clock.pauseAt(new Date('2026-01-01T10:00:02Z'));
+    await page.goto(base + '#story-ceramics');
     await gallery.scrollIntoViewIfNeeded();
-    const photo = control('photo');
+    await page.clock.runFor(100);
+    assert(await gallery.locator('.gallery-toolbar').count() === 0, 'Old gallery controls still present');
     for (const id of stories) {
-      assert(await gallery.getAttribute('data-story') === id, 'Unexpected story: ' + id);
-      await photo.evaluate(img => img.decode());
-      assert(await photo.evaluate(img => img.naturalWidth > 0 && img.alt.trim()), 'Missing photo: ' + id);
-      const demo = control('demo');
-      const before = await demo.innerText();
-      const choices = demo.getByRole('button');
-      const choice = choices.last();
-      await choice.click();
-      assert(await demo.innerText() !== before, 'Missing action feedback: ' + id);
-      assert(await choice.evaluate(node => node === document.activeElement), 'Focus lost: ' + id);
-      await control('next').click();
+      assert(await gallery.getAttribute('data-story') === id, 'Automatic story order: ' + id);
+      await control('photo').evaluate(img => img.decode());
+      const before = await control('demo').innerText();
+      await page.clock.runFor(3000);
+      assert(await control('demo').innerText() !== before, 'No automatic result: ' + id);
+      await page.clock.runFor(5000);
     }
-    assert(await gallery.getAttribute('data-story') === stories[0], 'Loop did not wrap');
-    assert(await control('demo').locator('[aria-pressed="true"]').count() === 1, 'Ceramics choice lost');
-
-    for (const [category, count] of [['clients', 3], ['work', 3], ['ideas', 2]]) {
-      await gallery.locator('[data-gallery-filter="' + category + '"]').click();
-      assert((await control('index').textContent()).endsWith(String(count)), 'Wrong count: ' + category);
-      assert(await gallery.getAttribute('data-category') === category, 'Wrong category');
-    }
-    await page.reload();
-    assert((await control('index').textContent()).endsWith('2'), 'Session filter lost on reload');
+    assert(await gallery.getAttribute('data-story') === stories[0], 'Automatic loop did not wrap');
+    await control('play').click();
+    await page.clock.runFor(16000);
+    assert(await gallery.getAttribute('data-story') === stories[0], 'Explicit pause ignored');
+    await control('play').click();
+    await page.clock.runFor(8100);
+    assert(await gallery.getAttribute('data-story') === stories[1], 'Explicit resume failed');
+    await page.emulateMedia({reducedMotion:'reduce'});
+    await page.clock.runFor(32);
+    await page.waitForFunction(() => document.querySelector('[data-gallery-play]').textContent === 'המשך ניגון');
+    await page.clock.runFor(16000);
+    assert(await gallery.getAttribute('data-story') === stories[1], 'Reduced motion ignored');
     await page.goto(base + '#story-hiking');
     assert(await gallery.getAttribute('data-story') === 'hiking', 'Shared story did not open');
     await page.locator('#brief-extras summary').click();
@@ -87,7 +88,7 @@ async previewTab => {
       await staticContext.close();
     }
     assert(errors.length === 0, errors.join('\n'));
-    return 'Eight stories, eight demo actions, loop, filters, context, retry, four widths and no-JS passed.';
+    return 'Eight automatic actions, loop, pause, resume, reduced motion, context, retry, responsive layout and no-JS passed.';
   } finally {
     await context.close();
   }

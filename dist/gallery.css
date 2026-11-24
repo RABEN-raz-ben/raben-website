@@ -15,27 +15,20 @@
   line-height: 1.1;
   text-wrap: balance;
 }
-.gallery-toolbar, .gallery-description, .gallery-filters, .gallery-controls, .gallery-links {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.gallery-toolbar, .gallery-description { justify-content: space-between; gap: 1rem; }
-.gallery-toolbar { margin-block: 1.5rem 1rem; }
-.gallery-filters, .gallery-controls { gap: .35rem; }
-.gallery-toolbar button {
+.gallery-description, .gallery-links { display: flex; align-items: center; flex-wrap: wrap; }
+.gallery-description { justify-content: space-between; gap: 1rem; }
+.gallery-play {
+  position: absolute;
+  inset-inline-end: .75rem;
+  inset-block-end: .75rem;
   min-height: 44px;
-  background: transparent;
-  border: 1px solid var(--rule);
+  padding: .4rem .9rem;
   border-radius: 999px;
+  border: 1px solid var(--rule);
   color: var(--ink);
-  padding: .5rem .9rem;
+  background: var(--paper);
 }
-.gallery-toolbar button:hover { border-color: var(--ink); }
-.gallery-filters button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: white; }
-.gallery-controls button { min-width: 44px; }
-.gallery-controls [data-gallery-index] { font-variant-numeric: tabular-nums; min-width: 4.8em; text-align: center; }
-.gallery-controls [data-gallery-play] { min-width: 5.25rem; }
+.gallery-play:hover { background: white; }
 .gallery-pair { display: grid; grid-template-columns: 1fr 1fr; overflow: clip; border-radius: 1.15rem; }
 .gallery-picture { background: #eee5d8; position: relative; min-width: 0; }
 .gallery-picture img { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; }
@@ -67,8 +60,6 @@
   .gallery-pair { grid-template-columns: minmax(0, 1fr); }
   .gallery-picture { height: clamp(10rem, 48vw, 15rem); }
   .gallery-stage { min-height: 23rem; border-radius: 0 0 1.15rem 1.15rem; }
-  .gallery-toolbar { gap: .75rem; }
-  .gallery-filters button { padding-inline: .7rem; }
   .gallery-description { align-items: start; }
 }
 .static-dates { border: 0; margin-inline: 0; padding: .5rem 0; }

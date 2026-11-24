@@ -15,62 +15,81 @@
   const demo = find('demo');
   const status = find('status');
   const play = find('play');
-  const previous = find('prev');
-  const next = find('next');
   const link = find('cta');
   const share = find('share');
   const shareLabel = share?.textContent;
-  const filters = [...gallery.querySelectorAll('[data-gallery-filter]')];
-
-  let selectedFilter = 'all';
-  let visible = stories;
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const choices = new Map();
   let position = 0;
-  let timer;
+  let slideTimer;
+  let actionTimer;
   let shareTimer;
   let inView = false;
   let near = false;
-  let hovered = false;
-  let resumeOnPlay = false;
+  let keyboardInput = true;
+  let paused = motion.matches;
+  let reducedMotionOverride = false;
+  let demonstrated = false;
   let photoFor;
   let preloadedFor;
   let nextImage;
-  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let paused = motion.matches;
-  const delay = 8000;
-  const states = new Map();
 
-  function stateFor(id) {
-    if (!states.has(id)) {
-      const state = {};
+  function savedChoice(id) {
+    if (!choices.has(id)) {
+      let choice;
       try {
         const saved = JSON.parse(sessionStorage.getItem('raben-gallery-' + id));
-        if (Number.isInteger(saved?.choice)) state.choice = saved.choice;
-      } catch { /* Storage is optional in private or restricted browsing. */ }
-      states.set(id, state);
+        if (Number.isInteger(saved?.choice)) choice = saved.choice;
+      } catch { /* Private browsing can keep selections in memory. */ }
+      choices.set(id, choice);
     }
-    return states.get(id);
+    return choices.get(id);
   }
 
-  function armTimer() {
-    clearTimeout(timer);
-    const focusInside = gallery.contains(document.activeElement);
-    const blockedByInteraction = (hovered || focusInside) && !resumeOnPlay;
-    if (paused || !inView || blockedByInteraction || document.hidden || visible.length < 2) return;
-    timer = setTimeout(() => move(1, false), delay);
+  function demonstrate() {
+    if (demonstrated) return;
+    demonstrated = true;
+    stories[position].demonstrate?.(demo);
+  }
+
+  function schedule() {
+    clearTimeout(slideTimer);
+    clearTimeout(actionTimer);
+    if (motion.matches && !reducedMotionOverride) {
+      paused = true;
+      updatePlayControl();
+      if (demo.firstElementChild) demonstrate();
+      return;
+    }
+    const focused = document.activeElement;
+    const reading = keyboardInput && (demo.contains(focused) || focused === link || focused === share);
+    if (paused || !inView || document.hidden || reading) return;
+    if (!demonstrated) actionTimer = setTimeout(demonstrate, 2500);
+    if (stories.length > 1) {
+      slideTimer = setTimeout(() => {
+        position = (position + 1) % stories.length;
+        render();
+      }, 8000);
+    }
+  }
+
+  function updatePlayControl() {
+    if (play) {
+      play.textContent = paused ? 'המשך ניגון' : 'השהיה';
+      play.setAttribute('aria-label', paused ? 'המשך ניגון — הפעלת מעבר אוטומטי' : 'השהיה — עצירת מעבר אוטומטי');
+    }
   }
 
   function setPaused(value) {
     paused = value;
-    if (value) resumeOnPlay = false;
-    play.textContent = paused ? 'המשך ניגון' : 'השהיה';
-    play.setAttribute('aria-label', paused ? 'המשך ניגון — הפעלת מעבר אוטומטי' : 'השהיה — עצירת מעבר אוטומטי');
-    armTimer();
+    updatePlayControl();
+    schedule();
   }
 
   function stagePhotos() {
     if (!near) return;
-    const story = visible[position];
-    const following = visible[(position + 1) % visible.length];
+    const story = stories[position];
+    const following = stories[(position + 1) % stories.length];
     const imageUrl = 'assets/gallery/' + story.id + '.webp';
     if (photoFor !== story.id) {
       photoFor = story.id;
@@ -82,7 +101,7 @@
       photo.srcset = 'assets/gallery/' + story.id + '-small.webp 460w, ' + imageUrl + ' 1100w';
       photo.src = imageUrl;
     }
-    if (!document.hidden && inView && visible.length > 1 && following.id !== preloadedFor && gallery.dataset.photoStatus !== 'loading') {
+    if (!document.hidden && inView && stories.length > 1 && following.id !== preloadedFor && gallery.dataset.photoStatus !== 'loading') {
       preloadedFor = following.id;
       nextImage = new Image();
       nextImage.fetchPriority = 'low';
@@ -111,14 +130,12 @@
     stagePhotos();
   });
 
-  function render(announce) {
-    const story = visible[position];
+  function render() {
+    const story = stories[position];
     gallery.dataset.category = story.category;
     gallery.dataset.story = story.id;
     find('title').textContent = story.title;
     find('caption').textContent = story.caption;
-    const count = 'דוגמה ' + (position + 1) + ' מתוך ' + visible.length;
-    find('index').textContent = count;
     link.textContent = story.cta;
     link.href = '#contact';
     if (share) {
@@ -126,63 +143,28 @@
       share.href = '#story-' + story.id;
       share.textContent = shareLabel;
     }
-    filters.forEach(button => {
-      button.setAttribute('aria-pressed', String(button.dataset.galleryFilter === selectedFilter));
-    });
-    previous.disabled = next.disabled = play.disabled = visible.length === 1;
-    demo.replaceChildren();
-    const state = stateFor(story.id);
+    const choice = savedChoice(story.id);
+    const state = Number.isInteger(choice) ? { choice } : {};
     story.render(demo, state, () => {
-      setPaused(true);
+      demonstrated = true;
+      choices.set(story.id, state.choice);
       try {
         sessionStorage.setItem('raben-gallery-' + story.id, JSON.stringify({ choice: state.choice }));
-      } catch { /* Keep selections in memory when storage is unavailable. */ }
+      } catch { /* The selection remains available within the page. */ }
+      schedule();
     });
+    demonstrated = Number.isInteger(state.choice);
     fadeIn(demo);
     stagePhotos();
-    if (announce) status.textContent = count + '. ' + story.title;
-    armTimer();
+    schedule();
   }
 
-  function syncStoryHash() {
-    if (location.hash.startsWith('#story-')) {
-      history.replaceState(history.state, '', '#story-' + visible[position].id);
-    }
-  }
-
-  function move(delta, manual) {
-    if (manual) setPaused(true);
-    position = (position + delta + visible.length) % visible.length;
-    render(manual);
-    if (manual) syncStoryHash();
-  }
-
-  function selectFilter(filter, announce = true) {
-    const options = filter === 'all' ? stories : stories.filter(story => story.category === filter);
-    if (!options.length) return;
-    selectedFilter = filter;
-    visible = options;
-    position = 0;
-    setPaused(true);
-    render(announce);
-    if (announce) {
-      try { sessionStorage.setItem('raben-story-filter', filter); } catch { /* The filter still works in memory. */ }
-      syncStoryHash();
-    }
-    return true;
-  }
-
-  function showStory(id, scroll) {
-    const story = stories.find(item => item.id === id);
-    if (!story) return false;
-    if (!visible.includes(story)) {
-      visible = stories;
-      selectedFilter = 'all';
-    }
-    position = visible.indexOf(story);
-    setPaused(true);
-    render(true);
-    if (scroll) gallery.scrollIntoView({ block: 'start', behavior: 'instant' });
+  function showStory(id) {
+    const target = stories.findIndex(item => item.id === id);
+    if (target === -1) return false;
+    position = target;
+    render();
+    gallery.scrollIntoView({ block: 'start', behavior: 'instant' });
     return true;
   }
 
@@ -193,27 +175,24 @@
       '#solution-product': 'study'
     };
     const id = legacyLinks[location.hash] || (location.hash.startsWith('#story-') && location.hash.slice(7));
-    return id && showStory(id, true);
+    return id && showStory(id);
   }
 
-  filters.forEach(button => button.addEventListener('click', () => selectFilter(button.dataset.galleryFilter)));
-  previous.addEventListener('click', () => move(-1, true));
-  next.addEventListener('click', () => move(1, true));
-  play.addEventListener('click', () => {
-    resumeOnPlay = paused;
+  play?.addEventListener('click', () => {
+    reducedMotionOverride = motion.matches && paused;
     setPaused(!paused);
   });
   link.addEventListener('click', () => {
-    setPaused(true);
-    const story = visible[position];
+    schedule();
+    const story = stories[position];
     document.dispatchEvent(new CustomEvent('raben:story-contact', { detail: { kind: story.kind, interest: story.interest } }));
   });
   share?.addEventListener('click', async event => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    setPaused(true);
+    schedule();
     const permalink = share.href;
-    const storyTitle = visible[position].title;
+    const storyTitle = stories[position].title;
     try {
       await navigator.clipboard.writeText(permalink);
       if (share.href !== permalink) return;
@@ -229,32 +208,23 @@
     shareTimer = setTimeout(() => { share.textContent = shareLabel; }, 3500);
   });
   window.addEventListener('hashchange', followHash);
-  gallery.addEventListener('keydown', event => {
-    if (![previous, next, play, gallery].includes(event.target)) return;
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-    event.preventDefault();
-    move(event.key === 'ArrowLeft' ? 1 : -1, true);
-  });
-  gallery.addEventListener('pointerenter', event => {
-    if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
-      hovered = true;
-      armTimer();
+  document.addEventListener('pointerdown', () => {
+    keyboardInput = false;
+    if (gallery.contains(document.activeElement)) schedule();
+  }, true);
+  document.addEventListener('keydown', () => {
+    if (!keyboardInput) {
+      keyboardInput = true;
+      if (gallery.contains(document.activeElement)) schedule();
     }
+  }, true);
+  gallery.addEventListener('focusin', schedule);
+  gallery.addEventListener('focusout', () => queueMicrotask(schedule));
+  document.addEventListener('visibilitychange', () => { stagePhotos(); schedule(); });
+  motion.addEventListener('change', event => {
+    reducedMotionOverride = false;
+    if (event.matches) setPaused(true);
   });
-  gallery.addEventListener('pointermove', event => {
-    if (resumeOnPlay && !play.contains(event.target)) {
-      resumeOnPlay = false;
-      armTimer();
-    }
-  });
-  gallery.addEventListener('pointerleave', () => { hovered = false; armTimer(); });
-  gallery.addEventListener('focusin', event => {
-    if (event.target !== play) resumeOnPlay = false;
-    armTimer();
-  });
-  gallery.addEventListener('focusout', () => queueMicrotask(armTimer));
-  document.addEventListener('visibilitychange', () => { stagePhotos(); armTimer(); });
-  motion.addEventListener('change', event => { if (event.matches) setPaused(true); });
 
   if ('IntersectionObserver' in window) {
     const nearby = new IntersectionObserver(entries => {
@@ -268,20 +238,28 @@
       const entry = entries[0];
       inView = entry.isIntersecting && entry.intersectionRatio >= .15;
       stagePhotos();
-      armTimer();
+      schedule();
     }, { threshold: [0, .15] }).observe(gallery);
   } else {
-    near = true;
-    setPaused(true);
+    function updateVisibility() {
+      const bounds = gallery.getBoundingClientRect();
+      const visibleHeight = Math.min(bounds.bottom, innerHeight) - Math.max(bounds.top, 0);
+      const visible = visibleHeight > 0 && visibleHeight >= .15 * Math.min(innerHeight, bounds.height);
+      near = near || (bounds.top < innerHeight + 320 && bounds.bottom > -320);
+      if (inView !== visible) {
+        inView = visible;
+        schedule();
+      }
+      stagePhotos();
+    }
+    window.addEventListener('scroll', updateVisibility, { passive: true });
+    window.addEventListener('resize', updateVisibility);
+    window.addEventListener('load', updateVisibility, { once: true });
   }
 
   enhanced.hidden = false;
   const fallback = find('static');
   if (fallback) fallback.hidden = true;
   setPaused(paused);
-  if (!followHash()) {
-    let lastFilter;
-    try { lastFilter = sessionStorage.getItem('raben-story-filter'); } catch { /* Storage may be unavailable. */ }
-    if (!lastFilter || !selectFilter(lastFilter, false)) render(false);
-  }
+  if (!followHash()) render();
 })();

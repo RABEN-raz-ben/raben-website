@@ -19,6 +19,14 @@
   font-family: Arial, sans-serif;
   text-align: start;
 }
+.gp-announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
 .gp-preview *, .gp-preview *::before, .gp-preview *::after { box-sizing: border-box; }
 .gp-preview [hidden] { display: none !important; }
 .gp-preview p, .gp-preview h3, .gp-preview ul { margin: 0; }
