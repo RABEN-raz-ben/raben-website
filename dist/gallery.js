@@ -156,8 +156,6 @@
     gallery.dataset.category = story.category;
     gallery.dataset.story = story.id;
     find('title').textContent = story.title;
-    const caption = find('caption');
-    if (caption) caption.textContent = story.caption;
     if (issue) issue.textContent = story.issue;
     if (outcome) outcome.textContent = story.outcome;
     if (problem) story.renderProblem(problem);

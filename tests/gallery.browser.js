@@ -38,11 +38,20 @@ async previewTab => {
       assert(await gallery.getAttribute('data-phase') === 'problem', 'Missing initial problem: ' + id);
       assert(await control('problem').isVisible() && !await control('demo').isVisible(), 'Problem frame not isolated: ' + id);
       assert((await control('problem').innerText()).trim().length > 0, 'Problem is empty: ' + id);
+      const issue = await control('issue').innerText();
+      const gain = await control('outcome').innerText();
+      assert(issue.trim() && gain.trim(), 'Missing always-visible comparison: ' + id);
       const before = await control('demo').textContent();
       await page.clock.runFor(3200);
       assert(await gallery.getAttribute('data-phase') === 'solution', 'Solution not revealed: ' + id);
       assert(await control('demo').isVisible() && !await control('problem').isVisible(), 'Solution frame not isolated: ' + id);
       assert(await control('demo').textContent() !== before, 'No automatic result: ' + id);
+      await control('demo').evaluate(node => window.scrollBy({top:node.getBoundingClientRect().top - 180, behavior:'instant'}));
+      for (const [key, value] of [['issue', issue], ['outcome', gain]]) {
+        const box = await control(key).boundingBox();
+        assert(box && box.y >= 0 && box.y + box.height <= 904 && await control(key).innerText() === value,
+          'Comparison lost midway through ' + id);
+      }
       await page.clock.runFor(5800);
     }
     assert(await gallery.getAttribute('data-story') === stories[0], 'Automatic loop did not wrap');
