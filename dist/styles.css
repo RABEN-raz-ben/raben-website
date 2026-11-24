@@ -331,3 +331,42 @@ footer { display:flex; align-items:center; justify-content:space-between; gap:25
   .playground h1 span::before { content:' '; }
   .playground h1 { font-size:clamp(42px,9vw,60px); }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .playground h1,
+  .playground-copy > .muted,
+  .example-buttons {
+    animation:studio-arrive .52s var(--ease) backwards;
+  }
+  .playground-copy > .muted { animation-delay:60ms; }
+  .example-buttons { animation-delay:110ms; }
+
+  .hero-art { animation:desk-arrive .68s var(--ease) backwards; }
+  .hero-art [data-example-panel]:not([hidden]) .preview-sculpture {
+    animation:ring-unfold .85s var(--ease) backwards;
+    transition:top .4s var(--ease), left .4s var(--ease), width .4s var(--ease), height .4s var(--ease);
+  }
+  .work-column, .product-steps li {
+    animation:studio-arrive .42s var(--ease) backwards;
+  }
+  .work-column:nth-child(2), .product-steps li:nth-child(2) { animation-delay:70ms; }
+  .work-column:nth-child(3), .product-steps li:nth-child(3) { animation-delay:140ms; }
+
+  .color-controls button { transition:transform .22s var(--ease); }
+  .color-controls button[aria-pressed=true] { transform:translateY(-3px); }
+  .example-buttons button:active { scale:.97; }
+  .example-buttons button { transition:scale .16s, background .2s, color .2s, border-color .2s; }
+
+  @keyframes studio-arrive {
+    from { opacity:0; translate:0 12px; }
+    to { opacity:1; translate:0 0; }
+  }
+  @keyframes desk-arrive {
+    from { opacity:0; transform:perspective(1000px) rotateY(5deg) translateY(16px); }
+    to { opacity:1; transform:none; }
+  }
+  @keyframes ring-unfold {
+    from { transform:rotate(-58deg) scale(.76); }
+    to { transform:rotate(-22deg) scale(1); }
+  }
+}
