@@ -46,7 +46,7 @@
 .art-product { background: #cfc2f1; }
 
 .sample-site,
-.sample-tasks,
+.sample-leads,
 .sample-phone {
   position: relative;
   box-sizing: border-box;
@@ -105,7 +105,7 @@
   clip-path: polygon(30% 0, 70% 0, 68% 19%, 93% 42%, 100% 65%, 90% 88%, 70% 100%, 30% 100%, 10% 88%, 0 65%, 7% 42%, 32% 19%);
 }
 
-.sample-tasks {
+.sample-leads {
   display: grid;
   gap: .36rem;
   width: min(70%, 13rem);
@@ -115,20 +115,34 @@
   transform: rotate(4deg);
 }
 
-.sample-tasks b { font-size: 1.18rem; }
-.sample-tasks span { display: flex; align-items: center; gap: .5rem; font-size: .77rem; }
-.sample-tasks i {
-  display: grid;
-  place-items: center;
-  width: .92rem;
-  height: .92rem;
-  border: 1px solid #476353;
-  border-radius: .24rem;
-  font-style: normal;
-  font-weight: bold;
+.sample-leads b { font-size: 1.14rem; }
+.sample-leads > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .35rem;
+  padding-block: .18rem;
+  border-block-start: 1px solid #d5dbd1;
+  font-size: .85rem;
 }
+.sample-leads small {
+  padding: .14rem .38rem;
+  border-radius: .3rem;
+  font-size: .64rem;
+  background: #d4e5d3;
+}
+.sample-leads > div:first-of-type small { background: #f1d5a9; }
+.sample-leads > div:nth-of-type(2) small { background: #e4dcf0; }
 
-.sample-tasks span:first-of-type i { background: #b6d3ba; }
+.sample-register {
+  display: inline-block;
+  margin-block-start: .4rem;
+  padding: .2rem .45rem;
+  background: #733a2a;
+  color: #fff;
+  border-radius: .25rem;
+  font-size: .65rem;
+}
 
 .sample-phone {
   width: 7.8rem;
@@ -149,22 +163,30 @@
 
 .sample-phone b {
   display: block;
-  font-size: 1.63rem;
-  line-height: 1.2;
+  font-size: 1.07rem;
+  line-height: 1.25;
 }
-
-.sample-dates { display: flex; gap: .25rem; margin-block: .4rem; }
-.sample-dates i {
-  flex: 1;
-  text-align: center;
-  background: #ece5f0;
+.sample-match { display: flex; align-items: center; gap: .4rem; margin-block: .45rem .2rem; }
+.sample-match span {
+  display: grid;
+  place-items: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  background: #e0d3ee;
+  color: #523c67;
+  font-weight: 700;
+}
+.sample-match strong { font-size: .9rem; }
+.sample-invite {
+  margin-block-start: .45rem;
+  padding: .25rem;
   border-radius: .3rem;
-  font-style: normal;
-  font-size: .75rem;
+  background: #584a65;
+  color: white;
+  text-align: center;
+  font-size: .65rem;
 }
-
-.sample-dates i:nth-child(2), .sample-time { background: #584a65; color: white; }
-.sample-time { border-radius: .3rem; padding: .12rem; text-align: center; font-size: .75rem; }
 
 .service-body { padding-block-start: 1.05rem; }
 .service-body h3 { font-size: clamp(1.35rem, 2.2vw, 1.85rem); line-height: 1.22; }

@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#fffbf4">
   <meta name="description" content="רז ובן בונים אתרים, כלים ומוצרים דיגיטליים. יש לכם עסק, יוזמה או משימה שגוזלת זמן? בואו לראות איך אפשר לעזור.">
-  <meta property="og:title" content="RABEN | הסטודיו לעיצוב ופיתוח של רז ובן">
+  <meta property="og:title" content="RABEN | סטודיו לעיצוב ופיתוח">
   <meta property="og:description" content="אתר שיציג אתכם, כלי שיקל על העבודה או גרסה ראשונה לרעיון שלכם.">
   <meta property="og:type" content="website">
-  <title>RABEN | הסטודיו לעיצוב ופיתוח של רז ובן</title>
+  <title>RABEN | סטודיו לעיצוב ופיתוח</title>
   <link rel="icon" href="assets/favicon.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="services.css">
@@ -22,28 +22,29 @@
 <header class="masthead shell">
   <a class="brand" href="#top" aria-label="RABEN, דף הבית" dir="ltr"><span class="brand-emblem" aria-hidden="true"><i></i><i></i><i></i></span>RABEN</a>
   <nav aria-label="ניווט ראשי">
-    <a href="#websites">מה בונים</a><a href="#process">איך זה עובד</a><a href="#about">מי אנחנו</a><a href="#projects" data-project-nav hidden>עבודות</a>
+    <a href="#websites">מה אפשר לבנות</a><a href="#about">איך עובדים איתנו</a><a href="#projects" data-project-nav hidden>עבודות</a>
   </nav>
-  <a class="header-contact" href="#contact">בואו נדבר <span aria-hidden="true">↙</span></a>
+  <a class="header-contact" href="#contact">יצירת קשר <span aria-hidden="true">↙</span></a>
 </header>
 <main id="main-content" tabindex="-1">
 <section class="intro shell" aria-labelledby="intro-title">
   <div class="intro-copy">
-    <p class="studio-line"><span aria-hidden="true"></span> הסטודיו לעיצוב ופיתוח של רז ובן</p>
-    <h1 id="intro-title">מה תרצו<br><em>לשפר או לבנות?</em></h1>
-    <p class="intro-text">אתר שיקל על לקוחות לפנות, כלי שיחסוך עבודה ידנית או רעיון לאפליקציה? נשמח לשמוע מה קורה אצלכם ולחשוב יחד מאיפה להתחיל.</p>
+    <p class="studio-line"><span aria-hidden="true"></span> סטודיו לעיצוב ופיתוח</p>
+    <h1 id="intro-title">אתרים לעסקים. כלים שמקלים על העבודה.</h1>
+    <p class="intro-text">אנחנו רז ובן. בונים אתרים, מרכזים עבודה שמתפזרת בין הודעות וגיליונות, ועוזרים לבדוק רעיונות לאפליקציות.</p>
     <div id="contact" class="hero-contact">
       <form id="brief-form" class="journey-form" aria-label="בקשת שיחת היכרות עם רז ובן" action="https://formsubmit.co/raben10studio@gmail.com" method="post">
       <fieldset>
         <legend class="journey-sr">פרטי הפנייה</legend>
-        <label for="phone">לאיזה מספר לחזור?</label>
+        <label for="phone">לאיזה מספר נחזור?</label>
         <div class="callback-row">
-          <input placeholder="050-1234567" id="phone" name="phone" type="tel" dir="ltr" autocomplete="tel" inputmode="tel" maxlength="25" required>
+          <input placeholder="050-1234567" id="phone" name="phone" type="tel" dir="ltr" autocomplete="tel" inputmode="tel" maxlength="25" required pattern="\+?(?:[\s\(\)\-]*[0-9]){8,15}[\s\(\)\-]*" aria-describedby="phone-error">
           <button type="submit">חזרו אליי <span aria-hidden="true">←</span></button>
         </div>
-        <p class="callback-note">רז או בן יחזרו אליך לשיחת היכרות.</p>
+        <p id="phone-error" class="field-error" role="alert" aria-atomic="true"></p>
+        <p class="callback-note">רז או בן יחזרו לשמוע מה צריך ולחשוב יחד על הצעד הראשון.</p>
         <details id="brief-extras" class="journey-extras">
-          <summary><span>הוספת פרטים <small id="brief-topic"></small></span></summary>
+          <summary><span>רוצה להוסיף כמה מילים? <small id="brief-topic"></small></span></summary>
           <label for="idea">על מה נדבר?</label>
           <textarea id="idea" name="message" rows="2" maxlength="2000"></textarea>
           <div class="journey-fields">
@@ -64,7 +65,7 @@
         <input type="hidden" name="_template" value="table">
         <p class="journey-form-note">הפרטים נשלחים באמצעות FormSubmit.</p>
       </fieldset>
-      <p id="form-status" role="status"></p>
+      <p id="form-status" role="status" aria-atomic="true"></p>
       <div id="contact-fallback" hidden>
         <label for="instagram-brief">הודעה מוכנה לאינסטגרם</label>
         <textarea id="instagram-brief" readonly rows="5"></textarea>
@@ -72,58 +73,72 @@
         <p id="instagram-copy-status" role="status">אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.</p>
       </div>
     </form>
-      <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">מעדיפים לכתוב? הודעה באינסטגרם <span aria-hidden="true">↗</span></a>
+      <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">לכתוב לנו באינסטגרם <span aria-hidden="true">↗</span></a>
     </div>
   </div>
-  <div class="studio-art" aria-hidden="true"><img src="assets/studio-objects.webp" width="1000" height="820" fetchpriority="high" alt=""></div>
+  <div class="studio-art" aria-hidden="true"><img src="assets/studio-objects.webp" width="1260" height="930" fetchpriority="high" alt=""></div>
 </section>
 <section class="section services" id="websites" aria-labelledby="websites-title">
   <div class="services-heading">
     <h2 id="websites-title">מה תרצו לעשות?</h2>
-    <p>אפשר להתחיל ממה שחסר לכם היום, גם אם עוד אין לכם רעיון לאתר או לאפליקציה.</p>
+    <p>הנה שלושה צרכים שאפשר להתחיל מהם, ודוגמה למה שנוכל לבנות יחד בכל מקרה.</p>
   </div>
   <div class="service-options">
     <article class="service-option" id="solution-website">
       <div class="service-art art-website" aria-hidden="true">
         <div class="sample-site">
           <div class="sample-toolbar"><i></i><i></i><i></i></div>
-          <div class="sample-poster"><div><small>בית מלאכה מקומי</small><b>ידיים<br>בחומר.</b></div><span class="sample-vase"></span></div>
+          <div class="sample-poster">
+            <div><small>סדנת קרמיקה</small><b>ידיים<br>בחומר.</b><span class="sample-register">הרשמה לסדנה</span></div>
+            <span class="sample-vase"></span>
+          </div>
         </div>
       </div>
       <div class="service-body">
-        <h3>להציג את מה שאני עושה</h3>
-        <p>אתר אישי, תיק עבודות או אתר לעסק, שבו אפשר להכיר אתכם, לראות עבודות ולפנות אליכם.</p>
+        <h3>להציג פעילות ולקבל הרשמות</h3>
+        <p>יש לכם שירות, שיעור או אירוע? נבנה עמוד שמסביר מה מציעים, למי זה מתאים ואיך פונים או נרשמים.</p>
         <details class="service-example">
-          <summary>דוגמה לאתר <span aria-hidden="true"></span></summary>
-          <p>בעמוד של סדנת קרמיקה אפשר לראות מה מכינים, לבדוק למי הסדנה מתאימה ולבקש להצטרף.</p>
+          <summary>איך נרשמים לסדנה? <span aria-hidden="true"></span></summary>
+          <p>בעמוד של סדנת קרמיקה רואים מה מכינים ומתי נפגשים. מי שרוצה להצטרף בוחר מועד ומשאיר פרטים באותו עמוד.</p>
         </details>
-        <a class="service-contact" href="#contact" data-service-kind="אתר או ממשק">נדבר על האתר שלי <span aria-hidden="true">←</span></a>
+        <a class="service-contact" href="#contact" data-service-kind="אתר או ממשק">נדבר על עמוד לפעילות שלי <span aria-hidden="true">←</span></a>
       </div>
     </article>
     <article class="service-option" id="solution-tool">
       <div class="service-art art-tool" aria-hidden="true">
-        <div class="sample-tasks"><b>המשימות שלנו</b><span><i>✓</i> לסדר את הפניות</span><span><i></i> לשלוח הצעה</span><span><i></i> לחזור ללקוח</span></div>
+        <div class="sample-leads">
+          <b>פניות לטיפול</b>
+          <div><span>נועה</span><small>ממתינה למענה</small></div>
+          <div><span>יואב</span><small>בטיפול</small></div>
+          <div><span>מיכל</span><small>קיבלה תשובה</small></div>
+        </div>
       </div>
       <div class="service-body">
-        <h3>לעשות סדר בעבודה</h3>
-        <p>כלי שמרכז פניות, משימות או הרשמות במקום אחד, כדי לדעת מה כבר טופל ומה עוד מחכה.</p>
+        <h3>לראות למי עוד צריך לחזור</h3>
+        <p>פניות מתפזרות בין הודעות לרשימות? נרכז אותן בכלי אחד שמראה מי מחכה לתשובה ומי כבר קיבל מענה.</p>
         <details class="service-example">
-          <summary>דוגמה לכלי עבודה <span aria-hidden="true"></span></summary>
-          <p>בעמותה שמחלקת סלי מזון, הצוות יכול לראות מי נרשם לחלוקה, למי שובץ מתנדב ומי כבר קיבל סל.</p>
+          <summary>איך עוקבים אחרי פנייה? <span aria-hidden="true"></span></summary>
+          <p>מרכז קהילתי מקבל בקשות על החוגים שלו. ליד כל פנייה מופיעים מי מטפל בה ומה מצב הטיפול, כדי שגם במשמרת הבאה ידעו למי לחזור.</p>
         </details>
-        <a class="service-contact" href="#contact" data-service-kind="כלי לעסק">נדבר על כלי שמתאים לי <span aria-hidden="true">←</span></a>
+        <a class="service-contact" href="#contact" data-service-kind="כלי לעסק">נדבר על כלי למעקב <span aria-hidden="true">←</span></a>
       </div>
     </article>
     <article class="service-option" id="solution-product">
       <div class="service-art art-product" aria-hidden="true">
-        <div class="sample-phone"><div class="sample-speaker"></div><b>ניפגש?</b><small>בחירת מועד</small><div class="sample-dates"><i>א</i><i>ב</i><i>ג</i></div><div class="sample-time">10:30</div></div>
+        <div class="sample-phone">
+          <div class="sample-speaker"></div>
+          <b>לומדים יחד</b>
+          <div class="sample-match"><span>ע</span><strong>עדי</strong></div>
+          <small>אנגלית · בערב</small>
+          <div class="sample-invite">הזמנה ללמוד יחד</div>
+        </div>
       </div>
       <div class="service-body">
-        <h3>לנסות רעיון חדש</h3>
-        <p>בונים גרסה ראשונה של הרעיון שלכם, כדי שאנשים יוכלו לנסות אותה ותגלו מה כדאי לפתח בהמשך.</p>
+        <h3>לבדוק רעיון עם אנשים</h3>
+        <p>יש לכם רעיון לאפליקציה? נבנה את הפעולה הכי חשובה בה, כדי שאנשים ינסו אותה ותראו מה עובד ומה כדאי לשנות.</p>
         <details class="service-example">
-          <summary>דוגמה למוצר ראשון <span aria-hidden="true"></span></summary>
-          <p>יש רעיון לחבר בין אנשים שרוצים ללמוד יחד? אפשר להתחיל במסך שמציע שותף ללימוד ומאפשר לקבוע פגישה.</p>
+          <summary>איך בודקים רעיון לאפליקציה? <span aria-hidden="true"></span></summary>
+          <p>באפליקציה למציאת שותפים ללימוד בוחרים מקצוע ושעות נוחות, רואים מי לומד באותן שעות ושולחים הזמנה. כך אפשר לבדוק אם נוצרות פגישות לימוד.</p>
         </details>
         <a class="service-contact" href="#contact" data-service-kind="רעיון למוצר">נדבר על הרעיון שלי <span aria-hidden="true">←</span></a>
       </div>
@@ -133,16 +148,15 @@
 <section id="about" class="journey-block journey-about" aria-labelledby="about-title">
   <div class="journey-shell journey-about-layout">
     <div class="journey-intro">
-      <p class="journey-kicker">האנשים מאחורי RABEN</p>
-      <h2 id="about-title">נעים להכיר,<br>אנחנו רז ובן.</h2>
-      <p>אנחנו שותפים בסטודיו לעיצוב ופיתוח. עובדים ישירות איתנו, מהשיחה על הרעיון ועד לאתר או לכלי שאפשר להתחיל להשתמש בו.</p>
+      <h2 id="about-title">עובדים ישירות עם רז ובן</h2>
+      <p>אנחנו שותפים בסטודיו לעיצוב ופיתוח. שנינו מלווים את הפרויקט מהשיחה הראשונה ועד שבודקים יחד את מה שבנינו.</p>
     </div>
     <div id="process" class="journey-process" aria-labelledby="process-title">
       <h3 id="process-title">איך עובדים יחד?</h3>
       <ol>
-        <li><div><h4>מתחילים בשיחה</h4><p>מכירים את מי שישתמשו בפתרון ומחליטים יחד מה חשוב לבנות. לפני שמתחילים מקבלים הצעה עם מחיר ולוח זמנים.</p></div></li>
-        <li><div><h4>רואים איך זה ייראה</h4><p>אנחנו מעצבים את המסכים. עוברים עליהם יחד, שואלים שאלות ומדייקים את הפרטים.</p></div></li>
-        <li><div><h4>בונים ובודקים</h4><p>אנחנו מפתחים את האתר או הכלי ובודקים את הפעולות החשובות במחשב ובטלפון.</p></div></li>
+        <li><div><h4>מתחילים בשיחה</h4><p>נשמע מה צריך ולמי זה מיועד. אחרי השיחה תקבלו הצעה שמפרטת מה נבנה, כמה זה יעלה ומתי זה יהיה מוכן.</p></div></li>
+        <li><div><h4>רואים איך זה ייראה</h4><p>נעבור יחד על המסכים, נבדוק אם הכל ברור ונעדכן את העיצוב לפי המשוב שלכם.</p></div></li>
+        <li><div><h4>בונים ובודקים</h4><p>נפתח את האתר או הכלי ונבדוק יחד את הפעולות העיקריות במחשב ובטלפון.</p></div></li>
       </ol>
     </div>
   </div>
@@ -154,10 +168,9 @@
   <div class="journey-shell journey-faq-layout">
     <h2 id="faq-title">לפני שמתחילים</h2>
     <div class="journey-answers">
-      <details><summary>אפשר לפנות גם עם רעיון ראשוני?</summary><p>כן. מספיק לספר מה היית רוצה לעשות ולמי זה יעזור. נחשוב יחד מה כדאי לבדוק או לבנות קודם.</p></details>
-      <details><summary>אפשר לשפר אתר שכבר יש לי?</summary><p>כן. אפשר לצרף לפנייה קישור לאתר ולספר מה מפריע היום. נעבור עליו ונציע מה כדאי לשנות כדי שיהיה קל יותר להשתמש בו.</p></details>
-      <details><summary>כמה זה עולה וכמה זמן זה לוקח?</summary><p>המחיר והזמן תלויים במספר המסכים, בתוכן ובפעולות שצריך לפתח. אחרי שיחת ההיכרות נוכל לתת הצעה שמתאימה לפרויקט.</p></details>
-      <details><summary>מה כדאי להכין לשיחה?</summary><p>כמה מילים על הצורך שלך יספיקו. אם יש אתר קיים, דוגמה שאהבת או משימה שחוזרת על עצמה, אפשר להראות לנו.</p></details>
+      <details><summary>כמה זה עולה?</summary><p>המחיר תלוי במה שצריך לעצב ולפתח. אחרי שיחת ההיכרות תקבלו הצעה שמפרטת מה כלול, מה המחיר וכמה זמן זה ייקח, ותוכלו להחליט אם להתקדם.</p></details>
+      <details><summary>אפשר לשפר אתר קיים?</summary><p>כן. שלחו קישור וספרו מה הייתם רוצים לשנות. נבדוק מה עובד היום ואיפה אפשר להקל על מי שמשתמש באתר.</p></details>
+      <details><summary>מה כדאי להכין לשיחה?</summary><p>אפשר להגיע גם עם רעיון ראשוני. מספיק לספר מה חסר היום ולמי זה יעזור. אם יש אתר קיים או דוגמה שאהבתם, אפשר לצרף קישור.</p></details>
     </div>
   </div>
 </section>
@@ -167,7 +180,7 @@
       <h2 id="contact-title">שנדבר על זה?</h2>
       <p>גם שאלה אחת על האתר או על הדרך שבה אתם עובדים היא סיבה טובה לכתוב לנו.</p>
     </div>
-    <div class="closing-actions"><a class="header-contact" href="#contact">אשמח שתחזרו אליי <span aria-hidden="true">←</span></a><a class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">הודעה באינסטגרם <span aria-hidden="true">↗</span></a></div>
+    <div class="closing-actions"><a class="header-contact" href="#contact">בקשו שיחה <span aria-hidden="true">←</span></a><a class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">כתבו באינסטגרם <span aria-hidden="true">↗</span></a></div>
   </div>
 </section>
 </main>

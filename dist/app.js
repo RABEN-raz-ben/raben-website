@@ -88,6 +88,9 @@ if (contact?.instagram) {
 const fieldset = form.querySelector('fieldset');
 const formStatus = document.getElementById('form-status');
 const phone = document.getElementById('phone');
+const phoneError = document.getElementById('phone-error');
+// Enhanced validation uses the same native constraints as the plain HTML form.
+form.noValidate = true;
 const nameField = document.getElementById('name');
 const message = document.getElementById('idea');
 const kind = document.getElementById('kind');
@@ -111,7 +114,11 @@ function updateFallback() {
 }
 
 form.addEventListener('input', event => {
-  event.target.setCustomValidity?.('');
+  if (event.target === phone && phone.hasAttribute('aria-invalid')) {
+    phone.removeAttribute('aria-invalid');
+    phoneError.textContent = '';
+  }
+  if (formStatus.dataset.state === 'success') formStatus.textContent = '';
   if (!fallback.hidden) updateFallback();
 });
 function updateTopic() {
@@ -129,18 +136,24 @@ kind.addEventListener('change', () => {
 form.addEventListener('submit', async event => {
   event.preventDefault();
   if (fieldset.disabled) return;
-  const number = phone.value.trim();
-  const validPhone = /^\+?[0-9\s()-]+$/.test(number) && /^\d{8,15}$/.test(number.replace(/\D/g, ''));
-  phone.setCustomValidity(validPhone ? '' : 'יש להזין מספר טלפון תקין, כולל קידומת.');
-  if (!form.reportValidity()) return;
+  phone.value = phone.value.trim();
+  if (!phone.checkValidity()) {
+    phone.setAttribute('aria-invalid', 'true');
+    phoneError.textContent = phone.validity.valueMissing
+      ? 'כדי שנוכל לחזור אליך, צריך להוסיף מספר טלפון.'
+      : 'כדאי לבדוק את מספר הטלפון ולהוסיף קידומת, למשל 050-1234567.';
+    phone.focus();
+    return;
+  }
 
   const payload = Object.fromEntries(new FormData(form));
   payload.name = nameField.value.trim();
-  payload.phone = number;
+  payload.phone = phone.value;
   payload.message = callbackMessage();
   fieldset.disabled = true;
   fallback.hidden = true;
-  formStatus.textContent = 'שולחים את הפנייה…';
+  formStatus.dataset.state = 'pending';
+  formStatus.textContent = 'שולחים את הבקשה…';
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 20000);
   try {
@@ -158,11 +171,13 @@ form.addEventListener('submit', async event => {
     document.getElementById('brief-extras').open = false;
     updateTopic();
     instagramBrief.value = '';
+    formStatus.dataset.state = 'success';
     formStatus.textContent = 'תודה, הפנייה נשלחה. נחזור אליך למספר שהשארת.';
   } catch {
     updateFallback();
     copyStatus.textContent = 'אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.';
     fallback.hidden = false;
+    formStatus.dataset.state = 'error';
     formStatus.textContent = 'לא התקבל אישור שליחה. הפרטים נשמרו כאן ואפשר לנסות שוב או לשלוח אותם באינסטגרם.';
   } finally {
     clearTimeout(timer);

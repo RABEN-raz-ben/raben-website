@@ -173,9 +173,9 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: .55rem;
 }
-.journey-form .callback-row input { min-width: 0; margin: 0; border-radius: 2rem; padding-inline: 1rem; text-align: right; }
+.journey-form .callback-row input { min-width: 0; margin: 0; border-radius: .8rem; padding-inline: 1rem; text-align: right; }
 .journey-form .callback-row button { white-space: nowrap; gap: .6rem; }
-.journey-form .callback-note { margin: .5rem 0 0; font-size: 1rem; line-height: 1.5; }
+.journey-form .callback-note { margin: .5rem 0 0; font-size: 1rem; line-height: 1.5; text-wrap: pretty; }
 .journey-form #form-status:empty { margin: 0; }
 .journey-form button:hover { background: #94311d; }
 .journey-form fieldset:disabled { opacity: .7; }
@@ -183,10 +183,18 @@
 #instagram-copy-status { font-size: .92rem; line-height: 1.5; margin-block: .25rem 0; color: #475e54; }
 #form-status:not(:empty),
 #contact-fallback:not([hidden]) { margin-block-start: 1rem; }
-#form-status:not(:empty) { padding: .85rem 1rem; border-radius: .6rem; background: #e1eee2; }
+#form-status:not(:empty) { padding: .85rem 1rem; border-radius: .6rem; background: #eeeae2; }
+#form-status[data-state="success"] { color: #164c30; background: #dcefdc; }
+#form-status[data-state="error"] { color: #762c21; background: #fce9e3; }
+.journey-form .field-error { color: #8b2c21; font-size: .96rem; line-height: 1.5; margin: .35rem 0 0; }
+.journey-form .field-error:empty { margin: 0; }
+.journey-form #phone[aria-invalid="true"] { border: 2px solid #a33627; }
 #contact-fallback .journey-social { margin: 0; }
 .journey-block :focus-visible { outline: 3px solid #54419b; outline-offset: 3px; }
-.journey-contact .journey-intro a:focus-visible { outline-color: #ffd6ad; }
+.journey-contact a:focus-visible { outline-color: #ffd6ad; }
+.closing-actions .header-contact:hover { background: #ffdfbd; color: #183b32; }
+.closing-actions .journey-social:hover { text-decoration-thickness: 2px; }
+.journey-answers summary:hover { color: #17604a; }
 .journey-sr {
   position: absolute;
   width: 1px;
