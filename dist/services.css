@@ -27,7 +27,7 @@
 
 .service-option {
   min-width: 0;
-  color: #202521;
+  color: #183b32;
   scroll-margin-block-start: 6rem;
 }
 
@@ -41,16 +41,16 @@
   user-select: none;
 }
 
-.art-website { background: #f4b29e; }
-.art-tool { background: #bbd8c6; }
-.art-product { background: #cfc3e3; }
+.art-website { background: #ffc3a7; }
+.art-tool { background: #a9d9c0; }
+.art-product { background: #cfc2f1; }
 
 .sample-site,
 .sample-tasks,
 .sample-phone {
   position: relative;
   box-sizing: border-box;
-  color: #282a26;
+  color: #233a31;
   background: #fff9ef;
   border: 1.5px solid currentColor;
 }
@@ -58,7 +58,7 @@
 .sample-site {
   width: min(72%, 14.5rem);
   border-radius: .5rem;
-  box-shadow: -.35rem .45rem 0 #9c5c50;
+  box-shadow: -.35rem .45rem 0 #a95940;
   transform: rotate(-5deg);
   overflow: hidden;
 }
@@ -111,7 +111,7 @@
   width: min(70%, 13rem);
   padding: .8rem 1rem;
   border-radius: .75rem;
-  box-shadow: .32rem .35rem 0 #8aaa99, .37rem .4rem 0 #334e40;
+  box-shadow: .32rem .35rem 0 #74a88a, .37rem .4rem 0 #334e40;
   transform: rotate(4deg);
 }
 
@@ -135,7 +135,7 @@
   padding: .52rem .65rem .85rem;
   border: 3px solid #302e34;
   border-radius: 1.2rem;
-  box-shadow: .3rem .3rem 0 #88779b;
+  box-shadow: .3rem .3rem 0 #917bac;
   transform: rotate(-7deg);
 }
 
