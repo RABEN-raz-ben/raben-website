@@ -55,6 +55,15 @@ async previewTab => {
       await page.clock.runFor(5800);
     }
     assert(await gallery.getAttribute('data-story') === stories[0], 'Automatic loop did not wrap');
+    await control('prev').click();
+    assert(await gallery.getAttribute('data-story') === 'volunteer', 'Previous business did not wrap');
+    await control('next').click();
+    assert(await control('picker').inputValue() === 'ceramics', 'Picker out of sync');
+    await control('picker').selectOption('bakery');
+    assert(await gallery.getAttribute('data-story') === 'bakery', 'Direct selection failed');
+    await page.clock.runFor(9100);
+    assert(await control('picker').inputValue() === 'community', 'Autoplay did not continue after selection');
+    await control('picker').selectOption('ceramics');
     await control('play').click();
     await page.clock.runFor(16000);
     assert(await gallery.getAttribute('data-story') === stories[0], 'Explicit pause ignored');

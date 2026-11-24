@@ -19,6 +19,11 @@
   const outcome = find('outcome');
   const status = find('status');
   const play = find('play');
+  const picker = find('picker');
+  let choosing = false;
+  for (const [index, story] of stories.entries()) {
+    picker.add(new Option((index + 1) + '/' + stories.length + ' · ' + (story.name || story.title), story.id));
+  }
   const link = find('cta');
   const share = find('share');
   const shareLabel = share?.textContent;
@@ -81,7 +86,7 @@
     }
     const focused = document.activeElement;
     const reading = keyboardInput && (demo.contains(focused) || problem?.contains(focused) || focused === link || focused === share);
-    if (!inView || document.hidden || reading) return;
+    if (!inView || document.hidden || reading || choosing) return;
     if (gallery.dataset.phase === 'problem') {
       actionTimer = setTimeout(() => setPhase('solution'), 3000);
     }
@@ -155,7 +160,9 @@
     const story = stories[position];
     gallery.dataset.category = story.category;
     gallery.dataset.story = story.id;
+    picker.value = story.id;
     find('title').textContent = story.title;
+    find('change-label').textContent = {clients: 'עם האתר', work: 'עם הכלי', ideas: 'עם האפליקציה'}[story.category] || 'עם הפתרון';
     if (issue) issue.textContent = story.issue;
     if (outcome) outcome.textContent = story.outcome;
     if (problem) story.renderProblem(problem);
@@ -181,6 +188,28 @@
     stagePhotos();
     schedule();
   }
+
+  function selectBusiness(index) {
+    choosing = false;
+    position = (index + stories.length) % stories.length;
+    render();
+    const story = stories[position];
+    status.textContent = (story.name || story.title) + ', דוגמה ' + (position + 1) + ' מתוך ' + stories.length;
+    if (location.hash.startsWith('#story-')) history.replaceState(history.state, '', '#story-' + story.id);
+  }
+
+  find('prev').addEventListener('click', () => selectBusiness(position - 1));
+  find('next').addEventListener('click', () => selectBusiness(position + 1));
+  function holdPicker() { choosing = true; schedule(); }
+  function releasePicker() { choosing = false; schedule(); }
+  picker.addEventListener('focus', holdPicker);
+  picker.addEventListener('pointerdown', holdPicker);
+  picker.addEventListener('blur', releasePicker);
+  picker.addEventListener('keydown', event => {
+    if (event.key === 'Escape') releasePicker();
+    else if (event.key !== 'Tab') holdPicker();
+  });
+  picker.addEventListener('change', () => selectBusiness(picker.selectedIndex));
 
   function showStory(id) {
     const target = stories.findIndex(item => item.id === id);
