@@ -94,6 +94,8 @@ form.noValidate = true;
 const nameField = document.getElementById('name');
 const message = document.getElementById('idea');
 const kind = document.getElementById('kind');
+const interestBox = document.getElementById('story-interest');
+const interest = document.getElementById('interest');
 const fallback = document.getElementById('contact-fallback');
 const instagramBrief = document.getElementById('instagram-brief');
 const copyStatus = document.getElementById('instagram-copy-status');
@@ -108,10 +110,34 @@ function updateFallback() {
     ...(nameField.value.trim() ? ['שם: ' + nameField.value.trim()] : []),
     'טלפון: ' + phone.value.trim(),
     'נושא הפנייה: ' + kind.selectedOptions[0].textContent,
+    ...(interest.value.trim() ? ['מעניין אותי: ' + interest.value.trim()] : []),
     '',
     callbackMessage()
   ].join('\n');
 }
+
+function clearInterest() {
+  interest.value = '';
+  interest.disabled = true;
+  interestBox.hidden = true;
+}
+
+document.addEventListener('raben:story-contact', event => {
+  if (fieldset.disabled) return;
+  const selected = event.detail;
+  if (!selected?.interest || !Array.from(kind.options).some(option => option.value === selected.kind)) return;
+  interest.value = selected.interest;
+  interest.disabled = false;
+  interestBox.hidden = false;
+  kind.value = selected.kind;
+  kind.dispatchEvent(new Event('change', { bubbles: true }));
+  phone.focus({ preventScroll: true });
+});
+document.getElementById('remove-interest').addEventListener('click', () => {
+  clearInterest();
+  if (!fallback.hidden) updateFallback();
+  phone.focus();
+});
 
 form.addEventListener('input', event => {
   if (event.target === phone && phone.hasAttribute('aria-invalid')) {
@@ -168,6 +194,7 @@ form.addEventListener('submit', async event => {
     const result = await response.json();
     if (!response.ok || ![true, 'true'].includes(result.success)) throw new Error('Submission rejected');
     form.reset();
+    clearInterest();
     document.getElementById('brief-extras').open = false;
     updateTopic();
     instagramBrief.value = '';

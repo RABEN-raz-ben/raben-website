@@ -11,10 +11,12 @@
   <title>RABEN | סטודיו לעיצוב ופיתוח</title>
   <link rel="icon" href="assets/favicon.png">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="services.css">
+  <link rel="stylesheet" href="gallery.css">
+  <link rel="stylesheet" href="gallery-previews.css">
   <link rel="stylesheet" href="journey.css">
   <script defer src="content.js"></script>
-  <script defer src="services.js"></script>
+  <script defer src="gallery-stories.js"></script>
+  <script defer src="gallery.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body id="top">
@@ -22,7 +24,7 @@
 <header class="masthead shell">
   <a class="brand" href="#top" aria-label="RABEN, דף הבית" dir="ltr"><span class="brand-emblem" aria-hidden="true"><i></i><i></i><i></i></span>RABEN</a>
   <nav aria-label="ניווט ראשי">
-    <a href="#websites">מה אפשר לבנות</a><a href="#about">איך עובדים איתנו</a><a href="#projects" data-project-nav hidden>עבודות</a>
+    <a href="#websites">דוגמאות</a><a href="#about">איך עובדים איתנו</a><a href="#projects" data-project-nav hidden>עבודות</a>
   </nav>
   <a class="header-contact" href="#contact">יצירת קשר <span aria-hidden="true">↙</span></a>
 </header>
@@ -31,7 +33,7 @@
   <div class="intro-copy">
     <p class="studio-line"><span aria-hidden="true"></span> סטודיו לעיצוב ופיתוח</p>
     <h1 id="intro-title">אתרים לעסקים. כלים שמקלים על העבודה.</h1>
-    <p class="intro-text">אנחנו רז ובן. בסטודיו שלנו בונים אתרים שבהם לקוחות יכולים להכיר אתכם ולפנות אליכם. אנחנו בונים גם כלים לניהול פניות וגרסאות ראשונות של אפליקציות.</p>
+    <p class="intro-text">אנחנו רז ובן. בונים אתרים לעסקים, כלים שחוסכים עבודה וגרסאות ראשונות לאפליקציות.</p>
     <div id="contact" class="hero-contact">
       <form id="brief-form" class="journey-form" aria-label="בקשת שיחת היכרות עם רז ובן" action="https://formsubmit.co/raben10studio@gmail.com" method="post">
       <fieldset>
@@ -43,6 +45,13 @@
         </div>
         <p id="phone-error" class="field-error" role="alert" aria-atomic="true"></p>
         <p class="callback-note">אחד מאיתנו יחזור אליכם. נשמע מה תרצו לעשות ונציע מאיפה להתחיל.</p>
+        <div id="story-interest" class="story-interest" hidden>
+          <label for="interest">הדוגמה שמעניינת אותי</label>
+          <div class="story-interest-row">
+            <input id="interest" name="story_interest" maxlength="180" disabled>
+            <button type="button" id="remove-interest" class="story-interest-remove">הסרה</button>
+          </div>
+        </div>
         <details id="brief-extras" class="journey-extras">
           <summary><span>אפשר להוסיף כמה מילים <small id="brief-topic"></small></span></summary>
           <label for="idea">על מה נדבר?</label>
@@ -78,71 +87,71 @@
   </div>
   <div class="studio-art" aria-hidden="true"><img src="assets/studio-objects.webp" width="1260" height="930" fetchpriority="high" alt=""></div>
 </section>
-<section class="section services" id="websites" aria-labelledby="websites-title">
-  <div class="services-heading">
-    <h2 id="websites-title">מה תרצו לעשות?</h2>
-    <p>בחרנו שלוש דוגמאות מהיום־יום כדי להראות איך אתר או כלי יכולים לעזור.</p>
-  </div>
-  <div class="service-options">
-    <article class="service-option" id="solution-website">
-      <div class="service-art art-website" aria-hidden="true">
-        <div class="sample-site">
-          <div class="sample-toolbar"><i></i><i></i><i></i></div>
-          <div class="sample-poster">
-            <div><small>סדנת קרמיקה</small><b>ידיים<br>בחומר.</b><span class="sample-register">הרשמה לסדנה</span></div>
-            <span class="sample-vase"></span>
+<section class="gallery-section shell" id="websites" aria-labelledby="gallery-heading">
+  <div id="story-gallery">
+    <header class="gallery-heading">
+      <p class="studio-line"><span aria-hidden="true"></span> דוגמאות להמחשה</p>
+      <h2 id="gallery-heading">מה זה יכול לעשות בשבילכם?</h2>
+    </header>
+    <div data-gallery-enhanced hidden>
+      <div class="gallery-toolbar">
+        <div class="gallery-filters" role="group" aria-label="סינון לפי צורך">
+          <button type="button" data-gallery-filter="all" aria-pressed="true">כל הדוגמאות</button>
+          <button type="button" data-gallery-filter="clients" aria-pressed="false">לקבל לקוחות</button>
+          <button type="button" data-gallery-filter="work" aria-pressed="false">לעשות סדר בעבודה</button>
+          <button type="button" data-gallery-filter="ideas" aria-pressed="false">לנסות רעיון</button>
+        </div>
+        <div class="gallery-controls" role="group" aria-label="דפדוף בדוגמאות">
+          <button data-gallery-prev type="button" aria-label="הדוגמה הקודמת">→</button>
+          <span data-gallery-index></span>
+          <button data-gallery-next type="button" aria-label="הדוגמה הבאה">←</button>
+          <button data-gallery-play type="button">השהיה</button>
+        </div>
+      </div>
+      <article aria-labelledby="current-story-title">
+        <div class="gallery-pair">
+          <div class="gallery-picture"><img data-gallery-photo width="1100" height="820" decoding="async" alt=""></div>
+          <div class="gallery-stage"><div data-gallery-demo></div></div>
+        </div>
+        <div class="gallery-description">
+          <div>
+            <h3 data-gallery-title id="current-story-title"></h3>
+            <p data-gallery-caption></p>
+          </div>
+          <div class="gallery-links">
+            <a class="gallery-cta" data-gallery-cta href="#contact">נדבר על דוגמה כזאת</a>
+            <a class="gallery-share" data-gallery-share href="#story-ceramics">העתקת קישור</a>
           </div>
         </div>
+      </article>
+      <span class="journey-sr" data-gallery-status role="status" aria-atomic="true"></span>
+    </div>
+    <div data-gallery-static>
+      <div class="gallery-pair">
+        <div class="gallery-picture"><img loading="lazy" src="assets/gallery/ceramics-small.webp" width="460" height="345" alt="ספל עם זיגוג כחול על שולחן העבודה בסדנת קרמיקה"></div>
+        <div class="gallery-stage"><div class="static-workshop">
+          <p>ידיים בחומר</p><h3>סדנה להכנת ספל כחול</h3>
+          <fieldset class="static-dates"><legend>בחרו מועד לדוגמה</legend>
+            <label><input type="radio" name="sample-date">12 בינואר <span>המפגש ב־18:00. נשארו 4 מקומות.</span></label>
+            <label><input type="radio" name="sample-date">19 בינואר <span>המפגש ב־18:00. נשארו 2 מקומות.</span></label>
+            <label><input type="radio" name="sample-date">26 בינואר <span>המפגש ב־18:00. נשארו 5 מקומות.</span></label>
+          </fieldset>
+          <a href="#contact">נדבר על הרשמה לסדנאות</a>
+        </div></div>
       </div>
-      <div class="service-body">
-        <h3>להציג פעילות ולקבל הרשמות</h3>
-        <p>אם אתם מציעים שירות או מעבירים סדנה, נבנה עמוד שבו אפשר לראות מה אתם מציעים, לשאול שאלה או להירשם.</p>
-        <details class="service-example">
-          <summary>איך נרשמים לסדנה? <span aria-hidden="true"></span></summary>
-          <p>בעמוד של סדנת קרמיקה רואים מה מכינים ומתי נפגשים. אפשר לבחור מועד ולהשאיר פרטים באותו עמוד.</p>
-        </details>
-        <a class="service-contact" href="#contact" data-service-kind="אתר או ממשק">נדבר על האתר שלי <span aria-hidden="true">←</span></a>
-      </div>
-    </article>
-    <article class="service-option" id="solution-tool">
-      <div class="service-art art-tool" aria-hidden="true">
-        <div class="sample-leads">
-          <b>פניות לטיפול</b>
-          <div><span>נועה</span><small>ממתינה למענה</small></div>
-          <div><span>יואב</span><small>בטיפול</small></div>
-          <div><span>מיכל</span><small>קיבלה תשובה</small></div>
-        </div>
-      </div>
-      <div class="service-body">
-        <h3>לראות למי עוד צריך לחזור</h3>
-        <p>כשהפניות מגיעות מכמה מקומות, קל לפספס הודעה. נבנה כלי שבו רואים מי פנה, מי מטפל בפנייה ולמי עוד צריך לחזור.</p>
-        <details class="service-example">
-          <summary>איך עוקבים אחרי פנייה? <span aria-hidden="true"></span></summary>
-          <p>למשל, במרכז קהילתי אפשר לרשום מי התעניין בחוג ומי כבר חזר אליו. כשמתחלפת משמרת, הצוות רואה אילו פניות נשארו פתוחות.</p>
-        </details>
-        <a class="service-contact" href="#contact" data-service-kind="כלי לעסק">נדבר על כלי למעקב <span aria-hidden="true">←</span></a>
-      </div>
-    </article>
-    <article class="service-option" id="solution-product">
-      <div class="service-art art-product" aria-hidden="true">
-        <div class="sample-phone">
-          <div class="sample-speaker"></div>
-          <b>לומדים יחד</b>
-          <div class="sample-match"><span>ע</span><strong>עדי</strong></div>
-          <small>אנגלית · בערב</small>
-          <div class="sample-invite">הזמנה ללמוד יחד</div>
-        </div>
-      </div>
-      <div class="service-body">
-        <h3>לבדוק רעיון עם אנשים</h3>
-        <p>יש לכם רעיון לאפליקציה? נתחיל בגרסה קטנה שאפשר לנסות. נראה איך אנשים משתמשים בה ונחליט יחד מה כדאי לשפר או להוסיף.</p>
-        <details class="service-example">
-          <summary>איך בודקים רעיון לאפליקציה? <span aria-hidden="true"></span></summary>
-          <p>באפליקציה למציאת שותפים ללימוד בוחרים מקצוע ושעות נוחות, רואים מי לומד באותן שעות ושולחים הזמנה. כך אפשר לבדוק אם נוצרות פגישות לימוד.</p>
-        </details>
-        <a class="service-contact" href="#contact" data-service-kind="רעיון למוצר">נדבר על הרעיון שלי <span aria-hidden="true">←</span></a>
-      </div>
-    </article>
+      <details class="static-ideas">
+        <summary>עוד רעיונות שאפשר לבנות</summary>
+        <ul>
+          <li><a href="#contact">בחירת גודל לעוגה והזמנה ממאפייה</a></li>
+          <li><a href="#contact">קביעת שיעור גיטרה</a></li>
+          <li><a href="#contact">סידור ביקורי שירות של טכנאית</a></li>
+          <li><a href="#contact">מעקב אחרי פניות למרכז קהילתי</a></li>
+          <li><a href="#contact">שיבוץ מתנדבים לחלוקה</a></li>
+          <li><a href="#contact">מציאת שותף ללימוד</a></li>
+          <li><a href="#contact">בחירת מועד לטיול עם חברים</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </section>
 <section id="about" class="journey-block journey-about" aria-labelledby="about-title">
@@ -171,6 +180,7 @@
       <details><summary>כמה זה עולה?</summary><p>המחיר תלוי במה שצריך לעצב ולפתח. אחרי שיחת ההיכרות תקבלו הצעה שמפרטת מה כלול, מה המחיר וכמה זמן זה ייקח, ותוכלו להחליט אם להתקדם.</p></details>
       <details><summary>אפשר לשפר אתר קיים?</summary><p>כן. שלחו לנו קישור וספרו מה הייתם רוצים לשפר. נבדוק את האתר ונציע מה כדאי להשאיר ומה כדאי לשנות.</p></details>
       <details><summary>מה כדאי להכין לשיחה?</summary><p>מספיק לספר מה הייתם רוצים שיהיה קל יותר. אם יש לכם אתר קיים או דוגמה שאהבתם, קישור יעזור לנו להבין למה התכוונתם.</p></details>
+      <details><summary>ואם מה שאני צריך לא מופיע בדוגמאות?</summary><p>ספרו לנו מה אתם מנסים לעשות היום ואיפה זה מסתבך. משם נוכל לחשוב יחד מה יתאים.</p></details>
     </div>
   </div>
 </section>
