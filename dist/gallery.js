@@ -13,6 +13,10 @@
   const enhanced = find('enhanced');
   const photo = find('photo');
   const demo = find('demo');
+  const problem = find('problem');
+  const phaseLabel = find('phase-label');
+  const issue = find('issue');
+  const outcome = find('outcome');
   const status = find('status');
   const play = find('play');
   const link = find('cta');
@@ -52,24 +56,40 @@
     stories[position].demonstrate?.(demo);
   }
 
+  function setPhase(phase) {
+    if (phase !== 'problem') demonstrate();
+    gallery.dataset.phase = phase;
+    demo.inert = phase === 'problem';
+    if (problem) problem.inert = phase === 'solution';
+    if (phaseLabel) {
+      const labels = { problem: 'הבעיה', solution: 'הפתרון', compare: 'הבעיה והפתרון' };
+      phaseLabel.textContent = labels[phase];
+    }
+  }
+
   function schedule() {
     clearTimeout(slideTimer);
     clearTimeout(actionTimer);
     if (motion.matches && !reducedMotionOverride) {
       paused = true;
       updatePlayControl();
-      if (demo.firstElementChild) demonstrate();
+    }
+    if (!demo.firstElementChild) return;
+    if (paused) {
+      setPhase('compare');
       return;
     }
     const focused = document.activeElement;
-    const reading = keyboardInput && (demo.contains(focused) || focused === link || focused === share);
-    if (paused || !inView || document.hidden || reading) return;
-    if (!demonstrated) actionTimer = setTimeout(demonstrate, 2500);
+    const reading = keyboardInput && (demo.contains(focused) || problem?.contains(focused) || focused === link || focused === share);
+    if (!inView || document.hidden || reading) return;
+    if (gallery.dataset.phase === 'problem') {
+      actionTimer = setTimeout(() => setPhase('solution'), 3000);
+    }
     if (stories.length > 1) {
       slideTimer = setTimeout(() => {
         position = (position + 1) % stories.length;
         render();
-      }, 8000);
+      }, 9000);
     }
   }
 
@@ -83,6 +103,7 @@
   function setPaused(value) {
     paused = value;
     updatePlayControl();
+    if (!paused && gallery.dataset.phase === 'compare') setPhase('solution');
     schedule();
   }
 
@@ -135,7 +156,11 @@
     gallery.dataset.category = story.category;
     gallery.dataset.story = story.id;
     find('title').textContent = story.title;
-    find('caption').textContent = story.caption;
+    const caption = find('caption');
+    if (caption) caption.textContent = story.caption;
+    if (issue) issue.textContent = story.issue;
+    if (outcome) outcome.textContent = story.outcome;
+    if (problem) story.renderProblem(problem);
     link.textContent = story.cta;
     link.href = '#contact';
     if (share) {
@@ -154,7 +179,7 @@
       schedule();
     });
     demonstrated = Number.isInteger(state.choice);
-    fadeIn(demo);
+    setPhase(paused ? 'compare' : 'problem');
     stagePhotos();
     schedule();
   }

@@ -35,23 +35,29 @@ async previewTab => {
     for (const id of stories) {
       assert(await gallery.getAttribute('data-story') === id, 'Automatic story order: ' + id);
       await control('photo').evaluate(img => img.decode());
-      const before = await control('demo').innerText();
-      await page.clock.runFor(3000);
-      assert(await control('demo').innerText() !== before, 'No automatic result: ' + id);
-      await page.clock.runFor(5000);
+      assert(await gallery.getAttribute('data-phase') === 'problem', 'Missing initial problem: ' + id);
+      assert(await control('problem').isVisible() && !await control('demo').isVisible(), 'Problem frame not isolated: ' + id);
+      assert((await control('problem').innerText()).trim().length > 0, 'Problem is empty: ' + id);
+      const before = await control('demo').textContent();
+      await page.clock.runFor(3200);
+      assert(await gallery.getAttribute('data-phase') === 'solution', 'Solution not revealed: ' + id);
+      assert(await control('demo').isVisible() && !await control('problem').isVisible(), 'Solution frame not isolated: ' + id);
+      assert(await control('demo').textContent() !== before, 'No automatic result: ' + id);
+      await page.clock.runFor(5800);
     }
     assert(await gallery.getAttribute('data-story') === stories[0], 'Automatic loop did not wrap');
     await control('play').click();
     await page.clock.runFor(16000);
     assert(await gallery.getAttribute('data-story') === stories[0], 'Explicit pause ignored');
     await control('play').click();
-    await page.clock.runFor(8100);
+    await page.clock.runFor(9100);
     assert(await gallery.getAttribute('data-story') === stories[1], 'Explicit resume failed');
     await page.emulateMedia({reducedMotion:'reduce'});
     await page.clock.runFor(32);
     await page.waitForFunction(() => document.querySelector('[data-gallery-play]').textContent === 'המשך ניגון');
-    await page.clock.runFor(16000);
+    await page.clock.runFor(20000);
     assert(await gallery.getAttribute('data-story') === stories[1], 'Reduced motion ignored');
+    assert(await control('problem').isVisible() && await control('demo').isVisible(), 'Static comparison missing');
     await page.goto(base + '#story-hiking');
     assert(await gallery.getAttribute('data-story') === 'hiking', 'Shared story did not open');
     await page.locator('#brief-extras summary').click();

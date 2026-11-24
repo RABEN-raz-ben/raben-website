@@ -97,14 +97,23 @@
       <article aria-labelledby="current-story-title">
         <header class="story-intro">
           <h3 data-gallery-title id="current-story-title"></h3>
-          <p data-gallery-caption></p>
+          <p class="journey-sr" data-gallery-caption></p>
         </header>
         <div class="gallery-pair">
           <div class="gallery-picture">
             <img data-gallery-photo width="1100" height="820" decoding="async" alt="">
             <button class="gallery-play" data-gallery-play type="button" aria-label="השהיית התצוגה האוטומטית">השהיה</button>
           </div>
-          <div class="gallery-stage"><div data-gallery-demo></div></div>
+          <div class="gallery-stage phase-stage">
+            <div class="phase-frame phase-before">
+              <div class="phase-heading"><span class="phase-symbol" aria-hidden="true">?</span><div><small>לפני</small><h4 data-gallery-issue></h4></div></div>
+              <div data-gallery-problem></div>
+            </div>
+            <div class="phase-frame phase-after">
+              <div class="phase-heading"><span class="phase-symbol" aria-hidden="true">✓</span><div><small>עם הפתרון שלנו</small><h4 data-gallery-outcome></h4></div></div>
+              <div data-gallery-demo></div>
+            </div>
+          </div>
         </div>
           <div class="gallery-links">
             <a class="gallery-cta" data-gallery-cta href="#contact">נדבר על דוגמה כזאת</a>
@@ -116,11 +125,13 @@
     <div data-gallery-static>
       <header class="story-intro">
         <h3>אתר הרשמה לסדנת קרמיקה</h3>
-        <p>המשתתפים רואים באילו מפגשים נשאר מקום. לבעלת הסדנה יש פחות הודעות לענות עליהן לפני כל הרשמה.</p>
+
       </header>
       <div class="gallery-pair">
         <div class="gallery-picture"><img loading="lazy" src="assets/gallery/ceramics-small.webp" width="460" height="345" alt="ספל עם זיגוג כחול על שולחן העבודה בסדנת קרמיקה"></div>
-        <div class="gallery-stage"><div class="static-workshop">
+        <div class="gallery-stage static-comparison">
+          <div class="static-workshop"><strong>לפני</strong><p>״יש מקום למפגש הקרוב?״</p><p>״אילו תאריכים פנויים?״</p></div>
+          <div class="static-workshop"><strong>עם אתר ההרשמה</strong>
           <p>ידיים בחומר</p><h3>סדנה להכנת ספל כחול</h3>
           <fieldset class="static-dates"><legend>בחרו מועד לדוגמה</legend>
             <label><input type="radio" name="sample-date" checked>12 בינואר <span>המפגש ב־18:00. נשארו 4 מקומות.</span></label>
