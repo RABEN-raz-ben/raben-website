@@ -26,7 +26,7 @@ function createProjectCard(project) {
   }
   const body = makeElement('div', 'project-body');
   body.append(makeElement('span', 'project-category', project.category));
-  if (project.concept) body.append(makeElement('span', 'concept-label', 'דוגמת קונספט'));
+  if (project.concept) body.append(makeElement('span', 'concept-label', 'דוגמה להמחשה'));
   body.append(
     makeElement('h3', 'project-title', project.title),
     makeElement('p', 'project-description', project.description),
@@ -104,10 +104,10 @@ function callbackMessage() {
 
 function updateFallback() {
   instagramBrief.value = [
-    'היי רז ובן, אשמח לדבר על פרויקט.',
+    'היי רז ובן,',
     ...(nameField.value.trim() ? ['שם: ' + nameField.value.trim()] : []),
     'טלפון: ' + phone.value.trim(),
-    'סוג הפרויקט: ' + kind.selectedOptions[0].textContent,
+    'נושא הפנייה: ' + kind.selectedOptions[0].textContent,
     '',
     callbackMessage()
   ].join('\n');
@@ -140,8 +140,8 @@ form.addEventListener('submit', async event => {
   if (!phone.checkValidity()) {
     phone.setAttribute('aria-invalid', 'true');
     phoneError.textContent = phone.validity.valueMissing
-      ? 'כדי שנוכל לחזור אליך, צריך להוסיף מספר טלפון.'
-      : 'כדאי לבדוק את מספר הטלפון ולהוסיף קידומת, למשל 050-1234567.';
+      ? 'חסר מספר טלפון לחזרה.'
+      : 'אפשר להזין מספר עם קידומת, למשל 050-1234567.';
     phone.focus();
     return;
   }
@@ -172,13 +172,13 @@ form.addEventListener('submit', async event => {
     updateTopic();
     instagramBrief.value = '';
     formStatus.dataset.state = 'success';
-    formStatus.textContent = 'תודה, הפנייה נשלחה. נחזור אליך למספר שהשארת.';
+    formStatus.textContent = 'תודה, קיבלנו את הבקשה. נחזור למספר שהשארתם.';
   } catch {
     updateFallback();
     copyStatus.textContent = 'אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.';
     fallback.hidden = false;
     formStatus.dataset.state = 'error';
-    formStatus.textContent = 'לא התקבל אישור שליחה. הפרטים נשמרו כאן ואפשר לנסות שוב או לשלוח אותם באינסטגרם.';
+    formStatus.textContent = 'לא קיבלנו אישור שהבקשה הגיעה. הפרטים עדיין בטופס. אפשר לנסות שוב או לשלוח לנו את ההודעה באינסטגרם.';
   } finally {
     clearTimeout(timer);
     fieldset.disabled = false;
@@ -192,6 +192,6 @@ document.getElementById('instagram-fallback-link').addEventListener('click', asy
   } catch {
     instagramBrief.focus();
     instagramBrief.select();
-    copyStatus.textContent = 'יש להעתיק את הטקסט המסומן ולהדביק אותו בשיחה באינסטגרם.';
+    copyStatus.textContent = 'אפשר להעתיק את ההודעה המסומנת ולהדביק אותה בשיחה באינסטגרם.';
   }
 });
