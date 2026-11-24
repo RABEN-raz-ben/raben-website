@@ -11,7 +11,7 @@ if (content.offering) {
 }
 const solutionList = document.getElementById('solution-list');
 if (solutionList) {
-  const solutionCards = content.services.map((service, index) => {
+  const solutionCards = content.services.map(service => {
     const card = el('article', '', 'solution-card solution-' + service.id);
     card.id = 'solution-' + service.id;
     const visual = el('img', '', 'solution-visual');
@@ -30,7 +30,6 @@ if (solutionList) {
     link.insertAdjacentHTML('beforeend', icon('arrow-left'));
     card.append(
       visual,
-      el('span', String(index + 1).padStart(2, '0'), 'solution-number'),
       el('p', service.need, 'solution-need'),
       el('h3', service.title),
       el('p', service.description, 'solution-description'),
@@ -290,56 +289,6 @@ reducedMotion.addEventListener('change', event => {
     revealObserver?.disconnect();
   }
 });
-
-const readingProgress = document.getElementById('reading-progress');
-if (readingProgress) {
-  let progressFrame = 0;
-  function updateReadingProgress() {
-    progressFrame = 0;
-    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-    const fraction = scrollable > 0 ? Math.min(1, Math.max(0, window.scrollY / scrollable)) : 0;
-    readingProgress.style.transform = 'scaleX(' + fraction + ')';
-  }
-  function scheduleReadingProgress() {
-    if (!progressFrame) progressFrame = requestAnimationFrame(updateReadingProgress);
-  }
-  window.addEventListener('scroll', scheduleReadingProgress, { passive: true });
-  window.addEventListener('resize', scheduleReadingProgress, { passive: true });
-  window.addEventListener('load', scheduleReadingProgress, { once: true });
-  if ('ResizeObserver' in window) new ResizeObserver(scheduleReadingProgress).observe(document.body);
-  scheduleReadingProgress();
-}
-
-const heroSculpture = document.getElementById('hero-sculpture');
-const heroVisual = heroSculpture?.closest('.hero-visual');
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-if (heroSculpture && heroVisual) {
-  let tiltFrame = 0;
-  let tiltX = 0;
-  let tiltY = 0;
-  function resetHeroTilt() {
-    cancelAnimationFrame(tiltFrame);
-    tiltFrame = 0;
-    heroSculpture.style.setProperty('--tilt-x', '0deg');
-    heroSculpture.style.setProperty('--tilt-y', '0deg');
-  }
-  heroVisual.addEventListener('pointermove', event => {
-    if (reducedMotion.matches || !finePointer.matches || event.pointerType === 'touch') return;
-    const bounds = heroVisual.getBoundingClientRect();
-    if (!bounds.width || !bounds.height) return;
-    tiltX = Math.max(-1, Math.min(1, (event.clientY - bounds.top) / bounds.height * 2 - 1)) * -4;
-    tiltY = Math.max(-1, Math.min(1, (event.clientX - bounds.left) / bounds.width * 2 - 1)) * 4;
-    if (!tiltFrame) tiltFrame = requestAnimationFrame(() => {
-      tiltFrame = 0;
-      heroSculpture.style.setProperty('--tilt-x', tiltX.toFixed(2) + 'deg');
-      heroSculpture.style.setProperty('--tilt-y', tiltY.toFixed(2) + 'deg');
-    });
-  }, { passive: true });
-  heroVisual.addEventListener('pointerleave', resetHeroTilt);
-  heroVisual.addEventListener('pointercancel', resetHeroTilt);
-  reducedMotion.addEventListener('change', resetHeroTilt);
-  finePointer.addEventListener('change', resetHeroTilt);
-}
 
 // Animate native disclosures in both directions; preserve keyboard and no-JS behavior.
 document.querySelectorAll('.faq details').forEach(details => {
