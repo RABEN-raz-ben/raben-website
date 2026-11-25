@@ -14,14 +14,22 @@ async previewTab => {
     const stories = ['ceramics', 'technician', 'study', 'bakery', 'community', 'hiking', 'guitar', 'volunteer'];
     const errors = [];
     const requests = [];
+    let nativeSubmission;
 
     page.on('pageerror', error => errors.push(error.message));
     await page.route('**/api/projects', route => route.fulfill({
       json: {projects: [], expiresAt: new Date(Date.now() + 300000).toISOString()}
     }));
     await page.route('https://formsubmit.co/**', route => {
+      if (!new URL(route.request().url()).pathname.startsWith('/ajax/')) {
+        nativeSubmission = new URLSearchParams(route.request().postData());
+        return route.fulfill({body: 'FormSubmit verification'});
+      }
       requests.push(route.request().postDataJSON());
-      return route.fulfill({json: {success: requests.length > 1}});
+      if (requests.length === 1) return route.fulfill({status: 500, json: {message: 'Server Error'}});
+      if (requests.length === 2) return route.fulfill({json: {success: 'true', message: 'Please activate your form'}});
+      if (requests.length === 4) return route.abort();
+      return route.fulfill({json: {success: 'true', message: 'The form was submitted successfully.'}});
     });
 
     await page.emulateMedia({reducedMotion: 'no-preference'});
@@ -85,13 +93,28 @@ async previewTab => {
     assert(await interest.isVisible() && await interest.inputValue(), 'Missing editable story context');
     await interest.fill('הקשר שנערך בבדיקה');
     await page.locator('#phone').fill('0501234567');
-    await page.locator('#brief-form button[type=submit]').click();
+    const submit = page.locator('.callback-row button[type=submit]');
+    await submit.click();
     await page.locator('#form-status[data-state=error]').waitFor();
     assert((await page.locator('#instagram-brief').inputValue()).includes('הקשר שנערך בבדיקה'), 'Missing fallback context');
-    await page.locator('#brief-form button[type=submit]').click();
+    const emailLink = page.locator('#email-fallback-link');
+    const emailDraft = new URL(await emailLink.getAttribute('href'));
+    assert(await emailLink.isVisible() && emailDraft.pathname === 'raben10studio@gmail.com' &&
+      emailDraft.searchParams.get('body').includes('0501234567') &&
+      emailDraft.searchParams.get('body').includes('הקשר שנערך בבדיקה'), 'Missing email fallback details');
+    await submit.click();
+    await page.locator('#form-status[data-state=error]').waitFor();
+    assert(await page.locator('#phone').inputValue() === '0501234567', 'Activation response lost the phone number');
+    await submit.click();
     await page.locator('#form-status[data-state=success]').waitFor();
-    assert(requests.length === 2 && requests.every(data => data.message === 'הודעת בדיקה מקומית' &&
+    assert(requests.length === 3 && requests.every(data => data.message === 'הודעת בדיקה מקומית' &&
       data.story_interest === 'הקשר שנערך בבדיקה'), 'Incorrect contact payload');
+    await page.locator('#phone').fill('0501234567');
+    await submit.click();
+    await page.locator('#form-status[data-state=error]').waitFor();
+    await page.locator('#formsubmit-browser-retry').click();
+    await page.waitForURL('https://formsubmit.co/raben10studio@gmail.com');
+    assert(nativeSubmission?.get('phone') === '0501234567', 'Native retry lost the phone number');
 
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({width, height: 844});

@@ -98,6 +98,8 @@ const interestBox = document.getElementById('story-interest');
 const interest = document.getElementById('interest');
 const fallback = document.getElementById('contact-fallback');
 const instagramBrief = document.getElementById('instagram-brief');
+const emailFallback = document.getElementById('email-fallback-link');
+const fallbackEmailAddress = contact?.email || emailFallback.getAttribute('href').slice('mailto:'.length);
 const copyStatus = document.getElementById('instagram-copy-status');
 
 function callbackMessage() {
@@ -114,6 +116,9 @@ function updateFallback() {
     '',
     callbackMessage()
   ].join('\n');
+  const subject = form.elements.namedItem('_subject').value;
+  emailFallback.href = 'mailto:' + fallbackEmailAddress + '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(instagramBrief.value);
 }
 
 function clearInterest() {
@@ -160,6 +165,7 @@ kind.addEventListener('change', () => {
 });
 
 form.addEventListener('submit', async event => {
+  if (event.submitter?.id === 'formsubmit-browser-retry' && phone.checkValidity()) return;
   event.preventDefault();
   if (fieldset.disabled) return;
   phone.value = phone.value.trim();
@@ -192,20 +198,23 @@ form.addEventListener('submit', async event => {
       signal: controller.signal
     });
     const result = await response.json();
-    if (!response.ok || ![true, 'true'].includes(result.success)) throw new Error('Submission rejected');
+    if (!response.ok || ![true, 'true'].includes(result?.success) ||
+        /\b(?:activat(?:e|ion)|confirm(?:ation)?|verify|verification)\b/i.test(result.message)) {
+      throw new Error('Submission not accepted');
+    }
     form.reset();
     clearInterest();
     document.getElementById('brief-extras').open = false;
     updateTopic();
     instagramBrief.value = '';
     formStatus.dataset.state = 'success';
-    formStatus.textContent = 'תודה, קיבלנו את הבקשה. נחזור למספר שהשארתם.';
+    formStatus.textContent = 'תודה, הבקשה נשלחה לשירות הטפסים.';
   } catch {
     updateFallback();
     copyStatus.textContent = 'אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.';
     fallback.hidden = false;
     formStatus.dataset.state = 'error';
-    formStatus.textContent = 'לא קיבלנו אישור שהבקשה הגיעה. הפרטים עדיין בטופס. אפשר לנסות שוב או לשלוח לנו את ההודעה באינסטגרם.';
+    formStatus.textContent = 'לא קיבלנו אישור שליחה. הפרטים עדיין בטופס. אפשר לנסות שוב או לפנות במייל או באינסטגרם.';
   } finally {
     clearTimeout(timer);
     fieldset.disabled = false;

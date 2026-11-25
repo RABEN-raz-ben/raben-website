@@ -190,6 +190,7 @@
 .journey-form .field-error:empty { margin: 0; }
 .journey-form #phone[aria-invalid="true"] { border: 2px solid #a33627; }
 #contact-fallback .journey-social { margin: 0; }
+#formsubmit-browser-retry { margin-block-end: .85rem; }
 .journey-block :focus-visible { outline: 3px solid #54419b; outline-offset: 3px; }
 .journey-contact a:focus-visible { outline-color: #ffd6ad; }
 .closing-actions .header-contact:hover { background: #ffdfbd; color: #183b32; }

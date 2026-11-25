@@ -76,11 +76,14 @@
       </fieldset>
       <p id="form-status" role="status" aria-atomic="true"></p>
       <div id="contact-fallback" hidden>
-        <label for="instagram-brief">הודעה מוכנה לאינסטגרם</label>
+        <button type="submit" id="formsubmit-browser-retry">ניסיון שליחה דרך דף האימות</button>
+        <label for="instagram-brief">הודעה מוכנה לשליחה</label>
         <textarea id="instagram-brief" readonly rows="5"></textarea>
+        <a id="email-fallback-link" class="journey-social" href="mailto:raben10studio@gmail.com">פתיחת הודעה במייל <span aria-hidden="true">↗</span></a>
         <a id="instagram-fallback-link" class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span aria-hidden="true">↗</span></a>
         <p id="instagram-copy-status" role="status">אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.</p>
       </div>
+      <noscript><p><a href="mailto:raben10studio@gmail.com">אפשר לפנות אלינו גם במייל</a></p></noscript>
     </form>
       <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">לכתוב לנו באינסטגרם <span aria-hidden="true">↗</span></a>
     </div>
