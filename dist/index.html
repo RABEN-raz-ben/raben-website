@@ -18,6 +18,9 @@
   <script defer src="content.js"></script>
   <script defer src="gallery-stories.js"></script>
   <script defer src="gallery.js"></script>
+  <link rel="stylesheet" href="analytics.css">
+  <script defer src="analytics-config.js"></script>
+  <script defer src="analytics.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body id="top">
@@ -27,7 +30,7 @@
   <nav aria-label="ניווט ראשי">
     <a href="#websites">דוגמאות</a><a href="#about">איך עובדים איתנו</a><a href="#projects" data-project-nav hidden>עבודות</a>
   </nav>
-  <a class="header-contact" href="#contact">יצירת קשר <span class="icon icon-arrow-down-left" aria-hidden="true"></span></a>
+  <a class="header-contact" data-raben-cta="header_contact" href="#contact">יצירת קשר <span class="icon icon-arrow-down-left" aria-hidden="true"></span></a>
 </header>
 <main id="main-content" tabindex="-1">
 <section class="intro shell" aria-labelledby="intro-title">
@@ -36,13 +39,13 @@
     <h1 id="intro-title">אתרים לעסקים. כלים שמקלים על העבודה.</h1>
     <p class="intro-text">אנחנו רז ובן. בונים אתרים לעסקים, כלים שחוסכים עבודה וגרסאות ראשונות לאפליקציות.</p>
     <div id="contact" class="hero-contact">
-      <form id="brief-form" class="journey-form" aria-label="בקשת שיחת היכרות עם רז ובן" action="https://formspree.io/f/mvkalrnq" method="post">
+      <form data-clarity-mask="true" id="brief-form" class="journey-form" aria-label="בקשת שיחת היכרות עם רז ובן" action="https://formspree.io/f/mvkalrnq" method="post">
       <fieldset>
         <legend class="journey-sr">פרטי הפנייה</legend>
         <label for="phone">לאיזה מספר נחזור?</label>
         <div class="callback-row">
           <input placeholder="050-1234567" id="phone" name="phone" type="tel" dir="ltr" autocomplete="tel" inputmode="tel" maxlength="25" required pattern="\+?(?:[\s\(\)\-]*[0-9]){8,15}[\s\(\)\-]*" aria-describedby="phone-error">
-          <button type="submit">חזרו אליי <span class="icon icon-arrow-left" aria-hidden="true"></span></button>
+          <button type="submit" data-raben-cta="submit_callback">חזרו אליי <span class="icon icon-arrow-left" aria-hidden="true"></span></button>
         </div>
         <p id="phone-error" class="field-error" role="alert" aria-atomic="true"></p>
         <p class="callback-note">אחד מאיתנו יחזור אליכם. נשמע מה תרצו לעשות ונציע מאיפה להתחיל.</p>
@@ -78,13 +81,13 @@
       <div id="contact-fallback" hidden>
         <label for="instagram-brief">הודעה מוכנה לשליחה</label>
         <textarea id="instagram-brief" readonly rows="5"></textarea>
-        <a id="email-fallback-link" class="journey-social" href="mailto:raben10studio@gmail.com">פתיחת הודעה במייל <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
-        <a id="instagram-fallback-link" class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
+        <a id="email-fallback-link" data-raben-channel="email" class="journey-social" data-raben-placement="fallback" href="mailto:raben10studio@gmail.com">פתיחת הודעה במייל <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
+        <a id="instagram-fallback-link" class="journey-social" data-raben-placement="fallback" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
         <p id="instagram-copy-status" role="status">אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.</p>
       </div>
       <noscript><p><a href="mailto:raben10studio@gmail.com">אפשר לפנות אלינו גם במייל</a></p></noscript>
     </form>
-      <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">לכתוב לנו באינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
+      <a class="hero-dm" data-instagram data-raben-placement="hero" href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">לכתוב לנו באינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
     </div>
   </div>
   <div class="studio-art" aria-hidden="true"><img src="assets/studio-objects.webp" width="1260" height="930" fetchpriority="high" alt=""></div>
@@ -151,19 +154,19 @@
             <label><input type="radio" name="sample-date">19 בינואר <span>המפגש ב־18:00. נשארו 2 מקומות.</span></label>
             <label><input type="radio" name="sample-date">26 בינואר <span>המפגש ב־18:00. נשארו 5 מקומות.</span></label>
           </fieldset>
-          <a href="#contact">נדבר על הרשמה לסדנאות</a>
+          <a href="#contact" data-raben-cta="example_contact">נדבר על הרשמה לסדנאות</a>
         </div></div>
       </div>
       <details class="static-ideas">
         <summary>עוד רעיונות שאפשר לבנות</summary>
         <ul>
-          <li><a href="#contact">בחירת גודל לעוגה והזמנה ממאפייה</a></li>
-          <li><a href="#contact">קביעת שיעור גיטרה</a></li>
-          <li><a href="#contact">סידור ביקורי שירות של טכנאית</a></li>
-          <li><a href="#contact">מעקב אחרי פניות למרכז קהילתי</a></li>
-          <li><a href="#contact">שיבוץ מתנדבים לחלוקה</a></li>
-          <li><a href="#contact">מציאת שותף ללימוד</a></li>
-          <li><a href="#contact">בחירת מועד לטיול עם חברים</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">בחירת גודל לעוגה והזמנה ממאפייה</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">קביעת שיעור גיטרה</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">סידור ביקורי שירות של טכנאית</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">מעקב אחרי פניות למרכז קהילתי</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">שיבוץ מתנדבים לחלוקה</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">מציאת שותף ללימוד</a></li>
+          <li><a href="#contact" data-raben-cta="example_contact">בחירת מועד לטיול עם חברים</a></li>
         </ul>
       </details>
     </div>
@@ -205,7 +208,7 @@
       <h2 id="contact-title">שנדבר על זה?</h2>
       <p>אפשר לכתוב לנו שאלה באינסטגרם או להשאיר מספר ונחזור אליכם.</p>
     </div>
-    <div class="closing-actions"><a class="header-contact" href="#contact">בקשו שיחה <span class="icon icon-arrow-left" aria-hidden="true"></span></a><a class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">כתבו באינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a></div>
+    <div class="closing-actions"><a class="header-contact" data-raben-cta="closing_contact" href="#contact">בקשו שיחה <span class="icon icon-arrow-left" aria-hidden="true"></span></a><a class="journey-social" data-instagram data-raben-placement="footer" href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">כתבו באינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a></div>
   </div>
 </section>
 </main>
@@ -213,6 +216,21 @@
   <a class="brand" href="#top" aria-label="RABEN, חזרה למעלה" dir="ltr"><span class="brand-emblem" aria-hidden="true"><i></i><i></i><i></i></span>RABEN</a>
   <span>הסטודיו של רז ובן</span>
   <a href="#top">חזרה למעלה <span class="icon icon-arrow-up" aria-hidden="true"></span></a>
+  <button id="analytics-preferences-toggle" type="button" aria-controls="analytics-preferences" hidden>העדפות פרטיות</button>
 </footer>
+<section id="analytics-preferences" class="analytics-preferences" aria-labelledby="analytics-title" hidden>
+  <button class="analytics-close" data-raben-consent-close type="button" aria-label="סגירת העדפות פרטיות">×</button>
+  <h2 id="analytics-title">העדפות פרטיות</h2>
+  <p data-raben-ga-note>Google Analytics עוזר לנו להבין איך מגיעים לאתר ואילו פעולות מבצעים בו.</p>
+  <p data-raben-clarity-note>Microsoft Clarity יוצר מפות חום והקלטות שימוש כדי לזהות היכן קשה לנווט. פרטי הטופס מוסתרים מההקלטות. בחירה חדשה בהקלטות עשויה להיכנס לתוקף בביקור הבא.</p>
+  <p>לא משתמשים בכלים האלה לפרסום. אפשר לסרב בלי לפגוע בשימוש באתר ולשנות את הבחירה בתחתית העמוד. טופס יצירת הקשר שולח את הפרטים שהזנתם ל־Formspree כדי שנוכל לחזור אליכם.</p>
+  <p data-raben-gpc hidden>הדפדפן ביקש לא לשתף מידע לצורכי מדידה, ולכן המדידה כבויה.</p>
+  <div class="analytics-actions" data-raben-consent-actions>
+    <button type="button" data-raben-consent="none">בלי מדידה</button>
+    <button type="button" data-raben-consent="analytics" hidden>מדידה בלבד, בלי הקלטות</button>
+    <button type="button" data-raben-consent="recording" hidden>אישור הקלטות שימוש</button>
+    <button type="button" data-raben-consent="both" hidden>מדידה והקלטות שימוש</button>
+  </div>
+</section>
 </body>
 </html>
