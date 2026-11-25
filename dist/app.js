@@ -79,11 +79,6 @@ document.addEventListener('visibilitychange', () => {
 
 const form = document.getElementById('brief-form');
 const contact = window.RABEN_CONTENT?.contact;
-if (contact?.email) {
-  const destination = new URL('https://formsubmit.co/');
-  destination.pathname = '/' + contact.email;
-  form.action = destination.href;
-}
 if (contact?.instagram) {
   document.querySelectorAll('[data-instagram]').forEach(link => {
     link.href = 'https://ig.me/m/' + encodeURIComponent(contact.instagram);
@@ -169,7 +164,6 @@ kind.addEventListener('change', () => {
 });
 
 form.addEventListener('submit', async event => {
-  if (event.submitter?.id === 'formsubmit-browser-retry' && phone.checkValidity()) return;
   event.preventDefault();
   if (fieldset.disabled) return;
   phone.value = phone.value.trim();
@@ -182,10 +176,10 @@ form.addEventListener('submit', async event => {
     return;
   }
 
-  const payload = Object.fromEntries(new FormData(form));
-  payload.name = nameField.value.trim();
-  payload.phone = phone.value;
-  payload.message = callbackMessage();
+  const payload = new URLSearchParams(new FormData(form));
+  payload.set('name', nameField.value.trim());
+  payload.set('phone', phone.value);
+  payload.set('message', callbackMessage());
   fieldset.disabled = true;
   fallback.hidden = true;
   formStatus.dataset.state = 'pending';
@@ -193,17 +187,14 @@ form.addEventListener('submit', async event => {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 20000);
   try {
-    const endpoint = new URL(form.action);
-    endpoint.pathname = '/ajax' + endpoint.pathname;
-    const response = await fetch(endpoint, {
+    const response = await fetch(form.action, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(payload),
+      headers: { Accept: 'application/json' },
+      body: payload,
       signal: controller.signal
     });
     const result = await response.json();
-    if (!response.ok || ![true, 'true'].includes(result?.success) ||
-        /\b(?:activat(?:e|ion)|confirm(?:ation)?|verify|verification)\b/i.test(result.message)) {
+    if (!response.ok || result?.ok !== true) {
       throw new Error('Submission not accepted');
     }
     form.reset();

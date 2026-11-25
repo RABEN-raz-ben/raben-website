@@ -14,22 +14,17 @@ async previewTab => {
     const stories = ['ceramics', 'technician', 'study', 'bakery', 'community', 'hiking', 'guitar', 'volunteer'];
     const errors = [];
     const requests = [];
-    let nativeSubmission;
 
     page.on('pageerror', error => errors.push(error.message));
     await page.route('**/api/projects', route => route.fulfill({
       json: {projects: [], expiresAt: new Date(Date.now() + 300000).toISOString()}
     }));
-    await page.route('https://formsubmit.co/**', route => {
-      if (!new URL(route.request().url()).pathname.startsWith('/ajax/')) {
-        nativeSubmission = new URLSearchParams(route.request().postData());
-        return route.fulfill({body: 'FormSubmit verification'});
-      }
-      requests.push(route.request().postDataJSON());
+    const formEndpoint = 'https://formspree.io/f/*';
+    await page.route(formEndpoint, route => {
+      requests.push(Object.fromEntries(new URLSearchParams(route.request().postData())));
       if (requests.length === 1) return route.fulfill({status: 500, json: {message: 'Server Error'}});
-      if (requests.length === 2) return route.fulfill({json: {success: 'true', message: 'Please activate your form'}});
-      if (requests.length === 4) return route.abort();
-      return route.fulfill({json: {success: 'true', message: 'The form was submitted successfully.'}});
+      if (requests.length === 2) return route.abort();
+      return route.fulfill({json: {ok: true}});
     });
 
     await page.emulateMedia({reducedMotion: 'no-preference'});
@@ -104,17 +99,12 @@ async previewTab => {
       emailDraft.searchParams.get('body').includes('הקשר שנערך בבדיקה'), 'Missing email fallback details');
     await submit.click();
     await page.locator('#form-status[data-state=error]').waitFor();
-    assert(await page.locator('#phone').inputValue() === '0501234567', 'Activation response lost the phone number');
+    assert(await page.locator('#phone').inputValue() === '0501234567', 'Network error lost the phone number');
     await submit.click();
     await page.locator('#form-status[data-state=success]').waitFor();
     assert(requests.length === 3 && requests.every(data => data.message === 'הודעת בדיקה מקומית' &&
       data.story_interest === 'הקשר שנערך בבדיקה'), 'Incorrect contact payload');
-    await page.locator('#phone').fill('0501234567');
-    await submit.click();
-    await page.locator('#form-status[data-state=error]').waitFor();
-    await page.locator('#formsubmit-browser-retry').click();
-    await page.waitForURL('https://formsubmit.co/raben10studio@gmail.com');
-    assert(nativeSubmission?.get('phone') === '0501234567', 'Native retry lost the phone number');
+    assert(await page.locator('#phone').inputValue() === '', 'Successful submission did not reset the phone field');
 
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({width, height: 844});
@@ -126,11 +116,20 @@ async previewTab => {
     const staticContext = await page.context().browser().newContext({javaScriptEnabled:false});
     try {
       const staticPage = await staticContext.newPage();
+      let nativePhone;
+      await staticPage.route(formEndpoint, route => {
+        nativePhone = new URLSearchParams(route.request().postData()).get('phone');
+        return route.fulfill({body: 'Form accepted'});
+      });
       await staticPage.goto(base + '#websites');
       assert(await staticPage.locator('[data-gallery-static]').isVisible(), 'Missing static fallback');
       await staticPage.locator('.static-ideas summary').click();
       await staticPage.locator('.static-ideas a').last().click();
       assert(staticPage.url().endsWith('#contact'), 'Static contact link');
+      await staticPage.locator('#phone').fill('0501234567');
+      await staticPage.locator('.callback-row button').click();
+      await staticPage.waitForURL(formEndpoint);
+      assert(nativePhone === '0501234567', 'No-JavaScript form did not submit the phone number');
     } finally {
       await staticContext.close();
     }
