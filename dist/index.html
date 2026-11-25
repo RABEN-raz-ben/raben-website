@@ -11,6 +11,7 @@
   <title>RABEN | סטודיו לעיצוב ופיתוח</title>
   <link rel="icon" href="assets/favicon.png">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="icons.css">
   <link rel="stylesheet" href="gallery.css">
   <link rel="stylesheet" href="gallery-previews.css">
   <link rel="stylesheet" href="journey.css">
@@ -26,7 +27,7 @@
   <nav aria-label="ניווט ראשי">
     <a href="#websites">דוגמאות</a><a href="#about">איך עובדים איתנו</a><a href="#projects" data-project-nav hidden>עבודות</a>
   </nav>
-  <a class="header-contact" href="#contact">יצירת קשר <span aria-hidden="true">↙</span></a>
+  <a class="header-contact" href="#contact">יצירת קשר <span class="icon icon-arrow-down-left" aria-hidden="true"></span></a>
 </header>
 <main id="main-content" tabindex="-1">
 <section class="intro shell" aria-labelledby="intro-title">
@@ -41,7 +42,7 @@
         <label for="phone">לאיזה מספר נחזור?</label>
         <div class="callback-row">
           <input placeholder="050-1234567" id="phone" name="phone" type="tel" dir="ltr" autocomplete="tel" inputmode="tel" maxlength="25" required pattern="\+?(?:[\s\(\)\-]*[0-9]){8,15}[\s\(\)\-]*" aria-describedby="phone-error">
-          <button type="submit">חזרו אליי <span aria-hidden="true">←</span></button>
+          <button type="submit">חזרו אליי <span class="icon icon-arrow-left" aria-hidden="true"></span></button>
         </div>
         <p id="phone-error" class="field-error" role="alert" aria-atomic="true"></p>
         <p class="callback-note">אחד מאיתנו יחזור אליכם. נשמע מה תרצו לעשות ונציע מאיפה להתחיל.</p>
@@ -79,13 +80,13 @@
         <button type="submit" id="formsubmit-browser-retry">ניסיון שליחה דרך דף האימות</button>
         <label for="instagram-brief">הודעה מוכנה לשליחה</label>
         <textarea id="instagram-brief" readonly rows="5"></textarea>
-        <a id="email-fallback-link" class="journey-social" href="mailto:raben10studio@gmail.com">פתיחת הודעה במייל <span aria-hidden="true">↗</span></a>
-        <a id="instagram-fallback-link" class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span aria-hidden="true">↗</span></a>
+        <a id="email-fallback-link" class="journey-social" href="mailto:raben10studio@gmail.com">פתיחת הודעה במייל <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
+        <a id="instagram-fallback-link" class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">העתקת ההודעה ופתיחת אינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
         <p id="instagram-copy-status" role="status">אחרי ההעתקה אפשר להדביק את ההודעה בשיחה ולשלוח.</p>
       </div>
       <noscript><p><a href="mailto:raben10studio@gmail.com">אפשר לפנות אלינו גם במייל</a></p></noscript>
     </form>
-      <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">לכתוב לנו באינסטגרם <span aria-hidden="true">↗</span></a>
+      <a class="hero-dm" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">לכתוב לנו באינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a>
     </div>
   </div>
   <div class="studio-art" aria-hidden="true"><img src="assets/studio-objects.webp" width="1260" height="930" fetchpriority="high" alt=""></div>
@@ -106,9 +107,9 @@
           </dl>
         </header>
         <div class="story-switcher" role="group" aria-label="מעבר בין דוגמאות">
-          <button type="button" data-gallery-prev aria-label="לדוגמה הקודמת">→</button>
+          <button type="button" data-gallery-prev aria-label="לדוגמה הקודמת"><span class="icon icon-arrow-right" aria-hidden="true"></span></button>
           <select data-gallery-picker aria-label="בחירת עסק או פעילות"></select>
-          <button type="button" data-gallery-next aria-label="לדוגמה הבאה">←</button>
+          <button type="button" data-gallery-next aria-label="לדוגמה הבאה"><span class="icon icon-arrow-left" aria-hidden="true"></span></button>
         </div>
         <div class="gallery-pair">
           <div class="gallery-picture">
@@ -117,11 +118,11 @@
           </div>
           <div class="gallery-stage phase-stage">
             <div class="phase-frame phase-before">
-              <div class="phase-heading"><span class="phase-symbol" aria-hidden="true">?</span><strong>כך זה נראה היום</strong></div>
+              <div class="phase-heading"><span class="phase-symbol" aria-hidden="true"><span class="icon icon-question" aria-hidden="true"></span></span><strong>כך זה נראה היום</strong></div>
               <div data-gallery-problem></div>
             </div>
             <div class="phase-frame phase-after">
-              <div class="phase-heading"><span class="phase-symbol" aria-hidden="true">✓</span><strong>כך הפתרון עובד</strong></div>
+              <div class="phase-heading"><span class="phase-symbol" aria-hidden="true"><span class="icon icon-check" aria-hidden="true"></span></span><strong>כך הפתרון עובד</strong></div>
               <div data-gallery-demo></div>
             </div>
           </div>
@@ -206,14 +207,14 @@
       <h2 id="contact-title">שנדבר על זה?</h2>
       <p>אפשר לכתוב לנו שאלה באינסטגרם או להשאיר מספר ונחזור אליכם.</p>
     </div>
-    <div class="closing-actions"><a class="header-contact" href="#contact">בקשו שיחה <span aria-hidden="true">←</span></a><a class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">כתבו באינסטגרם <span aria-hidden="true">↗</span></a></div>
+    <div class="closing-actions"><a class="header-contact" href="#contact">בקשו שיחה <span class="icon icon-arrow-left" aria-hidden="true"></span></a><a class="journey-social" data-instagram href="https://ig.me/m/raben10studio" target="_blank" rel="noopener noreferrer">כתבו באינסטגרם <span class="icon icon-arrow-up-right" aria-hidden="true"></span></a></div>
   </div>
 </section>
 </main>
 <footer class="endbar shell">
   <a class="brand" href="#top" aria-label="RABEN, חזרה למעלה" dir="ltr"><span class="brand-emblem" aria-hidden="true"><i></i><i></i><i></i></span>RABEN</a>
   <span>הסטודיו של רז ובן</span>
-  <a href="#top">חזרה למעלה ↑</a>
+  <a href="#top">חזרה למעלה <span class="icon icon-arrow-up" aria-hidden="true"></span></a>
 </footer>
 </body>
 </html>

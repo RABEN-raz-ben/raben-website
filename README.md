@@ -26,6 +26,7 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory dist
 | `dist/gallery.js`, `dist/gallery.css` | תצוגה אוטומטית, הצגת תמונות והעברת ההקשר לטופס |
 | `dist/journey.css`, `dist/app.js` | תהליך העבודה, שאלות, עבודות מאומתות וטיפול בפנייה |
 | `dist/assets/` | קובצי תמונה מקומיים |
+| `dist/icons.css`, `dist/assets/icons/` | אייקוני SVG מקומיים ששומרים על צורה אחידה בכל מכשיר |
 | `dist/content.js` | הגדרות ציבוריות ורשימת מועמדים להצגה בתיק העבודות |
 | `api/projects.js`, `lib/` | אימות זמינות והרשאה להצגת עבודות ומטמון תוצאות |
 

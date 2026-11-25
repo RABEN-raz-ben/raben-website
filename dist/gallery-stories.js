@@ -254,7 +254,6 @@
 
   // Source fragments are illustrative and contain no visitor information.
   function problem(layout, label, issue, outcome, fragments) {
-    const marks = { chat: '…', note: '≡', diary: '◷', inbox: '✉' };
     return {
       issue,
       outcome,
@@ -263,8 +262,10 @@
         artifact.dir = 'rtl';
         artifact.setAttribute('aria-label', label);
         const heading = element('h3', 'gp-problem-heading');
-        const mark = element('span', 'gp-problem-mark', marks[layout]);
+        const mark = element('span', 'gp-problem-mark');
+        const icon = element('span', 'icon icon-' + layout);
         mark.setAttribute('aria-hidden', 'true');
+        mark.append(icon);
         heading.append(mark, document.createTextNode(label));
         const list = element('ul', 'gp-fragments');
         for (const [source, content] of fragments) {
@@ -309,7 +310,7 @@
     {
       id: 'technician', name: 'טכנאית מכונות כביסה', category: 'work', title: 'יומן ביקורי בית לטכנאית',
       ...problem('diary', 'דף הביקורים ברכב', 'מחפשים בהודעות לאן לנסוע', 'הביקור הבא כבר פתוח ביומן', [
-        ['09:00 · לוי', 'מכונת הכביסה תוקנה ✓'],
+        ['09:00 · לוי', 'מכונת הכביסה תוקנה'],
         ['משפחת כהן', 'השעה בהודעה קולית. איזו משאבה צריך לבדוק?']
       ]),
       alt: 'טכנאית בודקת מכונת כביסה בביקור בית',

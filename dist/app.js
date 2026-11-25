@@ -27,10 +27,14 @@ function createProjectCard(project) {
   const body = makeElement('div', 'project-body');
   body.append(makeElement('span', 'project-category', project.category));
   if (project.concept) body.append(makeElement('span', 'concept-label', 'דוגמה להמחשה'));
+  const link = makeElement('span', 'project-link', 'לצפייה באתר ');
+  const arrow = makeElement('span', 'icon icon-arrow-up-right');
+  arrow.setAttribute('aria-hidden', 'true');
+  link.append(arrow);
   body.append(
     makeElement('h3', 'project-title', project.title),
     makeElement('p', 'project-description', project.description),
-    makeElement('span', 'project-link', 'לצפייה באתר ↗')
+    link
   );
   card.append(body);
   return card;

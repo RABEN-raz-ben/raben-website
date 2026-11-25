@@ -86,11 +86,6 @@
   padding-block: 1.2rem;
 }
 .journey-answers summary::-webkit-details-marker { display: none; }
-.journey-answers summary::after {
-  content: '+';
-  font: 400 1.5rem/1 Arial, sans-serif;
-}
-.journey-answers details[open] summary::after { content: '−'; }
 .journey-answers p { margin: 0 0 1.2rem; }
 .journey-contact { background: #123f36; color: #fffbf4; }
 .journey-contact .journey-intro h2 { color: #ffd6ad; }
@@ -131,8 +126,6 @@
   font-weight: 600;
 }
 .journey-extras summary::-webkit-details-marker { display: none; }
-.journey-extras summary::after { content: '+'; font-size: 1.4rem; }
-.journey-extras[open] summary::after { content: '−'; }
 .journey-extras small { font-size: .85rem; color: #475e54; margin-inline-start: .35rem; }
 .journey-extras .journey-fields { margin-block-start: .4rem; }
 .journey-form label {
