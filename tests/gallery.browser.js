@@ -95,8 +95,7 @@ async previewTab => {
     const emailLink = page.locator('#email-fallback-link');
     const emailDraft = new URL(await emailLink.getAttribute('href'));
     assert(await emailLink.isVisible() && emailDraft.pathname === 'raben10studio@gmail.com' &&
-      emailDraft.searchParams.get('body').includes('0501234567') &&
-      emailDraft.searchParams.get('body').includes('הקשר שנערך בבדיקה'), 'Missing email fallback details');
+      emailDraft.search === '', 'The fallback anchor must not expose visitor details in its URL');
     await submit.click();
     await page.locator('#form-status[data-state=error]').waitFor();
     assert(await page.locator('#phone').inputValue() === '0501234567', 'Network error lost the phone number');

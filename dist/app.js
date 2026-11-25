@@ -115,10 +115,16 @@ function updateFallback() {
     '',
     callbackMessage()
   ].join('\n');
-  const subject = form.elements.namedItem('_subject').value;
-  emailFallback.href = 'mailto:' + fallbackEmailAddress + '?subject=' + encodeURIComponent(subject) +
-    '&body=' + encodeURIComponent(instagramBrief.value);
 }
+
+emailFallback.addEventListener('click', event => {
+  // Never put visitor details into an attribute a replay tool can capture.
+  event.preventDefault();
+  const subject = form.elements.namedItem('_subject').value;
+  const draft = 'mailto:' + fallbackEmailAddress + '?subject=' + encodeURIComponent(subject) +
+    '&body=' + encodeURIComponent(instagramBrief.value);
+  window.location.assign(draft);
+});
 
 function clearInterest() {
   interest.value = '';
@@ -197,6 +203,7 @@ form.addEventListener('submit', async event => {
     if (!response.ok || result?.ok !== true) {
       throw new Error('Submission not accepted');
     }
+    document.dispatchEvent(new Event('raben:lead-accepted'));
     form.reset();
     clearInterest();
     document.getElementById('brief-extras').open = false;
