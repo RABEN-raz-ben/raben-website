@@ -1,0 +1,14 @@
+/* SayBack uses its own warm visual palette within the existing portfolio. */
+.project-has-case[data-case-style=sayback] {
+  --case-accent:#81341f;--case-line:#d4b997;--case-plate:#f5e3ca;--case-surface:#fffaef;
+}
+[data-case-style=sayback] .project-case-screen{background:#efe1c9}
+[data-case-style=sayback] .project-case-interface {border:1px solid #d0b596;border-radius:5px;background:#fff8eb}
+[data-case-style=sayback] #project-case-intro,[data-case-style=sayback] .project-case-tags li {color:#4a3628}
+[data-case-style=sayback] .project-case-figure figcaption {color:#684938}
+.project-gallery-card[data-project=sayback] .project-gallery-image {background:#f8e8cf}
+.project-gallery-card[data-project=sayback] .project-gallery-image img{object-position:center center}
+@media(max-width:680px){
+  .project-list a[data-project=sayback]{--project-thumb:url("assets/projects/sayback/image.webp")}
+  [data-case-style=sayback] button,[data-case-style=sayback] #project-case-open{min-height:44px}
+}

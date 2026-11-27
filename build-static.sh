@@ -9,3 +9,20 @@ test -s dist/index.html
 test -s dist/showroom.js
 test -s dist/assets/projects/catalog.json
 printf 'Verified RABEN v5 static release.\n'
+
+# Install the SayBack portfolio card on the verified, pinned base release.
+sayback='portfolio/sayback'
+cp "$sayback/room-index.html" dist/index.html
+cp "$sayback/sayback.css" dist/sayback.css
+mkdir -p dist/assets/projects/sayback
+cp "$sayback/index.html" "$sayback/image.webp" "$sayback/example.webp" dist/assets/projects/sayback/
+catalog='dist/assets/projects/catalog.json'
+test "$(tail -n 1 "$catalog")" = '}'
+{
+  sed '$d' "$catalog"
+  printf ',\n'
+  cat "$sayback/catalog.entry.json"
+  printf '}\n'
+} > "${catalog}.new"
+mv "${catalog}.new" "$catalog"
+printf 'Verified SayBack portfolio release overlay.\n'

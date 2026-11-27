@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#191e18">
+  <meta name="description" content="ראבן בונה אתרים ללקוחות, אפליקציות לצוותים וכלים לעבודה השוטפת. בואו לנסות אותם בסטודיו.">
+  <title>RABEN — אתרים, אפליקציות וכלים לעסקים</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23252d23'/%3E%3Ctext x='7' y='50' font-family='Arial' font-size='50' font-weight='bold' fill='%23eee8d8'%3ER%3C/text%3E%3C/svg%3E">
+  <link rel="preload" href="assets/rubik.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="office.css"><link rel="stylesheet" href="showroom.css">
+  <link rel="stylesheet" href="projects.css"><link rel="stylesheet" href="mobile.css" media="(max-width:680px)"><link rel="stylesheet" href="sayback.css">
+  <script defer src="showroom.js"></script><script defer src="projects.js"></script><script defer src="office.js"></script><script defer src="contact.js"></script>
+  <noscript><style>.exhibit-list,.showroom-open,.office-pin,#help-open,.look-dial,.scene-surface{display:none!important}.station{background-image:linear-gradient(270deg,#171e16f5,transparent 78%),var(--scene)}@media(max-width:680px){.station{background-image:linear-gradient(0deg,#1a2019 30%,#1a2019d1 52%,transparent 76%),var(--scene)}}</style></noscript>
+  <meta property="og:title" content="RABEN Studio">
+  <meta property="og:description" content="אתרים, אפליקציות וכלים לעסקים">
+  <meta property="og:type" content="website">
+</head>
+<body>
+  <svg class="symbol-bank" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.8" r=".8" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="look" viewBox="0 0 24 24"><path d="M3 12c2.7-4 5.7-5.8 9-5.8s6.3 1.8 9 5.8c-2.7 4-5.7 5.8-9 5.8S5.7 16 3 12Z"/><circle cx="12" cy="12" r="2.5"/></symbol>
+  </svg>
+  <a class="skip-tour" href="#contact-room">דילוג ליצירת קשר</a>
+  <header class="studio-bar">
+    <a href="#home" class="studio-logo" aria-label="ראבן, לקבלה"><b dir="ltr" lang="en">RABEN<span>.</span></b><span>סטודיו למוצרים<br>דיגיטליים לעסקים</span></a>
+    <nav class="studio-nav" aria-label="חדרי הסטודיו"><a href="#home">קבלה</a><a href="#showroom">הדגמות</a><a href="#projects-room">פרויקטים</a><a href="#contact-room">יצירת קשר</a></nav>
+    <button id="help-open" type="button" aria-label="אפשרויות תצוגה ועזרה">?</button>
+  </header>
+  <main class="office-journey" id="office-journey" aria-labelledby="home-title">
+    <div class="office-world" id="office-world">
+      <div class="scene-surface" id="scene-surface" role="group" aria-label="מבט בתוך המשרד. חצי ימין ושמאל מסובבים את המבט">
+        <picture class="office-poster"><source media="(max-width:680px)" srcset="assets/office/entry-view-mobile.webp"><img id="office-poster" src="assets/office/entry-view.webp" fetchpriority="high" alt=""></picture>
+      </div>
+      <div class="office-pins" aria-label="נקודות בחלל">
+        <a class="office-pin door-pin" href="#showroom" data-door="showroom" aria-label="דרך הדלת לחדר ההדגמות" hidden><span class="pin-core" aria-hidden="true">↗</span><span class="pin-label">חדר ההדגמות</span></a>
+        <button class="office-pin table-pin" id="table-pin" type="button" hidden><span class="pin-core" aria-hidden="true">+</span><span class="pin-label" id="pin-label"></span></button>
+        <a class="project-plate" href="assets/projects/myshift/index.html" data-project="myshift" aria-label="פתיחת MyShift מתוך לוח הפרויקטים" aria-haspopup="dialog" hidden></a>
+        <a class="project-plate" href="assets/projects/gearguard/index.html" data-project="gearguard" aria-label="פתיחת GearGuard מתוך לוח הפרויקטים" aria-haspopup="dialog" hidden></a>
+        <a class="project-plate" href="assets/projects/bookeasy/index.html" data-project="bookeasy" aria-label="פתיחת BookEasy מתוך לוח הפרויקטים" aria-haspopup="dialog" hidden></a>
+        <a class="project-plate" href="https://etz-umlo-online.vercel.app/" data-project="etz-umlo" aria-label="פתיחת עץ ומלואו מתוך לוח הפרויקטים" aria-haspopup="dialog" hidden></a>
+        <a class="project-plate" href="https://shuon-shifts-il.web.app/demo" data-project="shuon" aria-label="פתיחת שועון מתוך לוח הפרויקטים" aria-haspopup="dialog" hidden></a>
+        <button class="project-wall-open" id="project-wall-open" type="button" aria-label="פתחו את לוח הפרויקטים בתצוגה גדולה" aria-haspopup="dialog" aria-controls="project-gallery" hidden><span aria-hidden="true">להגדלה ↗</span></button>
+      </div>
+      <div class="look-dial" hidden><button id="look-left" type="button" aria-label="להביט שמאלה">‹</button><button id="look-center" type="button" aria-label="למרכז את המבט"><svg class="icon" aria-hidden="true"><use href="#look"/></svg></button><button id="look-right" type="button" aria-label="להביט ימינה">›</button></div>
+    </div>
+    <div class="office-trail">
+      <section class="station entrance" id="home" data-room="lobby" aria-labelledby="home-title" tabindex="-1">
+        <div class="station-copy">
+          <p class="room-sign"><span dir="ltr">01 / 04</span><i></i>הקבלה · הסטודיו הווירטואלי של ראבן</p>
+          <h1 id="home-title">אתרים, אפליקציות <em>וכלים לעסקים</em></h1>
+          <p class="purpose">אנחנו ראבן. אנחנו בונים אתרים שבהם הלקוחות שלכם יכולים לבחור ולהזמין, אפליקציות שהצוות לוקח לשטח וכלים שמסדרים עבודה שחוזרת על עצמה.</p>
+          <div class="entrance-actions"><a class="solid-link" id="home-contact" href="#contact-room">דברו איתנו <span aria-hidden="true">↙</span></a><a class="text-link" id="start-journey" href="#showroom">לחדר ההדגמות <span aria-hidden="true">↓</span></a></div>
+          <p class="travel-hint">גללו כדי ללכת במשרד. אפשר גם לבחור חדר בניווט.</p>
+        </div>
+      </section>
+      <section class="station room-station" id="showroom" data-room="showroom" aria-labelledby="showroom-title" tabindex="-1">
+        <div class="station-copy">
+          <p class="room-sign"><span dir="ltr">02 / 04</span><i></i>חדר ההדגמות</p>
+          <h2 id="showroom-title">ככה זה <em>עובד בפועל.</em></h2>
+          <p class="purpose">התנסו בשלושה כלים של ״חומר״, בית מלאכה דמיוני לקרמיקה.</p>
+          <button class="showroom-open" type="button" data-open-demo="web" aria-haspopup="dialog" aria-controls="display-dialog">פתחו את ההדגמות</button>
+          <div class="exhibit-list" aria-label="הדגמות אינטראקטיביות">
+            <button class="exhibit-card" type="button" data-open-demo="web" aria-haspopup="dialog" aria-controls="display-dialog">
+              <span class="exhibit-thumb" data-thumb="web" aria-hidden="true"></span>
+              <span class="exhibit-copy"><small><bdi>01</bdi> · אתר ללקוחות</small><b>קטלוג קרמיקה</b></span>
+            </button>
+            <button class="exhibit-card" type="button" data-open-demo="app" aria-haspopup="dialog" aria-controls="display-dialog">
+              <span class="exhibit-thumb" data-thumb="app" aria-hidden="true"></span>
+              <span class="exhibit-copy"><small><bdi>02</bdi> · אפליקציה לצוות</small><b>עמדת אריזה</b></span>
+            </button>
+            <button class="exhibit-card" type="button" data-open-demo="tool" aria-haspopup="dialog" aria-controls="display-dialog">
+              <span class="exhibit-thumb" data-thumb="tool" aria-hidden="true"></span>
+              <span class="exhibit-copy"><small><bdi>03</bdi> · כלי לניהול</small><b>מחשבון תמחור</b></span>
+            </button>
+          </div>
+          <noscript><p class="travel-hint">להפעלת הדוגמאות יש לאפשר JavaScript.</p></noscript>
+          <a class="next-room" href="#projects-room">לפרויקטים שבנינו</a>
+        </div>
+      </section>
+      <section class="station projects-station" id="projects-room" data-room="projects" aria-labelledby="projects-title" tabindex="-1">
+        <div class="station-copy">
+          <p class="room-sign"><span dir="ltr">03 / 04</span><i></i>חדר הפרויקטים</p>
+          <h2 id="projects-title">הפרויקטים <em>שלנו.</em></h2>
+          <p class="purpose">טעימה מהעבודות על הקיר. את כל הפרויקטים אפשר לראות בלוח הגדול.</p>
+          <button class="project-gallery-open" id="project-gallery-open" type="button" aria-haspopup="dialog" aria-controls="project-gallery" hidden>פתחו את הלוח הגדול <span aria-hidden="true">↗</span></button>
+          <div class="project-list" aria-label="בחירת פרויקט">
+            <a href="assets/projects/myshift/index.html" data-project="myshift" aria-haspopup="dialog"><strong lang="en" dir="ltr">MyShift</strong><span>ניהול משמרות</span></a>
+            <a href="assets/projects/gearguard/index.html" data-project="gearguard" aria-haspopup="dialog"><strong lang="en" dir="ltr">GearGuard</strong><span>ניהול ציוד</span></a>
+            <a href="assets/projects/bookeasy/index.html" data-project="bookeasy" aria-haspopup="dialog"><strong lang="en" dir="ltr">BookEasy</strong><span>קביעת תורים</span></a>
+            <a href="https://etz-umlo-online.vercel.app/" data-project="etz-umlo" aria-haspopup="dialog"><strong>עץ ומלואו</strong><span>חנות צמחים</span></a>
+            <a href="https://shuon-shifts-il.web.app/demo" data-project="shuon" aria-haspopup="dialog"><strong>שועון</strong><span>יומן משמרות</span></a>
+            <a href="assets/projects/sayback/index.html" data-project="sayback" aria-haspopup="dialog"><strong lang="en" dir="ltr">SayBack</strong><span>ניסוח תשובות</span></a>
+          </div>
+          <div class="project-exits"><a class="next-room" href="#showroom">חזרה להדגמות</a><a class="next-room" href="#contact-room">לחדר הפגישות</a></div>
+        </div>
+      </section>
+      <section class="station final-station" id="contact-room" data-room="contact" aria-labelledby="contact-title" tabindex="-1">
+        <div class="station-copy">
+          <p class="room-sign"><span dir="ltr">04 / 04</span><i></i>חדר הפגישות</p>
+          <h2 id="contact-title">מה תרצו <em>שנבנה יחד?</em></h2>
+          <p class="purpose">ספרו לנו בקצרה מה אתם צריכים ונחזור אליכם.</p>
+          <form class="studio-form" id="studio-contact" method="post" action="https://formspree.io/f/mvkalrnq" aria-label="שליחת פנייה לראבן">
+            <div class="contact-fields">
+              <label for="contact-name">שם<input id="contact-name" name="name" autocomplete="name" maxlength="100" required></label>
+              <label for="contact-email">מייל לחזרה<input id="contact-email" name="email" type="email" autocomplete="email" dir="ltr" maxlength="254" required></label>
+            </div>
+            <label for="contact-message">איך נוכל לעזור?<textarea id="contact-message" name="message" rows="3" maxlength="2000" required></textarea></label>
+            <label class="field-trap" aria-hidden="true">אין למלא שדה זה<input name="_gotcha" tabindex="-1" autocomplete="off"></label>
+            <input type="hidden" name="_subject" value="פנייה חדשה מאתר ראבן">
+            <button class="solid-link" type="submit">שלחו פנייה</button>
+            <p id="mail-status" role="status" aria-live="polite" aria-atomic="true"></p>
+            <p class="contact-note">הפרטים ישמשו למענה לפנייה בלבד. הטופס נשלח באמצעות Formspree.</p>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+  <dialog class="display-dialog" id="display-dialog" aria-labelledby="display-title">
+    <header class="display-top">
+      <div><p class="display-eyebrow">סטודיו ראבן · התנסות</p><h2 id="display-title">שולחן ההדגמות</h2></div>
+      <button class="close-dialog" type="button" id="display-close"><span>חזרה לחדר</span><b aria-hidden="true">×</b></button>
+    </header>
+    <div class="display-tabs" role="tablist" aria-label="מוצר להתנסות">
+      <button role="tab" id="tab-web" aria-controls="panel-web" aria-selected="true" type="button"><bdi aria-hidden="true">01</bdi> קטלוג</button>
+      <button role="tab" id="tab-app" aria-controls="panel-app" aria-selected="false" tabindex="-1" type="button"><bdi aria-hidden="true">02</bdi> אריזה</button>
+      <button role="tab" id="tab-tool" aria-controls="panel-tool" aria-selected="false" tabindex="-1" type="button"><bdi aria-hidden="true">03</bdi> תמחור</button>
+    </div>
+    <div class="display-content" id="display-content">
+    <section class="sample catalog" id="panel-web" role="tabpanel" aria-labelledby="tab-web">
+      <div class="catalog-bar"><div class="catalog-brand"><strong class="ceramics-logo">חֹמֶר</strong><span>בית מלאכה לקרמיקה</span></div><span class="catalog-sample">קטלוג לדוגמה</span></div>
+      <div class="catalog-grid">
+        <figure class="catalog-photo"><img id="ceramic-photo" width="560" height="740" alt="ספל קרמיקה ירוק בעבודת אובניים על אבן בהירה"><figcaption id="ceramic-caption">זיגוג זית · סדרת בוקר</figcaption></figure>
+        <div class="catalog-product"><p class="sample-kicker">קולקציית הסטודיו</p><h3 id="ceramic-title">ספל בוקר</h3><p class="product-copy" id="ceramic-copy">ספל נמוך עם ידית רחבה, שנוצר לסיבוב הראשון של הקפה.</p>
+          <div class="product-options" role="group" aria-label="כלי מהקולקציה"><button type="button" data-ceramic="cup" aria-pressed="true"><i></i>ספל</button><button type="button" data-ceramic="vase" aria-pressed="false"><i></i>אגרטל</button></div>
+          <div class="catalog-choice"><button type="button" id="ceramic-save" aria-pressed="false">להוסיף לבחירה</button><p id="ceramic-status" role="status">עוד לא נבחרו פריטים.</p></div>
+          <details class="product-spec"><summary>חומר ומידות</summary><p id="ceramic-spec">חימר אבן בזיגוג זית. גובה 8 ס״מ, נפח 220 מ״ל.</p></details>
+        </div>
+      </div>
+    </section>
+    <section class="sample dispatch" id="panel-app" role="tabpanel" aria-labelledby="tab-app" hidden>
+      <div class="dispatch-intro"><p class="sample-kicker">אפליקציית הצוות</p><h3>גם כשעמוס, <br>לא שוכחים פריט.</h3><p>סמנו מה כבר נארז. רק אחרי שכל סוגי הפריטים סומנו אפשר להעביר את ההזמנה לאיסוף.</p></div>
+      <div class="packing-screen"><header><div><small>חומר · מסך צוות</small><strong>עמדת אריזה</strong></div><span id="order-state">בהכנה</span></header>
+        <div class="order-summary"><div><small>הזמנה לאיסוף</small><h4 id="order-id" dir="ltr">#1042</h4></div><b id="packed-count" dir="ltr">0 / 2</b></div>
+        <progress id="packing-progress" value="0" max="2" aria-label="התקדמות האריזה"></progress>
+        <div id="packing-lines"></div><button type="button" id="advance-order" disabled>להעביר לאיסוף</button>
+        <p class="pack-status" id="pack-status" role="status"></p>
+      </div>
+    </section>
+    <section class="sample batch" id="panel-tool" role="tabpanel" aria-labelledby="tab-tool" hidden>
+      <div class="batch-heading"><div><p class="sample-kicker">כלי לניהול · נתוני דוגמה</p><h3>כמה תעלה הסדרה?</h3><p class="batch-description">שנו את הכמות או האריזה וראו איך העלות לכל כלי משתנה.</p></div><span aria-hidden="true">₪</span></div>
+      <div class="batch-grid">
+        <div class="batch-inputs"><label for="batch-units">מספר כלים</label><div class="quantity"><button type="button" id="quantity-down" aria-label="להפחית כלי אחד">−</button><input type="number" id="batch-units" min="1" max="200" step="1" value="12" inputmode="numeric"><button type="button" id="quantity-up" aria-label="להוסיף כלי אחד">+</button></div>
+          <div class="batch-presets" role="group" aria-label="כמויות לדוגמה"><button type="button" data-batch-units="12" aria-pressed="true">12 כלים</button><button type="button" data-batch-units="24" aria-pressed="false">24 כלים</button><button type="button" data-batch-units="48" aria-pressed="false">48 כלים</button></div>
+          <fieldset class="pack-options"><legend>אריזה לכל כלי</legend><label><input type="radio" name="pack-type" value="4" checked>רגילה</label><label><input type="radio" name="pack-type" value="9">מתנה</label></fieldset>
+          <p id="cost-error" class="cost-error" role="status"></p>
+        </div>
+        <div class="batch-output" aria-live="polite"><small>עלות הסדרה</small><strong id="batch-total">₪360</strong><p id="unit-total">₪30 לכלי</p>
+          <div class="cost-bar" aria-hidden="true"><i></i><i></i><i></i></div>
+          <dl><div><dt>חומר ושריפה</dt><dd id="clay-cost">₪216</dd></div><div><dt>אריזה</dt><dd id="pack-cost">₪48</dd></div><div><dt>הכנת הסדרה</dt><dd id="setup-cost">₪96</dd></div></dl>
+        </div>
+      </div>
+    </section>
+    </div>
+    <footer class="display-footer"><span>התנסות לדוגמה · בלי הזמנה אמיתית</span><a href="#projects-room">לפרויקטים שבנינו</a></footer>
+  </dialog>
+  <dialog class="project-gallery" id="project-gallery" aria-labelledby="project-gallery-title">
+    <header class="project-gallery-bar">
+      <div><p>חדר הפרויקטים · RABEN</p><h2 id="project-gallery-title">לוח הפרויקטים</h2></div>
+      <button id="project-gallery-close" type="button" aria-label="סגירת הלוח הגדול וחזרה לחדר"><span aria-hidden="true">×</span> חזרה לחדר</button>
+    </header>
+    <div class="project-gallery-scroll" id="project-gallery-scroll" role="region" aria-label="הפרויקטים של ראבן" tabindex="0">
+      <p class="project-gallery-hint" id="project-gallery-status" role="status">טוען את הפרויקטים…</p>
+      <div class="project-gallery-grid" id="project-gallery-grid"></div>
+    </div>
+  </dialog>
+  <dialog class="project-view" id="project-view" aria-labelledby="project-name">
+    <header class="project-mast">
+      <div class="project-identity"><h2 id="project-name" lang="en" dir="ltr"></h2><span id="project-context"></span></div>
+      <button type="button" id="project-close" aria-label="סגירה וחזרה ללוח הפרויקטים"><span aria-hidden="true">×</span> <b id="project-close-label">חזרה ללוח</b></button>
+    </header>
+    <nav class="project-tools" aria-label="תצוגת הפרויקט">
+      <button type="button" data-view="demo" aria-pressed="true">הדגמה</button>
+      <button type="button" data-view="about" aria-pressed="false">על הפרויקט</button>
+      <a id="project-full" target="_blank" rel="noopener noreferrer">פתיחה בחלון נפרד</a>
+    </nav>
+    <div id="project-stage" class="project-stage"></div>
+    <article id="project-about" class="project-about" hidden>
+      <section id="project-case" class="project-case" hidden>
+        <div class="project-case-intro">
+          <p id="project-case-kicker" class="project-case-kicker"></p>
+          <h3>מה בנינו</h3>
+          <p id="project-case-intro"></p>
+          <ul id="project-case-tags" class="project-case-tags" aria-label="תכונות מרכזיות"></ul>
+          <a id="project-case-open" target="_blank" rel="noopener noreferrer"></a>
+        </div>
+        <div class="project-case-visual">
+          <div class="project-case-picker" id="project-case-picker" role="group" aria-label="מסכים מהפרויקט"></div>
+          <figure class="project-case-figure">
+            <div class="project-case-screen">
+              <img id="project-case-photo" class="project-case-photo" alt="" hidden>
+              <img id="project-case-image" class="project-case-interface" alt="">
+            </div>
+            <figcaption id="project-case-caption" aria-live="polite"></figcaption>
+          </figure>
+        </div>
+      </section>
+      <div class="project-description"><p id="project-summary"></p><ul id="project-facts"></ul><p id="project-edition"></p></div>
+      <figure><img id="project-image" alt=""><figcaption id="project-caption"></figcaption></figure>
+    </article>
+  </dialog>
+  <dialog class="help-dialog" id="help" aria-labelledby="help-title"><div class="display-top"><h2 id="help-title">ניווט בסטודיו</h2><button class="close-dialog" id="help-close" type="button" aria-label="סגירה">×</button></div>
+    <p>גללו מהקבלה לחדר ההדגמות, לחדר הפרויקטים ולחדר הפגישות. גררו לרוחב התמונה כדי להביט לצדדים. במקלדת אפשר לנווט עם Tab ולסובב את המבט בחצים.</p><label class="motion-option"><input type="checkbox" id="static-view">תצוגת חדרים ללא תנועת מצלמה</label>
+  </dialog>
+</body>
+</html>
