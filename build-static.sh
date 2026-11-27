@@ -31,5 +31,6 @@ printf 'Verified SayBack portfolio release overlay.\n'
 entry='portfolio/wall-logo'
 git apply --check "$entry/entry.patch"
 git apply "$entry/entry.patch"
-cp "$entry/entry-wall.webp" "$entry/entry-wall-mobile.webp" dist/assets/office/
+cp "$entry/entry-wall.webp" dist/assets/office/entry-doorway.webp
+cp "$entry/entry-wall-mobile.webp" dist/assets/office/entry-doorway-mobile.webp
 printf 'Verified RABEN reception wordmark framing.\n'

@@ -5,17 +5,17 @@
    }
    function mobilePhoto(room) {
 -    const file = room==="lobby" ? "entry-view-mobile" : room==="projects" ? "projects-still" : room+"-detail";
-+    const file = room==="lobby" ? "entry-wall-mobile" : room==="projects" ? "projects-still" : room+"-detail";
++    const file = room==="lobby" ? "entry-doorway-mobile" : room==="projects" ? "projects-still" : room+"-detail";
      return "assets/office/"+file+".webp";
    }
    function setPoster(room){
      if(posterRoom===room)return;
      posterRoom=room;
 -    const file=room==="lobby"?"entry-view":room==="projects"?"projects-still":room+"-detail";
-+    const file=room==="lobby"?"entry-wall":room==="projects"?"projects-still":room+"-detail";
++    const file=room==="lobby"?"entry-doorway":room==="projects"?"projects-still":room+"-detail";
      const source="assets/office/"+file+".webp";
 -    mobileSource.srcset=room==="lobby"?"assets/office/entry-view-mobile.webp":source;
-+    mobileSource.srcset=room==="lobby"?"assets/office/entry-wall-mobile.webp":source;
++    mobileSource.srcset=room==="lobby"?"assets/office/entry-doorway-mobile.webp":source;
      poster.src=source;
    }
    function paintPhonePosters(from, to, progress) {
@@ -27,7 +27,7 @@
      function resize(){
        const {width,height}=surface.getBoundingClientRect();
        if(!width || !height || width===w && height===h)return;
-@@ -245,15 +246,13 @@
+@@ -245,15 +246,19 @@
        }
        const framing=room==="projects"?ease((t-.25)/.68):from==="projects"?1-ease(t/.64):0;
        baseYaw+=(w<=680?.14:.18)*framing;
@@ -39,9 +39,15 @@
 -      }
 -      const lens=(w<=680?84:61)+(w<=680?5:10)*framing;
 +      const entryWeight=from==="lobby" ? 1-ease(t/.42) : 0;
-+      baseYaw=angle(baseYaw,entryAim[0]+(w<=680?-.04:-.015),entryWeight);
++      // The left edge of the mounted wordmark is about 0.134 rad left of the
++      // reception lens axis. Allow a little parallax and inset the entire sign.
++      const entryLens=w<=680?72:59;
++      const focal=h/(2*Math.tan(T.MathUtils.degToRad(entryLens/2)));
++      const gutter=Math.max(w<=680?24:56,w*.055);
++      const entryTurn=Math.min(.68,Math.atan(((w<=680?.5:.435)*w-gutter)/focal)-.134);
++      baseYaw=angle(baseYaw,entryAim[0]-entryTurn,entryWeight);
 +      const walkLens=(w<=680?84:61)+(w<=680?5:10)*framing;
-+      const lens=T.MathUtils.lerp(walkLens,w<=680?63:59,entryWeight);
++      const lens=T.MathUtils.lerp(walkLens,entryLens,entryWeight);
        if(Math.abs(camera.fov-lens)>.001){camera.fov=lens;camera.updateProjectionMatrix();}
 -      const basePitch=T.MathUtils.lerp(T.MathUtils.lerp(path.from[1],along[1],depart),path.to[1],arrive);
 +      const walkPitch=T.MathUtils.lerp(T.MathUtils.lerp(path.from[1],along[1],depart),path.to[1],arrive);
@@ -56,10 +62,10 @@
    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23252d23'/%3E%3Ctext x='7' y='50' font-family='Arial' font-size='50' font-weight='bold' fill='%23eee8d8'%3ER%3C/text%3E%3C/svg%3E">
    <link rel="preload" href="assets/rubik.ttf" as="font" type="font/ttf" crossorigin>
 -  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="office.css"><link rel="stylesheet" href="showroom.css">
-+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="office.css?v=wall-logo-1"><link rel="stylesheet" href="showroom.css">
++  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="office.css?v=wall-logo-2"><link rel="stylesheet" href="showroom.css">
    <link rel="stylesheet" href="projects.css"><link rel="stylesheet" href="mobile.css" media="(max-width:680px)"><link rel="stylesheet" href="sayback.css">
 -  <script defer src="showroom.js"></script><script defer src="projects.js"></script><script defer src="office.js"></script><script defer src="contact.js"></script>
-+  <script defer src="showroom.js"></script><script defer src="projects.js"></script><script defer src="office.js?v=wall-logo-1"></script><script defer src="contact.js"></script>
++  <script defer src="showroom.js"></script><script defer src="projects.js"></script><script defer src="office.js?v=wall-logo-2"></script><script defer src="contact.js"></script>
    <noscript><style>.exhibit-list,.showroom-open,.office-pin,#help-open,.look-dial,.scene-surface{display:none!important}.station{background-image:linear-gradient(270deg,#171e16f5,transparent 78%),var(--scene)}@media(max-width:680px){.station{background-image:linear-gradient(0deg,#1a2019 30%,#1a2019d1 52%,transparent 76%),var(--scene)}}</style></noscript>
    <meta property="og:title" content="RABEN Studio">
    <meta property="og:description" content="אתרים, אפליקציות וכלים לעסקים">
@@ -68,7 +74,7 @@
      <div class="office-world" id="office-world">
        <div class="scene-surface" id="scene-surface" role="group" aria-label="מבט בתוך המשרד. חצי ימין ושמאל מסובבים את המבט">
 -        <picture class="office-poster"><source media="(max-width:680px)" srcset="assets/office/entry-view-mobile.webp"><img id="office-poster" src="assets/office/entry-view.webp" fetchpriority="high" alt=""></picture>
-+        <picture class="office-poster"><source media="(max-width:680px)" srcset="assets/office/entry-wall-mobile.webp"><img id="office-poster" src="assets/office/entry-wall.webp" fetchpriority="high" alt=""></picture>
++        <picture class="office-poster"><source media="(max-width:680px)" srcset="assets/office/entry-doorway-mobile.webp"><img id="office-poster" src="assets/office/entry-doorway.webp" fetchpriority="high" alt=""></picture>
        </div>
        <div class="office-pins" aria-label="נקודות בחלל">
          <a class="office-pin door-pin" href="#showroom" data-door="showroom" aria-label="דרך הדלת לחדר ההדגמות" hidden><span class="pin-core" aria-hidden="true">↗</span><span class="pin-label">חדר ההדגמות</span></a>
@@ -79,19 +85,18 @@
  .travel-hint{margin-top:15px}
  .travel-hint a{display:inline-flex;align-items:center;gap:4px;min-height:36px;color:#fff2c9;text-decoration:underline;text-underline-offset:4px}
 -.entrance{--scene:url("assets/office/entry-view.webp")}
-+.entrance{--scene:url("assets/office/entry-wall.webp")}
++.entrance{--scene:url("assets/office/entry-doorway.webp")}
  .entrance .station-copy{width:min(100%,540px)}
  .exhibit-list{display:grid;max-width:355px;margin-top:20px;border-top:1px solid #c3bea185}
  .exhibit-list button{display:grid;grid-template-columns:82px 1fr 22px;align-items:center;gap:8px;min-height:49px;padding:7px 3px;border:0;border-bottom:1px solid #c3bea15c;background:#19231bb8;color:#fff9e8;text-align:start}
-@@ -131,3 +131,11 @@
+@@ -131,3 +131,10 @@
  #mail-status{font-size:15px}
  #mail-status[data-state=success]{color:#e1f3d4}
  #mail-status[data-state=error]{color:#ffd7c0}
 +
-+/* Keep the photographed wordmark to the left of the copy on portrait tablets. */
-+@media (min-width:681px){
-+  .office-world[data-room=lobby] .office-poster img{object-position:65% 50%}
-+}
++/* The static portrait starts at the same wall edge as the 3D entry. */
++.office-world[data-room=lobby] .office-poster img[src*="entry-doorway"]{object-position:left center}
++.entrance{background-position:left center}
 +@media (max-width:680px){
-+  .entrance{--scene:url("assets/office/entry-wall-mobile.webp")}
++  .entrance{--scene:url("assets/office/entry-doorway-mobile.webp");background-position:left var(--phone-header)}
 +}
