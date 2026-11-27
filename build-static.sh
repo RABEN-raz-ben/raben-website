@@ -26,3 +26,10 @@ test "$(tail -n 1 "$catalog")" = '}'
 } > "${catalog}.new"
 mv "${catalog}.new" "$catalog"
 printf 'Verified SayBack portfolio release overlay.\n'
+
+# Reframe the original reception photograph and its 3D camera together.
+entry='portfolio/wall-logo'
+git apply --check "$entry/entry.patch"
+git apply "$entry/entry.patch"
+cp "$entry/entry-wall.webp" "$entry/entry-wall-mobile.webp" dist/assets/office/
+printf 'Verified RABEN reception wordmark framing.\n'
