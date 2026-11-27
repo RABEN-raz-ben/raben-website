@@ -1,0 +1,17 @@
+@font-face{font-family:Rubik;src:url("assets/rubik.ttf") format("truetype");font-weight:300 900;font-display:swap}
+@font-face{font-family:"Frank Ruhl";src:url("assets/frank-ruhl.ttf") format("truetype");font-weight:300 900;font-display:swap}
+:root{font-family:Rubik,Arial,sans-serif;--serif:"Frank Ruhl",David,Georgia,serif;--mono:Consolas,"Courier New",monospace;color:#f6f2e6;background:#191e18}
+*{box-sizing:border-box}
+body{margin:0;min-width:280px}
+h1,h2,h3,h4,p,figure,dl,dd{margin:0}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;color:inherit}
+button:disabled{cursor:default}
+button,a,summary{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+a{color:inherit;text-decoration:none}
+.symbol-bank,.field-trap{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+[hidden]{display:none!important}
+.mail-receipt{width:min(100% - 36px,38rem);margin:12vh auto;line-height:1.65}
+.mail-receipt h1{font:560 3rem/1.1 var(--serif);color:#f2dfb0}
+.mail-receipt p{margin:1.5rem 0}.mail-receipt a{text-decoration:underline;text-underline-offset:4px}
